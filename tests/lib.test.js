@@ -22,22 +22,10 @@ describe('Timeline tests', () => {
     it('resolves correctly', () => {
         const timeline = new Timeline([
             [
-                {
-                    caster: 'Mr. Robot',
-                    target: 'Elliot Alderson',
-                    text: 'Deal 2 damage to an independent target'
-                }
-            ], [
-                {
-                    caster: 'Elliot Alderson',
-                    target: 'The next Effect',
-                    text: "Multiply an Effect's damage by 2"
-                },
-                {
-                    caster: 'Elliot Alderson',
-                    target: 'Mr.Robot',
-                    text: "Deal 3 damage to the card's target"
-                }
+                new Effect('Deal 2 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
+            ], 
+            [
+                new Effect("Deal 3 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')       
             ]
         ]);
 
@@ -62,23 +50,10 @@ describe('Timeline tests', () => {
             ]
         }), [
             [
-                {
-                    caster: 'Mr. Robot',
-                    target: 'Elliot Alderson',
-                    text: 'Deal 4 damage to an independent target'
-                }
+                new Effect('Deal 4 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
             ],
             [
-                {
-                    caster: 'Elliot Alderson',
-                    target: 'The next Effect',
-                    text: "Multiply an Effect's damage by 2"
-                },
-                {
-                    caster: 'Elliot Alderson',
-                    target: 'Mr.Robot',
-                    text: "Deal 3 damage to the card's target"
-                }
+                new Effect("Deal 3 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')
             ]
         ])
     })
