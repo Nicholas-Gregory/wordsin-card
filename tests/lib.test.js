@@ -26,12 +26,31 @@ describe('Timeline tests', () => {
             ]
         ]);
 
-        assert.deepStrictEqual(timeline.resolve(), [
+        assert.deepStrictEqual(timeline.resolve({
+            characters: [
+                {
+                    id: 'Mr. Robot',
+                    equipment: [
+                        {
+                            bonuses: [
+                                {
+                                    text: 'Increase all damage in Offensive Effects by 2'
+                                }
+                            ]
+                        }
+                    ]   
+                },
+                {
+                    id: 'Elliot Alderson',
+                    equipment: []
+                }
+            ]
+        }), [
             [
                 {
                     caster: 'Mr. Robot',
                     target: 'Elliot Alderson',
-                    text: 'Deal 2 damage to an independent target'
+                    text: 'Deal 4 damage to an independent target'
                 }
             ],
             [
