@@ -46,10 +46,13 @@ describe('Timeline tests', () => {
     it('resolves correctly', () => {
         const timeline = new Timeline([
             [
-                new Effect('Deal 2 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
+                new Effect('Deal 2 damage to an independent target', 'Mr. Robot', 'Elliot Alderson', 0)
             ], 
             [
                 new Effect("Deal 3 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')       
+            ],
+            [
+                new Effect("Increase independent target offensive effect's damage by 3", 'Mr. Robot', 0)
             ],
             [
                 new Effect("Independent target heals for 5", 'Mr. Robot', 'Mr. Robot')
@@ -85,10 +88,13 @@ describe('Timeline tests', () => {
             ]
         }), [
             [
-                new Effect('Deal 7 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
+                new Effect('Deal 10 damage to an independent target', 'Mr. Robot', 'Elliot Alderson', 0)
             ],
             [
                 new Effect("Deal 5 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')
+            ],
+            [
+                new Effect("Increase independent target offensive effect's damage by 3", 'Mr. Robot', 0)
             ],
             [
                 new Effect("Independent target heals for 7", 'Mr. Robot', 'Mr. Robot')
