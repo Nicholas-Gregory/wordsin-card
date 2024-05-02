@@ -5,16 +5,27 @@ import * as assert from "node:assert";
 import Effect from "../lib/Effect.js";
 
 describe('Effect tests', () => {
-    const effect = new Effect('Deal 1 damage to an independent target');
+    const damageEffect = new Effect('Deal 1 damage to an independent target');
+    const healEffect = new Effect('Independent target heals for 5');
 
     it('reports damage', () => {
-        assert.strictEqual(effect.getDamage(), 1);
+        assert.strictEqual(damageEffect.getDamage(), 1);
     });
 
     it('sets damage', () => {
-        effect.setDamage(2);
+        damageEffect.setDamage(2);
 
-        assert.strictEqual(effect.getDamage(), 2);
+        assert.strictEqual(damageEffect.getDamage(), 2);
+    });
+
+    it('reports heal amount', () => {
+        assert.strictEqual(healEffect.getHealAmount(), 5);
+    });
+
+    it('sets heal amount', () => {
+        healEffect.setHealAmount(2);
+
+        assert.strictEqual(healEffect.getHealAmount(), 2);
     });
 });
 
