@@ -59,6 +59,12 @@ describe('Timeline tests', () => {
             ],
             [
                 new Effect("Independent target heals for 5", 'Mr. Robot', 'Mr. Robot', 1)
+            ],
+            [
+                new Effect("Decrease independent target character's awareness by 1", 'Elliot Alderson', 'Mr. Robot')
+            ],
+            [
+                new Effect("Decrease independent target character's power by 1", 'Mr. Robot', 'Elliot Alderson')
             ]
         ]);
 
@@ -77,7 +83,8 @@ describe('Timeline tests', () => {
                     ],
                     stats: {
                         power: 3,
-                        wellness: 2
+                        wellness: 2,
+                        awareness: 2
                     } 
                 },
                 {
@@ -85,7 +92,8 @@ describe('Timeline tests', () => {
                     equipment: [],
                     stats: {
                         power: 2,
-                        wellness: 1
+                        wellness: 1,
+                        awareness: 4
                     }
                 }
             ]
@@ -104,6 +112,12 @@ describe('Timeline tests', () => {
             ],
             [
                 new Effect("Independent target heals for 9", 'Mr. Robot', 'Mr. Robot', 1)
+            ],
+            [
+                new Effect("Decrease independent target character's awareness by 5", 'Elliot Alderson', 'Mr. Robot')
+            ],
+            [
+                new Effect("Decrease independent target character's power by -2", 'Mr. Robot', 'Elliot Alderson')
             ]
         ])
     })
