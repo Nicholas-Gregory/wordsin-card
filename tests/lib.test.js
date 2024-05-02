@@ -7,6 +7,8 @@ import Effect from "../lib/Effect.js";
 describe('Effect tests', () => {
     const damageEffect = new Effect('Deal 1 damage to an independent target');
     const healEffect = new Effect('Independent target heals for 5');
+    const increaseDamageEffect = new Effect("Increase independent target offensive effect's damage by 1");
+    const decreaseDamageEffect = new Effect("Decrease independent target offensive effect's damage by 1");
 
     it('reports damage', () => {
         assert.strictEqual(damageEffect.getDamage(), 1);
@@ -27,6 +29,17 @@ describe('Effect tests', () => {
 
         assert.strictEqual(healEffect.getHealAmount(), 2);
     });
+
+    it('reports damage modifier', () => {
+        assert.strictEqual(increaseDamageEffect.getDamageModifier(), 1);
+        assert.strictEqual(decreaseDamageEffect.getDamageModifier(), -1);
+    });
+
+    it('sets damage modifier', () => {
+        increaseDamageEffect.setDamageModifier(2);
+
+        assert.strictEqual(increaseDamageEffect.getDamageModifier(), 2);
+    })
 });
 
 describe('Timeline tests', () => {
