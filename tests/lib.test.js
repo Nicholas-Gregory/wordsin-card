@@ -41,19 +41,25 @@ describe('Timeline tests', () => {
                                 }
                             ]
                         }
-                    ]   
+                    ],
+                    stats: {
+                        power: 3
+                    } 
                 },
                 {
                     id: 'Elliot Alderson',
-                    equipment: []
+                    equipment: [],
+                    stats: {
+                        power: 2
+                    }
                 }
             ]
         }), [
             [
-                new Effect('Deal 4 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
+                new Effect('Deal 7 damage to an independent target', 'Mr. Robot', 'Elliot Alderson')
             ],
             [
-                new Effect("Deal 3 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')
+                new Effect("Deal 5 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')
             ]
         ])
     })
