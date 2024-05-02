@@ -55,7 +55,10 @@ describe('Timeline tests', () => {
                 new Effect("Increase independent target offensive effect's damage by 3", 'Mr. Robot', 0)
             ],
             [
-                new Effect("Independent target heals for 5", 'Mr. Robot', 'Mr. Robot')
+                new Effect("Increase independent target defensive effect's heal amount by 2", 'Mr. Robot', 1)
+            ],
+            [
+                new Effect("Independent target heals for 5", 'Mr. Robot', 'Mr. Robot', 1)
             ]
         ]);
 
@@ -97,7 +100,10 @@ describe('Timeline tests', () => {
                 new Effect("Increase independent target offensive effect's damage by 3", 'Mr. Robot', 0)
             ],
             [
-                new Effect("Independent target heals for 7", 'Mr. Robot', 'Mr. Robot')
+                new Effect("Increase independent target defensive effect's heal amount by 2", 'Mr. Robot', 1)
+            ],
+            [
+                new Effect("Independent target heals for 9", 'Mr. Robot', 'Mr. Robot', 1)
             ]
         ])
     })
