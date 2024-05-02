@@ -37,6 +37,9 @@ describe('Timeline tests', () => {
             ], 
             [
                 new Effect("Deal 3 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')       
+            ],
+            [
+                new Effect("Independent target heals for 5", 'Mr. Robot', 'Mr. Robot')
             ]
         ]);
 
@@ -54,14 +57,16 @@ describe('Timeline tests', () => {
                         }
                     ],
                     stats: {
-                        power: 3
+                        power: 3,
+                        wellness: 2
                     } 
                 },
                 {
                     id: 'Elliot Alderson',
                     equipment: [],
                     stats: {
-                        power: 2
+                        power: 2,
+                        wellness: 1
                     }
                 }
             ]
@@ -71,6 +76,9 @@ describe('Timeline tests', () => {
             ],
             [
                 new Effect("Deal 5 damage to the card's target", 'Elliot Alderson', 'Mr.Robot')
+            ],
+            [
+                new Effect("Independent target heals for 7", 'Mr. Robot', 'Mr. Robot')
             ]
         ])
     })
