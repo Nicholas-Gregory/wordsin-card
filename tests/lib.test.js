@@ -16,8 +16,8 @@ describe('Effect tests', () => {
         const decreaseDamageEffect = new Effect('Decrease damage 1 for an independent target character');
         const increaseHealEffect = new Effect('Increase heal 1 for an independent target character');
         const decreaseHealEffect = new Effect('Decrease heal 1 for an independent target character');
-        const setDamageEffect = new Effect('Set damage to 0 for an independent target character');
-        const setHealEffect = new Effect('Set heal to 10 for an independent target character');
+        const setDamageEffect = new Effect('Set damage 0 for an independent target character');
+        const setHealEffect = new Effect('Set heal 10 for an independent target character');
         
         assert.strictEqual(damageEffect.getAmount(), 5);
         assert.strictEqual(statIncreaseEffect.getAmount(), 3);
@@ -42,9 +42,9 @@ describe('Effect tests', () => {
     });
 
     it('reports stats correctly', () => {
-        const increaseStatEffect = new Effect('Increase wellness by 1 for an independent target character');
-        const decreaseStatEffect = new Effect('Decrease agility by 2 for an independent target character');
-        const setStatAmount = new Effect('Set swiftness to 5 for an independent target character');
+        const increaseStatEffect = new Effect('Increase wellness 1 for an independent target character');
+        const decreaseStatEffect = new Effect('Decrease agility 2 for an independent target character');
+        const setStatAmount = new Effect('Set swiftness 5 for an independent target character');
 
         assert.strictEqual(increaseStatEffect.getStat(), 'wellness');
         assert.strictEqual(decreaseStatEffect.getStat(), 'agility');
@@ -81,5 +81,16 @@ describe('Effect tests', () => {
         assert.strictEqual(new Effect('Insert "Apply burn" in independent target defensive effect').targetClass, 'defensive effect');
         assert.strictEqual(new Effect('Insert "Apply burn" in independent target utility effect').targetClass, 'utility effect');
         assert.strictEqual(new Effect('Insert "Apply burn" in independent target card').targetClass, 'card');
+    });
+
+    it('reports sweeper targets', () => {
+        assert.strictEqual(new Effect('Kill all characters').sweeperTarget, 'characters');
+        assert.strictEqual(new Effect('Kill all enemies').sweeperTarget, 'enemies');
+        assert.strictEqual(new Effect('Kill all allies').sweeperTarget, 'allies');
+        assert.strictEqual(new Effect('Destroy all objects').sweeperTarget, 'objects');
+        assert.strictEqual(new Effect('Counter all spells').sweeperTarget, 'spells');
+        assert.strictEqual(new Effect('Counter all offensive effects').sweeperTarget, 'offensive effects');
+        assert.strictEqual(new Effect('Counter all defensive effects').sweeperTarget, 'defensive effects');
+        assert.strictEqual(new Effect('Counter all utility effects').sweeperTarget, 'utility effects');
     })
 });
