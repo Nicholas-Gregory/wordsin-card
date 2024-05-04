@@ -54,8 +54,8 @@ describe('Effect tests', () => {
     it('reports effects correctly', () => {
         const oneEffectInsertEffect = new Effect('Insert "Deal 3"');
         const twoEffectsInsertEffect = new Effect('Insert "Deal 2", "Heal 1"');
-        const oneEffectChangeEffect = new Effect('Change to "Apply burn"');
-        const twoEffectsChangeEffect = new Effect('Change to "Apply wet", "Apply cold"');
+        const oneEffectChangeEffect = new Effect('Change text to "Apply burn"');
+        const twoEffectsChangeEffect = new Effect('Change text to "Apply wet", "Apply cold"');
 
         assert.deepStrictEqual(oneEffectInsertEffect.getEffects(), ['Deal 3']);
         assert.deepStrictEqual(twoEffectsInsertEffect.getEffects(), ['Deal 2', 'Heal 1']);
