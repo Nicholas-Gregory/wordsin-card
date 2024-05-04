@@ -1,96 +1,173 @@
 import { describe, it } from "node:test";
+import assert from 'node:assert';
+import EffectText from "../lib/EffectText.js";
 
-import Timeline from "../lib/Timeline.js";
-import * as assert from "node:assert";
-import Effect from "../lib/Effect.js";
+describe('Class: EffectText;', () => {
+    it('reports sweeper properties', () => {
+        const destroyObjects = new EffectText('Destroy all objects');
+        assert.strictEqual(destroyObjects.getSweeperAction(), 'destroy');
+        assert.strictEqual(destroyObjects.getSweeperTarget(), 'objects');
 
-describe('Effect tests', () => {
-    it('reports amount correctly', () => {
-        const damageEffect = new Effect('Deal 5 to an independent target character');
-        const statIncreaseEffect = new Effect('Increase wellness 3 for an independent target character');
-        const statDecreaseEffect = new Effect('Decrease wellness 1 for an independent target character');
-        const setStatEffect = new Effect('Set wellness 10 for an independent target character');
-        const drawEffect = new Effect('Draw 2 for an independent target character');
-        const healEffect = new Effect('Heal 5 for an independent target character');
-        const increaseDamageEffect = new Effect('Increase damage 1 for an independent target character');
-        const decreaseDamageEffect = new Effect('Decrease damage 1 for an independent target character');
-        const increaseHealEffect = new Effect('Increase heal 1 for an independent target character');
-        const decreaseHealEffect = new Effect('Decrease heal 1 for an independent target character');
-        const setDamageEffect = new Effect('Set damage 0 for an independent target character');
-        const setHealEffect = new Effect('Set heal 10 for an independent target character');
-        
-        assert.strictEqual(damageEffect.getAmount(), 5);
-        assert.strictEqual(statIncreaseEffect.getAmount(), 3);
-        assert.strictEqual(statDecreaseEffect.getAmount(), -1);
-        assert.strictEqual(setStatEffect.getAmount(), 10);
-        assert.strictEqual(drawEffect.getAmount(), 2);
-        assert.strictEqual(healEffect.getAmount(), 5);
-        assert.strictEqual(increaseDamageEffect.getAmount(), 1);
-        assert.strictEqual(decreaseDamageEffect.getAmount(), -1);
-        assert.strictEqual(increaseHealEffect.getAmount(), 1);
-        assert.strictEqual(decreaseHealEffect.getAmount(), -1);
-        assert.strictEqual(setDamageEffect.getAmount(), 0);
-        assert.strictEqual(setHealEffect.getAmount(), 10);
+        const killAllies = new EffectText('Kill all allies');
+        assert.strictEqual(killAllies.getSweeperAction(), 'kill');
+        assert.strictEqual(killAllies.getSweeperTarget(), 'allies');
+
+        const killEnemies = new EffectText('Kill all enemies');
+        assert.strictEqual(killEnemies.getSweeperAction(), 'kill');
+        assert.strictEqual(killEnemies.getSweeperTarget(), 'enemies');
+
+        const killCharacters = new EffectText('Kill all characters');
+        assert.strictEqual(killCharacters.getSweeperAction(), 'kill');
+        assert.strictEqual(killCharacters.getSweeperTarget(), 'characters');
+
+        const counterSpells = new EffectText('Counter all spells');
+        assert.strictEqual(counterSpells.getSweeperAction(), 'counter');
+        assert.strictEqual(counterSpells.getSweeperTarget(), 'spells');
+
+        const counterEffects = new EffectText('Counter all effects');
+        assert.strictEqual(counterEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterEffects.getSweeperTarget(), 'effects');
+
+        const counterOffensiveEffects = new EffectText('Counter all offensive effects');
+        assert.strictEqual(counterOffensiveEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterOffensiveEffects.getSweeperTarget(), 'offensive effects');
+
+        const counterDefensiveEffects = new EffectText('Counter all defensive effects');
+        assert.strictEqual(counterDefensiveEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterDefensiveEffects.getSweeperTarget(), 'defensive effects');
+
+        const counterUtilityEffects = new EffectText('Counter all utility effects');
+        assert.strictEqual(counterUtilityEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterUtilityEffects.getSweeperTarget(), 'utility effects');
     });
 
-    it('reports words correctly', () => {
-        const oneWordEffect = new Effect('Apply burn to an independent target character');
-        const twoWordsEffect = new Effect('Apply wet, cold to an independent target character');
-
-        assert.deepStrictEqual(oneWordEffect.getWords(), ['burn']);
-        assert.deepStrictEqual(twoWordsEffect.getWords(), ['wet', 'cold']);
+    it('reports amounts', () => {
+        assert.strictEqual(new EffectText('Deal 5 to independent target character').getAmount(), 5);
+        assert.strictEqual(new EffectText('Heal 3 for independent target character').getAmount(), 3);
+        assert.strictEqual(new EffectText('Increase damage 2 for independent target offensive effect').getAmount(), 2);
+        assert.strictEqual(new EffectText('Decrease damage 1 for independent target offensive effect').getAmount(), 1);
+        assert.strictEqual(new EffectText('Increase heal 5 for independent target defensive effect').getAmount(), 5);
+        assert.strictEqual(new EffectText('Decrease heal 6 for independent target defensive effect').getAmount(), 6);
+        assert.strictEqual(new EffectText('Set damage to 1 for independent target offensive effect').getAmount(), 1);
+        assert.strictEqual(new EffectText('Set heal to 10 for independent target defensive effect').getAmount(), 10);
     });
 
-    it('reports stats correctly', () => {
-        const increaseStatEffect = new Effect('Increase wellness 1 for an independent target character');
-        const decreaseStatEffect = new Effect('Decrease agility 2 for an independent target character');
-        const setStatAmount = new Effect('Set swiftness 5 for an independent target character');
-
-        assert.strictEqual(increaseStatEffect.getStat(), 'wellness');
-        assert.strictEqual(decreaseStatEffect.getStat(), 'agility');
-        assert.strictEqual(setStatAmount.getStat(), 'swiftness');
+    it('reports instructions', () => {
+        assert.strictEqual(new EffectText('Deal 5 to independent target character').getInstruction(), 'deal');
+        assert.strictEqual(new EffectText('Heal 3 for independent target character').getInstruction(), 'heal');
+        assert.strictEqual(new EffectText('Increase damage 2 for independent target offensive effect').getInstruction(), 'increase damage');
+        assert.strictEqual(new EffectText('Decrease damage 1 for independent target offensive effect').getInstruction(), 'decrease damage');
+        assert.strictEqual(new EffectText('Increase heal 5 for independent target defensive effect').getInstruction(), 'increase heal');
+        assert.strictEqual(new EffectText('Decrease heal 6 for independent target defensive effect').getInstruction(), 'decrease heal');
+        assert.strictEqual(new EffectText('Set damage to 1 for independent target offensive effect').getInstruction(), 'set damage to');
+        assert.strictEqual(new EffectText('Set heal to 10 for independent target defensive effect').getInstruction(), 'set heal to');
+        assert.strictEqual(new EffectText('Increase wellness 3 for independent target character for 2 turns').getInstruction(), 'increase');
+        assert.strictEqual(new EffectText('Decrease wellness 3 for independent target character for 2 turns').getInstruction(), 'decrease');
+        assert.strictEqual(new EffectText('Set wellness 10 for independent target character for 2 turns').getInstruction(), 'set');
     });
 
-    it('reports effects correctly', () => {
-        const oneEffectInsertEffect = new Effect('Insert "Deal 3" in an independent target character');
-        const twoEffectsInsertEffect = new Effect('Insert "Deal 2", "Heal 1" in an independent target character');
-        const oneEffectChangeEffect = new Effect('Change text to "Apply burn" on an independent target character');
-        const twoEffectsChangeEffect = new Effect('Change text to "Apply wet", "Apply cold" on an independent target character');
-
-        assert.deepStrictEqual(oneEffectInsertEffect.getEffects(), ['Deal 3']);
-        assert.deepStrictEqual(twoEffectsInsertEffect.getEffects(), ['Deal 2', 'Heal 1']);
-        assert.deepStrictEqual(oneEffectChangeEffect.getEffects(), ['Apply burn']);
-        assert.deepStrictEqual(twoEffectsChangeEffect.getEffects(), ['Apply wet', 'Apply cold']);
+    it('reports words', () => {
+        assert.deepStrictEqual(new EffectText('Apply burn to independent target object').getWords(), ['burn']);
+        assert.deepStrictEqual(new EffectText('Apply cold, wet to independent target object').getWords(), ['cold', 'wet']); 
     });
 
-    it('reports target type correctly', () => {
-        const independentTarget = new Effect('Deal 2 to independent target character');
-        const cardsTarget = new Effect("Deal 2 to card's target character");
+    it('reports stat properties', () => {
+        const increaseStat = new EffectText('Increase wellness 3 for independent target character for 2 turns');
+        assert.strictEqual(increaseStat.getStat(), 'wellness');
+        assert.strictEqual(increaseStat.getStatAmount(), 3);
 
-        assert.strictEqual(independentTarget.targetType, 'independent target');
-        assert.strictEqual(cardsTarget.targetType, "card's target");
+        const decreaseStat = new EffectText('Decrease wellness 3 for independent target character for 2 turns');
+        assert.strictEqual(decreaseStat.getStat(), 'wellness');
+        assert.strictEqual(decreaseStat.getStatAmount(), 3);
+
+        const setStat = new EffectText('Set wellness to 10 for independent target character for 2 turns');
+        assert.strictEqual(setStat.getStat(), 'wellness');
+        assert.strictEqual(setStat.getStatAmount(), 10);
     });
 
-    it('reports target class correctly', () => {
-        assert.strictEqual(new Effect('Deal 2 to independent target character').targetClass, 'character');
-        assert.strictEqual(new Effect('Deal 2 to independent target enemy').targetClass, 'enemy');
-        assert.strictEqual(new Effect('Deal 2 to independent target ally').targetClass, 'ally');
-        assert.strictEqual(new Effect('Deal 2 to independent target object').targetClass, 'object');
-        assert.strictEqual(new Effect('Insert "Apply burn" in independent target spell').targetClass, 'spell');
-        assert.strictEqual(new Effect('Insert "Apply burn" in independent target offensive effect').targetClass, 'offensive effect');
-        assert.strictEqual(new Effect('Insert "Apply burn" in independent target defensive effect').targetClass, 'defensive effect');
-        assert.strictEqual(new Effect('Insert "Apply burn" in independent target utility effect').targetClass, 'utility effect');
-        assert.strictEqual(new Effect('Insert "Apply burn" in independent target card').targetClass, 'card');
+    it('reports target properties', () => {
+        // Independent
+        const independentCharacter = new EffectText('Deal 2 to independent target character');
+        assert.strictEqual(independentCharacter.getTargetClass(), 'character');
+        assert.strictEqual(independentCharacter.getTargetType(), 'independent');
+
+        const independentEnemy = new EffectText('Deal 2 to independent target enemy');
+        assert.strictEqual(independentEnemy.getTargetClass(), 'enemy');
+        assert.strictEqual(independentEnemy.getTargetType(), 'independent');
+
+        const independentAlly = new EffectText('Heal 2 for independent target ally');
+        assert.strictEqual(independentAlly.getTargetClass(), 'ally');
+        assert.strictEqual(independentAlly.getTargetType(), 'independent');
+
+        const independentObject = new EffectText('Apply burn to independent target object');
+        assert.strictEqual(independentObject.getTargetClass(), 'object');
+        assert.strictEqual(independentObject.getTargetType(), 'independent');
+
+        const independentSpell = new EffectText('Counter independent target spell');
+        assert.strictEqual(independentSpell.getTargetClass(), 'spell');
+        assert.strictEqual(independentSpell.getTargetType(), 'independent');
+
+        const independentEffect = new EffectText('Set damage to 1 for independent target effect');
+        assert.strictEqual(independentEffect.getTargetClass(), 'effect');
+        assert.strictEqual(independentEffect.getTargetType(), 'independent');
+
+        const independentOffensiveEffect = new EffectText('Set damage to 1 for independent target offensive effect');
+        assert.strictEqual(independentOffensiveEffect.getTargetClass(), 'offensive effect');
+        assert.strictEqual(independentOffensiveEffect.getTargetType(), 'independent');
+
+        const independentDefensiveEffect = new EffectText('Set damage to 1 for independent target defensive effect');
+        assert.strictEqual(independentDefensiveEffect.getTargetClass(), 'defensive effect');
+        assert.strictEqual(independentDefensiveEffect.getTargetType(), 'independent');
+
+        const independentUtilityEffect = new EffectText('Set damage to 1 for independent target utility effect');
+        assert.strictEqual(independentUtilityEffect.getTargetClass(), 'utility effect');
+        assert.strictEqual(independentUtilityEffect.getTargetType(), 'independent');
+
+        // Card
+        const cardCharacter = new EffectText("Deal 2 to card's target character");
+        assert.strictEqual(cardCharacter.getTargetClass(), "character");
+        assert.strictEqual(cardCharacter.getTargetType(), "card");
+
+        const cardEnemy = new EffectText("Deal 2 to card's target enemy");
+        assert.strictEqual(cardEnemy.getTargetClass(), "enemy");
+        assert.strictEqual(cardEnemy.getTargetType(), "card");
+
+        const cardAlly = new EffectText("Heal 2 for card's target ally");
+        assert.strictEqual(cardAlly.getTargetClass(), "ally");
+        assert.strictEqual(cardAlly.getTargetType(), "card");
+
+        const cardObject = new EffectText("Apply burn to card's target object");
+        assert.strictEqual(cardObject.getTargetClass(), "object");
+        assert.strictEqual(cardObject.getTargetType(), "card");
+
+        const cardSpell = new EffectText("Counter card's target spell");
+        assert.strictEqual(cardSpell.getTargetClass(), "spell");
+        assert.strictEqual(cardSpell.getTargetType(), "card");
+
+        const cardEffect = new EffectText("Set damage to 1 for card's target effect");
+        assert.strictEqual(cardEffect.getTargetClass(), "effect");
+        assert.strictEqual(cardEffect.getTargetType(), "card");
+
+        const cardOffensiveEffect = new EffectText("Set damage to 1 for card's target offensive effect");
+        assert.strictEqual(cardOffensiveEffect.getTargetClass(), "offensive effect");
+        assert.strictEqual(cardOffensiveEffect.getTargetType(), "card");
+
+        const cardDefensiveEffect = new EffectText("Set damage to 1 for card's target defensive effect");
+        assert.strictEqual(cardDefensiveEffect.getTargetClass(), "defensive effect");
+        assert.strictEqual(cardDefensiveEffect.getTargetType(), "card");
+
+        const cardUtilityEffect = new EffectText("Set damage to 1 for card's target utility effect");
+        assert.strictEqual(cardUtilityEffect.getTargetClass(), "utility effect");
+        assert.strictEqual(cardUtilityEffect.getTargetType(), "card");
     });
 
-    it('reports sweeper targets', () => {
-        assert.strictEqual(new Effect('Kill all characters').sweeperTarget, 'characters');
-        assert.strictEqual(new Effect('Kill all enemies').sweeperTarget, 'enemies');
-        assert.strictEqual(new Effect('Kill all allies').sweeperTarget, 'allies');
-        assert.strictEqual(new Effect('Destroy all objects').sweeperTarget, 'objects');
-        assert.strictEqual(new Effect('Counter all spells').sweeperTarget, 'spells');
-        assert.strictEqual(new Effect('Counter all offensive effects').sweeperTarget, 'offensive effects');
-        assert.strictEqual(new Effect('Counter all defensive effects').sweeperTarget, 'defensive effects');
-        assert.strictEqual(new Effect('Counter all utility effects').sweeperTarget, 'utility effects');
-    })
+    it('reports time modifier properties', () => {
+        const exchangeTimeModifier = new EffectText('Increase wellness 3 for independent target character for 3 more exchanges');
+        assert.strictEqual(exchangeTimeModifier.getTimeModifierAmount(), 3);
+        assert.strictEqual(exchangeTimeModifier.getTimeModifierType(), 'exchanges');
+
+        const turnTimeModifier = new EffectText('Increase wellness 3 for independent target character for 3 more turns');
+        assert.strictEqual(turnTimeModifier.getTimeModifierAmount(), 3);
+        assert.strictEqual(turnTimeModifier.getTimeModifierType(), 'turns');
+    });
 });
