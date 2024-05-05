@@ -75,6 +75,11 @@ describe('Class: EffectText;', () => {
         assert.strictEqual(new EffectText('Set wellness 10 for independent target character for 2 turns').getInstruction(), 'set');
     });
 
+    it('reports instruction modifiers', () => {
+        assert.strictEqual(new EffectText('Set heal 10 for independent target defensive effect').getInstructionModifier(), 'heal');
+        assert.strictEqual(new EffectText('Increase damage 2 for independent target offensive effect').getInstructionModifier(), 'damage');
+    })
+
     it('reports words', () => {
         assert.deepStrictEqual(new EffectText('Apply burn to independent target object').getWords(), ['burn']);
         assert.deepStrictEqual(new EffectText('Apply cold, wet to independent target object').getWords(), ['cold', 'wet']); 
@@ -216,6 +221,14 @@ describe('Class: EffectText;', () => {
         const effect = new EffectText('Deal 2 to independent target ally');
         effect.setInstruction('heal');
         assert.strictEqual(effect.text, 'Heal 2 for independent target ally');
+    });
+
+    it('sets instruction modifier', () => {
+        assert.strictEqual(
+            new EffectText('Set damage 10 for independent target defensive effect')
+            .setInstructionModifier('heal')
+            .getInstructionModifier(), 'heal'
+        );
     });
 
     it('sets amount', () => {
