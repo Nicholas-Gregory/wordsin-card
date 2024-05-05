@@ -212,5 +212,13 @@ describe('Class: EffectText;', () => {
         assert.strictEqual(effect.text, 'Heal 2 for independent target ally');
     });
 
+    it('sets amount', () => {
+        assert.strictEqual(
+            new EffectText('Deal 2 to independent target enemy')
+            .setAmount(3)
+            .getAmount(), 3
+        )
+    })
+
     // #endregion
 });
