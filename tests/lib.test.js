@@ -260,5 +260,13 @@ describe('Class: EffectText;', () => {
         );
     });
 
+    it('sets time modifier amount', () => {
+        assert.strictEqual(
+            new EffectText('Set wellness 10 for independent target character for 1 more turns')
+            .setTimeModifierAmount(3)
+            .getTimeModifierAmount(), 3
+        );
+    })
+
     // #endregion
 });
