@@ -228,5 +228,13 @@ describe('Class: EffectText;', () => {
         );
     });
 
+    it('sets stat', () => {
+        assert.strictEqual(
+            new EffectText('Increase wellness 3 for independent target character')
+            .setStat('awareness')
+            .getStat(), 'awareness'
+        );
+    });
+
     // #endregion
 });
