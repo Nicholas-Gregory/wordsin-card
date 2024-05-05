@@ -170,4 +170,26 @@ describe('Class: EffectText;', () => {
         assert.strictEqual(turnTimeModifier.getTimeModifierAmount(), 3);
         assert.strictEqual(turnTimeModifier.getTimeModifierType(), 'turns');
     });
+
+    it('reports second order effect properties', () => {
+        const insertOneIndependentSecondOrder = new EffectText('Insert "Counter independent target spell" into independent target card');
+        assert.strictEqual(insertOneIndependentSecondOrder.getSecondOrderType(), 'insert');
+        assert.deepStrictEqual(insertOneIndependentSecondOrder.getSecondOrderEffects(), ['Counter independent target spell']);
+        assert.strictEqual(insertOneIndependentSecondOrder.getSecondOrderTargetType(), 'independent');
+
+        const insertOneCardSecondOrder = new EffectText(`Insert "Counter independent target spell" into card's target card`);
+        assert.strictEqual(insertOneCardSecondOrder.getSecondOrderType(), 'insert');
+        assert.deepStrictEqual(insertOneCardSecondOrder.getSecondOrderEffects(), ['Counter independent target spell']);
+        assert.strictEqual(insertOneCardSecondOrder.getSecondOrderTargetType(), 'card');
+
+        const insertManyIndependentSecondOrder = new EffectText('Insert "Counter independent target spell", "Destroy all objects" into independent target card');
+        assert.strictEqual(insertManyIndependentSecondOrder.getSecondOrderType(), 'insert');
+        assert.deepStrictEqual(insertManyIndependentSecondOrder.getSecondOrderEffects(), ['Counter independent target spell', "Destroy all objects"]);
+        assert.strictEqual(insertManyIndependentSecondOrder.getSecondOrderTargetType(), 'independent');
+
+        const insertManycardSecondOrder = new EffectText(`Insert "Counter card's target spell", "Destroy all objects" into card's target card`);
+        assert.strictEqual(insertManycardSecondOrder.getSecondOrderType(), 'insert');
+        assert.deepStrictEqual(insertManycardSecondOrder.getSecondOrderEffects(), ["Counter card's target spell", "Destroy all objects"]);
+        assert.strictEqual(insertManycardSecondOrder.getSecondOrderTargetType(), 'card');
+    });
 });
