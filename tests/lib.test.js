@@ -236,12 +236,28 @@ describe('Class: EffectText;', () => {
         );
     });
 
-    it ('sets stat amount', () => {
+    it('sets stat amount', () => {
         assert.strictEqual(
             new EffectText('Increase wellness 3 for independent target character')
             .setStatAmount(9)
             .getStatAmount(), 9
         )
+    });
+
+    it('sets target type', () => {
+        assert.strictEqual(
+            new EffectText('Deal 2 to independent target character')
+            .setTargetType('card')
+            .getTargetType(), 'card'
+        );
+    });
+
+    it('sets target class', () => {
+        assert.strictEqual(
+            new EffectText('Deal 2 to independent target ally')
+            .setTargetClass('enemy')
+            .getTargetClass(), 'enemy'
+        );
     });
 
     // #endregion
