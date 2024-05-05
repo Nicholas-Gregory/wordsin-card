@@ -4,41 +4,49 @@ import EffectText from "../lib/EffectText.js";
 
 describe('Class: EffectText;', () => {
     // #region Reports
+
+    it('reports outer target properties', () => {
+        const outerTargetEffect = new EffectText('Target enemy discards 1 target card');
+        assert.strictEqual(outerTargetEffect.getOuterTarget(), 'enemy');
+        assert.strictEqual(outerTargetEffect.getInstruction(), 'discards');
+        assert.strictEqual(outerTargetEffect.getAmount(), 1);
+    })
+
     it('reports sweeper properties', () => {
         const destroyObjects = new EffectText('Destroy all objects');
-        assert.strictEqual(destroyObjects.getSweeperAction(), 'destroy');
+        assert.strictEqual(destroyObjects.getInstruction(), 'destroy');
         assert.strictEqual(destroyObjects.getSweeperTarget(), 'objects');
 
         const killAllies = new EffectText('Kill all allies');
-        assert.strictEqual(killAllies.getSweeperAction(), 'kill');
+        assert.strictEqual(killAllies.getInstruction(), 'kill');
         assert.strictEqual(killAllies.getSweeperTarget(), 'allies');
 
         const killEnemies = new EffectText('Kill all enemies');
-        assert.strictEqual(killEnemies.getSweeperAction(), 'kill');
+        assert.strictEqual(killEnemies.getInstruction(), 'kill');
         assert.strictEqual(killEnemies.getSweeperTarget(), 'enemies');
 
         const killCharacters = new EffectText('Kill all characters');
-        assert.strictEqual(killCharacters.getSweeperAction(), 'kill');
+        assert.strictEqual(killCharacters.getInstruction(), 'kill');
         assert.strictEqual(killCharacters.getSweeperTarget(), 'characters');
 
         const counterSpells = new EffectText('Counter all spells');
-        assert.strictEqual(counterSpells.getSweeperAction(), 'counter');
+        assert.strictEqual(counterSpells.getInstruction(), 'counter');
         assert.strictEqual(counterSpells.getSweeperTarget(), 'spells');
 
         const counterEffects = new EffectText('Counter all effects');
-        assert.strictEqual(counterEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterEffects.getInstruction(), 'counter');
         assert.strictEqual(counterEffects.getSweeperTarget(), 'effects');
 
         const counterOffensiveEffects = new EffectText('Counter all offensive effects');
-        assert.strictEqual(counterOffensiveEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterOffensiveEffects.getInstruction(), 'counter');
         assert.strictEqual(counterOffensiveEffects.getSweeperTarget(), 'offensive effects');
 
         const counterDefensiveEffects = new EffectText('Counter all defensive effects');
-        assert.strictEqual(counterDefensiveEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterDefensiveEffects.getInstruction(), 'counter');
         assert.strictEqual(counterDefensiveEffects.getSweeperTarget(), 'defensive effects');
 
         const counterUtilityEffects = new EffectText('Counter all utility effects');
-        assert.strictEqual(counterUtilityEffects.getSweeperAction(), 'counter');
+        assert.strictEqual(counterUtilityEffects.getInstruction(), 'counter');
         assert.strictEqual(counterUtilityEffects.getSweeperTarget(), 'utility effects');
     });
 
@@ -56,12 +64,12 @@ describe('Class: EffectText;', () => {
     it('reports instructions', () => {
         assert.strictEqual(new EffectText('Deal 5 to independent target character').getInstruction(), 'deal');
         assert.strictEqual(new EffectText('Heal 3 for independent target character').getInstruction(), 'heal');
-        assert.strictEqual(new EffectText('Increase damage 2 for independent target offensive effect').getInstruction(), 'increase damage');
-        assert.strictEqual(new EffectText('Decrease damage 1 for independent target offensive effect').getInstruction(), 'decrease damage');
-        assert.strictEqual(new EffectText('Increase heal 5 for independent target defensive effect').getInstruction(), 'increase heal');
-        assert.strictEqual(new EffectText('Decrease heal 6 for independent target defensive effect').getInstruction(), 'decrease heal');
-        assert.strictEqual(new EffectText('Set damage 1 for independent target offensive effect').getInstruction(), 'set damage');
-        assert.strictEqual(new EffectText('Set heal 10 for independent target defensive effect').getInstruction(), 'set heal');
+        assert.strictEqual(new EffectText('Increase damage 2 for independent target offensive effect').getInstruction(), 'increase');
+        assert.strictEqual(new EffectText('Decrease damage 1 for independent target offensive effect').getInstruction(), 'decrease');
+        assert.strictEqual(new EffectText('Increase heal 5 for independent target defensive effect').getInstruction(), 'increase');
+        assert.strictEqual(new EffectText('Decrease heal 6 for independent target defensive effect').getInstruction(), 'decrease');
+        assert.strictEqual(new EffectText('Set damage 1 for independent target offensive effect').getInstruction(), 'set');
+        assert.strictEqual(new EffectText('Set heal 10 for independent target defensive effect').getInstruction(), 'set');
         assert.strictEqual(new EffectText('Increase wellness 3 for independent target character for 2 turns').getInstruction(), 'increase');
         assert.strictEqual(new EffectText('Decrease wellness 3 for independent target character for 2 turns').getInstruction(), 'decrease');
         assert.strictEqual(new EffectText('Set wellness 10 for independent target character for 2 turns').getInstruction(), 'set');
@@ -198,9 +206,7 @@ describe('Class: EffectText;', () => {
     // #region Setters
 
     it('sets sweeper properties', () => {
-        const sweeperEffect = new EffectText('Kill all allies');
-        sweeperEffect.setSweeperAction('destroy');
-        assert.strictEqual(sweeperEffect.getSweeperAction(), 'destroy');
+        const sweeperEffect = new EffectText('Destroy all allies');
 
         sweeperEffect.setSweeperTarget('objects');
         assert.strictEqual(sweeperEffect.getSweeperTarget(), 'objects');
