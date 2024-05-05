@@ -236,5 +236,13 @@ describe('Class: EffectText;', () => {
         );
     });
 
+    it ('sets stat amount', () => {
+        assert.strictEqual(
+            new EffectText('Increase wellness 3 for independent target character')
+            .setStatAmount(9)
+            .getStatAmount(), 9
+        )
+    });
+
     // #endregion
 });
