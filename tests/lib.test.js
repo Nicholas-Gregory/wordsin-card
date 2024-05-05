@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import EffectText from "../lib/EffectText.js";
 
 describe('Class: EffectText;', () => {
+    // #region Reports
     it('reports sweeper properties', () => {
         const destroyObjects = new EffectText('Destroy all objects');
         assert.strictEqual(destroyObjects.getSweeperAction(), 'destroy');
@@ -192,4 +193,15 @@ describe('Class: EffectText;', () => {
         assert.deepStrictEqual(insertManycardSecondOrder.getSecondOrderEffects(), ["Counter card's target spell", "Destroy all objects"]);
         assert.strictEqual(insertManycardSecondOrder.getSecondOrderTargetType(), 'card');
     });
+    // #endregion
+
+    // #region Setters
+
+    it('sets sweeper properties', () => {
+        const sweeperEffect = new EffectText('Kill all allies');
+        sweeperEffect.setSweeperAction('destroy');
+        assert.strictEqual(sweeperEffect.getSweeperAction(), 'destroy');
+    });
+
+    // #endregion
 });
