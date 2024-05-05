@@ -217,8 +217,16 @@ describe('Class: EffectText;', () => {
             new EffectText('Deal 2 to independent target enemy')
             .setAmount(3)
             .getAmount(), 3
-        )
-    })
+        );
+    });
+
+    it('sets words', () => {
+        assert.deepStrictEqual(
+            new EffectText('Apply burn to independent target object')
+            .setWords(['wet', 'cold'])
+            .getWords(), ['wet', 'cold']
+        );
+    });
 
     // #endregion
 });
