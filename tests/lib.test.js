@@ -44,8 +44,8 @@ describe('Class: StateEffectText;', () => {
     });
 
     it('reports time modifier span', () => {
-        assert.strictEqual(new StateEffectText('Increase 3 for wellness for all allies for 3 more turns').getTimeModifierSpan(), 'turns');
-        assert.strictEqual(new StateEffectText('Decrease 3 for awareness for all enemies for 2 more exchanges').getTimeModifierSpan(), 'exchanges');
+        assert.strictEqual(new StateEffectText('Increase 3 for wellness for all allies for 3 more turns').getTimeModifierSpan(), 'turn');
+        assert.strictEqual(new StateEffectText('Decrease 3 for awareness for all enemies for 2 more exchanges').getTimeModifierSpan(), 'exchange');
     });
 
     it('reports time modifier amount', () => {
@@ -127,15 +127,37 @@ describe('Class: StateEffectText;', () => {
     });
 
     it('sets target class', () => {
-        const effect = new StateEffectText('Heal 4 for all target enemies');
+        const effect = new StateEffectText('Heal 4 for all enemies');
 
         assert.strictEqual(
             effect
             .setTargetClass('ally')
             .getTargetClass(), 'ally'
         );
-        assert.strictEqual(effect.text, 'Heal 4 for all target allies');
-    })
+        assert.strictEqual(effect.text, 'Heal 4 for all allies');
+    });
+
+    it('sets time modifier amount', () => {
+        const effect = new StateEffectText('Set 10 for power for all characters for 2 more turns');
+
+        assert.strictEqual(
+            effect
+            .setTimeModifierAmount(1)
+            .getTimeModifierAmount(), 1
+        );
+        assert.strictEqual(effect.text, 'Set 10 for power for all characters for 1 more turn');
+    });
+
+    it('sets time modifier span', () => {
+        const effect = new StateEffectText('Set 10 for power for all characters for 2 more turns');
+
+        assert.strictEqual(
+            effect
+            .setTimeModifierSpan('exchange')
+            .getTimeModifierSpan(), 'exchange'
+        );
+        assert.strictEqual(effect.text, 'Set 10 for power for all characters for 2 more exchanges');
+    });
 
     // #endregion
 });
