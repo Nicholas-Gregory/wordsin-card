@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import StateEffectText from "../lib/StateEffectText.js";
 
 describe('Class: StateEffectText;', () => {
+    // #region Getters
     it('reports instruction', () => {
         assert.strictEqual(new StateEffectText('Deal 2 to independent target character').getInstruction(), 'deal');
         assert.strictEqual(new StateEffectText("Heal 4 for card's target ally").getInstruction(), 'heal');
@@ -27,6 +28,10 @@ describe('Class: StateEffectText;', () => {
         assert.deepStrictEqual(new StateEffectText('Apply wet, cold to independent target character').getWords(), ['wet', 'cold']);
     });
 
+    it('reports stat', () => {
+        assert.strictEqual(new StateEffectText('Increase 3 for awareness for independent target character').getStat(), 'awareness');
+    })
+
     it('reports target type', () => {
         assert.strictEqual(new StateEffectText('Deal 2 to independent target enemy').getTargetType(), 'independent');
         assert.strictEqual(new StateEffectText("Deal 2 to card's target enemy").getTargetType(), 'card');
@@ -34,7 +39,7 @@ describe('Class: StateEffectText;', () => {
     });
 
     it('reports target class', () => {
-        assert.strictEqual(new StateEffectText('Deal 2 to all enemies').getTargetClass(), 'enemies');
+        assert.strictEqual(new StateEffectText('Deal 2 to all enemies').getTargetClass(), 'enemy');
         assert.strictEqual(new StateEffectText('Heal 3 for independent target ally').getTargetClass(), 'ally');
     });
 
@@ -49,5 +54,88 @@ describe('Class: StateEffectText;', () => {
 
     it('reports if it is for the rest of the encounter', () => {
         assert.strictEqual(new StateEffectText('Apply burn to all enemies for the rest of the encounter').isRestOfEncounter(), true);
+    });
+
+    // #endregion
+
+    // #region Setters
+
+    it('sets instruction', () => {
+        assert.strictEqual(
+            new StateEffectText('Deal 4 to independent target ally')
+            .setInstruction('heal')
+            .text, 'Heal 4 for independent target ally'
+        );
+
+        assert.strictEqual(
+            new StateEffectText('Heal 4 for independent target enemy')
+            .setInstruction('deal')
+            .text, 'Deal 4 to independent target enemy'
+        );
+    });
+
+    it('sets amount', () => {
+        assert.strictEqual(
+            new StateEffectText('Deal 2 to independent target enemy')
+            .setAmount(3)
+            .getAmount(), 3
+        );
+    });
+
+    it('sets words', () => {
+        const effect = new StateEffectText('Apply burn to independent target object');
+
+        assert.deepStrictEqual(
+            effect
+            .setWords(['wet'])
+            .getWords(), ['wet']
+        );
+        assert.strictEqual(effect.text, 'Apply wet to independent target object')
+
+        assert.deepStrictEqual(
+            effect
+            .setWords(['wet', 'cold'])
+            .getWords(), ['wet', 'cold']
+        );
+        assert.strictEqual(effect.text, 'Apply wet, cold to independent target object');
+    });
+
+    it('sets stat', () => {
+        assert.strictEqual(
+            new StateEffectText('Increase 2 for wellness for independent target character')
+            .setStat('awareness')
+            .getStat(), 'awareness'
+        );
+    });
+
+    it('sets target type', () => {
+        const effect = new StateEffectText('Deal 2 to independent target enemy');
+
+        assert.strictEqual(
+            effect
+            .setTargetType('card')
+            .getTargetType(), 'card'
+        );
+        assert.strictEqual(effect.text, "Deal 2 to card's target enemy");
+
+        assert.strictEqual(
+            effect
+            .setTargetType('all')
+            .getTargetType(), 'all'
+        );
+        assert.strictEqual(effect.text, 'Deal 2 to all enemies');
+    });
+
+    it('sets target class', () => {
+        const effect = new StateEffectText('Heal 4 for all target enemies');
+
+        assert.strictEqual(
+            effect
+            .setTargetClass('ally')
+            .getTargetClass(), 'ally'
+        );
+        assert.strictEqual(effect.text, 'Heal 4 for all target allies');
     })
+
+    // #endregion
 });
