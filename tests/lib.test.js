@@ -11,7 +11,8 @@ describe('Class: StateEffectText;', () => {
         assert.strictEqual(new StateEffectText('Increase 2 for awareness for independent target character').getInstruction(), 'increase');
         assert.strictEqual(new StateEffectText("Decrease 2 for awareness for card's target character").getInstruction(), 'decrease');
         assert.strictEqual(new StateEffectText('Apply burn to independent target object').getInstruction(), 'apply');
-        assert.strictEqual(new StateEffectText("Apply wet, cold to card's target character").getInstruction(), 'apply');
+        assert.strictEqual(new StateEffectText("Apply wet, burn to card's target character").getInstruction(), 'apply');
+
         assert.strictEqual(new StateEffectText('Destroy independent target object').getInstruction(), 'destroy');
         assert.strictEqual(new StateEffectText('Kill independent target character').getInstruction(), 'kill');
     });
@@ -170,15 +171,45 @@ describe('Class: ModifierEffectText', () => {
         assert.strictEqual(new ModifierEffectText(`Decrease "Deal" by 1 for independent target effect`).getInstruction(), 'decrease');
         assert.strictEqual(new ModifierEffectText(`Multiply "Deal" by 2 for independent target effect`).getInstruction(), 'multiply');
         assert.strictEqual(new ModifierEffectText(`Divide "Deal" by 2 for independent target effect`).getInstruction(), 'divide');
-        assert.strictEqual(new ModifierEffectText(`Remove "Apply burn" from independent target word effect`).getInstruction(), 'remove');
-        assert.strictEqual(new ModifierEffectText(`Remove "Apply wet, cold" from independent target word effect`).getInstruction(), 'remove');
+        assert.strictEqual(new ModifierEffectText(`Remove "Apply burn" from independent target effect`).getInstruction(), 'remove');
+        assert.strictEqual(new ModifierEffectText(`Remove "Apply wet, cold" from independent target effect`).getInstruction(), 'remove');
     });
 
     it('reports amount', () => {
-        
+        assert.strictEqual(new ModifierEffectText(`Set "Deal" to 1 for independent target effect`).getAmount(), 1);
     });
 
     it('reports words', () => {
-        
+        assert.deepStrictEqual(new ModifierEffectText(`Remove "Apply burn" from independent target effect`).getWords(), ['burn']);
+        assert.deepStrictEqual(new ModifierEffectText(`Remove "Apply wet, cold" from independent target effect`).getWords(), ['wet', 'cold'])
     });
+
+    it('reports argument', () => {
+        assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for independent target effect`).getArgument(), 'deal');
+        assert.strictEqual(new ModifierEffectText(`Increase "Heal" by 1 for independent target effect`).getArgument(), 'heal');
+        assert.strictEqual(new ModifierEffectText(`Multiply "Increase" by 2 for independent target effect`).getArgument(), 'increase');
+        assert.strictEqual(new ModifierEffectText(`Divide "Deal" by 2 for independent target effect`).getArgument(), 'deal');
+        assert.strictEqual(new ModifierEffectText(`Remove "Apply burn" from independent target effect`).getArgument(), 'apply');
+    });
+
+    it(`reports target type`, () => {
+        assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for independent target effect`).getTargetType(), 'independent');
+        assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for card's target effect`).getTargetType(), 'card');
+    });
+
+    it('reports if it is for the rest of the encounter', () => {
+        assert.strictEqual(new ModifierEffectText('Increase "Deal" by 5 for all effects for the rest of the encounter').isRestOfEncounter(), true);
+        assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 5 for all effects for 2 more turns`).isRestOfEncounter(), false);
+    });
+
+    it(`reports time modifier amount`, () => {
+        assert.strictEqual(new ModifierEffectText(`Increase "Heal" by 2 for all effects for 1 more turn`).getTimeModifierAmount(), 1);
+    });
+
+    it(`reports time modifier span`, () => {
+        assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 2 more turns`).getTimeModifierSpan(), 'turn');
+        assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 1 more turn`).getTimeModifierSpan(), 'turn');
+        assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 2 more exchanges`).getTimeModifierSpan(), 'exchange');
+        assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 1 more exchange`).getTimeModifierSpan(), 'exchange');
+    })
 })
