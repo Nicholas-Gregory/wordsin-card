@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from 'node:assert';
 import StateEffectText from "../lib/StateEffectText.js";
+import ModifierEffectText from "../lib/ModifierEffectText.js";
 
 describe('Class: StateEffectText;', () => {
     // #region Getters
@@ -161,3 +162,23 @@ describe('Class: StateEffectText;', () => {
 
     // #endregion
 });
+
+describe('Class: ModifierEffectText', () => {
+    it('reports instruction', () => {
+        assert.strictEqual(new ModifierEffectText('Set "Deal" to 3 for independent target effect').getInstruction(), 'set');
+        assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for independent target effect`).getInstruction(), 'increase');
+        assert.strictEqual(new ModifierEffectText(`Decrease "Deal" by 1 for independent target effect`).getInstruction(), 'decrease');
+        assert.strictEqual(new ModifierEffectText(`Multiply "Deal" by 2 for independent target effect`).getInstruction(), 'multiply');
+        assert.strictEqual(new ModifierEffectText(`Divide "Deal" by 2 for independent target effect`).getInstruction(), 'divide');
+        assert.strictEqual(new ModifierEffectText(`Remove "Apply burn" from independent target word effect`).getInstruction(), 'remove');
+        assert.strictEqual(new ModifierEffectText(`Remove "Apply wet, cold" from independent target word effect`).getInstruction(), 'remove');
+    });
+
+    it('reports amount', () => {
+        
+    });
+
+    it('reports words', () => {
+        
+    });
+})
