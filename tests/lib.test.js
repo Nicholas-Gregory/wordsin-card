@@ -4,6 +4,7 @@ import StateEffectText from "../lib/StateEffectText.js";
 import ModifierEffectText from "../lib/ModifierEffectText.js";
 import CardEffectText from "../lib/CardEffectText.js";
 import { cardTargetClass } from "../lib/effect-text-regexps.js";
+import EffectEffectText from "../lib/EffectEffectText.js";
 
 describe('Class: StateEffectText;', () => {
     // #region Getters
@@ -365,4 +366,13 @@ describe('Class: CardEffectText', () => {
     });
 
     // #endregion
+});
+
+describe(`Class: EffectEffectText`, () => {
+    it(`reports instruction`, () => {
+        assert.strictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy"`).getInstruction(), 'change');
+        assert.strictEqual(new EffectEffectText(`Add to independent target card's text "Deal 2 to independent target enemy"`).getInstruction(), 'add');
+        assert.strictEqual(new EffectEffectText(`Remove from independent target card's text independent target effect`).getInstruction(), 'remove');
+        assert.strictEqual(new EffectEffectText(`Copy independent target effect 2 times`).getInstruction(), 'copy');
+    });
 });
