@@ -165,6 +165,9 @@ describe('Class: StateEffectText;', () => {
 });
 
 describe('Class: ModifierEffectText', () => {
+
+    // #region Getters
+
     it('reports instruction', () => {
         assert.strictEqual(new ModifierEffectText('Set "Deal" to 3 for independent target effect').getInstruction(), 'set');
         assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for independent target effect`).getInstruction(), 'increase');
@@ -197,6 +200,11 @@ describe('Class: ModifierEffectText', () => {
         assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 1 for card's target effect`).getTargetType(), 'card');
     });
 
+    it(`reports changed instruction`, () => {
+        assert.strictEqual(new ModifierEffectText(`Change "Deal" to "Heal" for independent target effect for 1 more exchange`).getChangedInstruction(), 'heal');
+        assert.strictEqual(new ModifierEffectText(`Change instruction to "Multiply" for independent target effect`).getChangedInstruction(), 'multiply');
+    });
+
     it('reports if it is for the rest of the encounter', () => {
         assert.strictEqual(new ModifierEffectText('Increase "Deal" by 5 for all effects for the rest of the encounter').isRestOfEncounter(), true);
         assert.strictEqual(new ModifierEffectText(`Increase "Deal" by 5 for all effects for 2 more turns`).isRestOfEncounter(), false);
@@ -211,5 +219,60 @@ describe('Class: ModifierEffectText', () => {
         assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 1 more turn`).getTimeModifierSpan(), 'turn');
         assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 2 more exchanges`).getTimeModifierSpan(), 'exchange');
         assert.strictEqual(new ModifierEffectText(`Multiply "Heal" by 2 for all effects for 1 more exchange`).getTimeModifierSpan(), 'exchange');
+    });
+
+    // #endregion
+
+    // #region Setters
+
+    it(`sets instruction`, () => {
+        const effect = new ModifierEffectText(`Decrease "Heal" by 3 for independent target effect`)
+
+        assert.strictEqual(
+            effect
+            .setInstruction('increase')
+            .getInstruction(), 'increase'
+        );
+        assert.strictEqual(effect.text, `Increase "Heal" by 3 for independent target effect`);
+    });
+
+    it(`sets amount`, () => {
+        assert.strictEqual(
+            new ModifierEffectText(`Multiply "Heal" by 1 for independent target effect`)
+            .setAmount(2)
+            .getAmount(), 2
+        );
+    });
+
+    it('sets target type', () => {
+        const effect = new ModifierEffectText(`Change "Increase" to "Divide" for card's target effect`);
+
+        assert.strictEqual(
+            effect
+            .setTargetType('independent')
+            .getTargetType(), 'independent'
+        );
+        assert.strictEqual(effect.text, `Change "Increase" to "Divide" for independent target effect`);
+    });
+
+    it(`sets time modifier amount`, () => {
+        assert.strictEqual(
+            new ModifierEffectText(`Increase "Heal" by 2 for all effects for 1 more turns`)
+            .setTimeModifierAmount(2)
+            .getTimeModifierAmount(), 2
+        );
+    });
+
+    it(`sets time modifier span`, () => {
+        const effect = new ModifierEffectText(`Decrease "Deal" by 2 for independent target effect for 2 more exchanges`);
+
+        assert.strictEqual(
+            effect
+            .setTimeModifierSpan('turn')
+            .getTimeModifierSpan(), 'turn'
+        );
+        assert.strictEqual(effect.text, `Decrease "Deal" by 2 for independent target effect for 2 more turns`);
     })
+
+    // #endregion
 })
