@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from 'node:assert';
 import StateEffectText from "../lib/StateEffectText.js";
 import ModifierEffectText from "../lib/ModifierEffectText.js";
+import CardEffectText from "../lib/CardEffectText.js";
 
 describe('Class: StateEffectText;', () => {
     // #region Getters
@@ -275,4 +276,18 @@ describe('Class: ModifierEffectText', () => {
     })
 
     // #endregion
-})
+});
+
+describe('Class: CardEffectText', () => {
+    // #region Getters
+
+    it('reports card target', () => {
+        assert.strictEqual(new CardEffectText('You discard 3 chosen cards').getCardTargetingType(), 'you');
+        assert.strictEqual(new CardEffectText('Target character draws 3 cards').getCardTargetingType(), 'target');
+        assert.strictEqual(new CardEffectText(`All enemies discard 1 target card`).getCardTargetingType(), 'all');
+    });
+
+    // #endregion
+
+
+});
