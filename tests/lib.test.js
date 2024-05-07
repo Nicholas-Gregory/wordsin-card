@@ -3,7 +3,6 @@ import assert from 'node:assert';
 import StateEffectText from "../lib/StateEffectText.js";
 import ModifierEffectText from "../lib/ModifierEffectText.js";
 import CardEffectText from "../lib/CardEffectText.js";
-import { cardTargetClass } from "../lib/effect-text-regexps.js";
 import EffectEffectText from "../lib/EffectEffectText.js";
 import FocusEffectText from "../lib/FocusEffectText.js";
 
@@ -60,6 +59,14 @@ describe('Class: StateEffectText;', () => {
 
     it('reports if it is for the rest of the encounter', () => {
         assert.strictEqual(new StateEffectText('Apply burn to all enemies for the rest of the encounter').isRestOfEncounter(), true);
+    });
+
+    it('handles self targeting', () => {
+        const effect = new StateEffectText('Deal 2 to you');
+
+        assert.strictEqual(effect.getTargetClass(), 'you');
+        assert.strictEqual(effect.getInstruction(), 'deal');
+        assert.strictEqual(effect.getAmount(), 2);
     });
 
     // #endregion
