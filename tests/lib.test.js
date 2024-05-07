@@ -389,5 +389,16 @@ describe(`Class: EffectEffectText`, () => {
     it(`reports effects`, () => {
         assert.deepStrictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy"`).getEffects(), ["Deal 2 to independent target enemy"]);
         assert.deepStrictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy", "You draw 1 card"`).getEffects(), ["Deal 2 to independent target enemy", "You draw 1 card"]);
-    })
+    });
+
+    it(`sets amount`, () => {
+        const effect = new EffectEffectText(`Copy independent target effect 1 time`);
+
+        assert.strictEqual(
+            effect
+            .setAmount(3)
+            .getAmount(), 3
+        );
+        assert.strictEqual(effect.text, `Copy independent target effect 3 times`);
+    });
 });
