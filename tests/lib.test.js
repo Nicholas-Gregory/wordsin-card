@@ -375,4 +375,19 @@ describe(`Class: EffectEffectText`, () => {
         assert.strictEqual(new EffectEffectText(`Remove from independent target card's text independent target effect`).getInstruction(), 'remove');
         assert.strictEqual(new EffectEffectText(`Copy independent target effect 2 times`).getInstruction(), 'copy');
     });
+
+    it(`reports target type`, () => {
+        assert.strictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy"`).getTargetType(), 'independent');
+        assert.strictEqual(new EffectEffectText(`Change card's target card's text to "Deal 2 to independent target enemy"`).getTargetType(), 'card');
+    });
+
+    it(`reports amount`, () => {
+        assert.strictEqual(new EffectEffectText(`Copy independent target effect 1 time`).getAmount(), 1);
+        assert.strictEqual(new EffectEffectText(`Copy independent target effect 2 times`).getAmount(), 2);
+    });
+
+    it(`reports effects`, () => {
+        assert.deepStrictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy"`).getEffects(), ["Deal 2 to independent target enemy"]);
+        assert.deepStrictEqual(new EffectEffectText(`Change independent target card's text to "Deal 2 to independent target enemy", "You draw 1 card"`).getEffects(), ["Deal 2 to independent target enemy", "You draw 1 card"]);
+    })
 });
