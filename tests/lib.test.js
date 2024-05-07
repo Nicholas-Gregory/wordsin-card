@@ -5,6 +5,7 @@ import ModifierEffectText from "../lib/ModifierEffectText.js";
 import CardEffectText from "../lib/CardEffectText.js";
 import { cardTargetClass } from "../lib/effect-text-regexps.js";
 import EffectEffectText from "../lib/EffectEffectText.js";
+import FocusEffectText from "../lib/FocusEffectText.js";
 
 describe('Class: StateEffectText;', () => {
     // #region Getters
@@ -400,5 +401,14 @@ describe(`Class: EffectEffectText`, () => {
             .getAmount(), 3
         );
         assert.strictEqual(effect.text, `Copy independent target effect 3 times`);
+    });
+});
+
+describe(`Class: FocusEffectText`, () => {
+    it(`reports instruction`, () => {
+        assert.strictEqual(new FocusEffectText(`Add 1 to independent target card's focus cost`).getInstruction(), 'add');
+        assert.strictEqual(new FocusEffectText(`Subtract 1 from independent target card's focus cost`).getInstruction(), 'subtract');
+        assert.strictEqual(new FocusEffectText('Gain 1 focus for independent target ally').getInstruction(), 'gain');
+        assert.strictEqual(new FocusEffectText(`Lose 1 focus for independent target enemy`).getInstruction(), 'lose');
     });
 });
