@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import StateEffectText from "../lib/StateEffectText.js";
 import ModifierEffectText from "../lib/ModifierEffectText.js";
 import CardEffectText from "../lib/CardEffectText.js";
+import { cardTargetClass } from "../lib/effect-text-regexps.js";
 
 describe('Class: StateEffectText;', () => {
     // #region Getters
@@ -283,8 +284,46 @@ describe('Class: CardEffectText', () => {
 
     it('reports card target', () => {
         assert.strictEqual(new CardEffectText('You discard 3 chosen cards').getCardTargetingType(), 'you');
-        assert.strictEqual(new CardEffectText('Target character draws 3 cards').getCardTargetingType(), 'target');
+        assert.strictEqual(new CardEffectText('Independent target character draws 3 cards').getCardTargetingType(), 'independent');
+        assert.strictEqual(new CardEffectText(`Card's target character draws 3 cards`).getCardTargetingType(), 'card');
         assert.strictEqual(new CardEffectText(`All enemies discard 1 target card`).getCardTargetingType(), 'all');
+    });
+
+    it(`reports target class`, () => {
+        assert.strictEqual(new CardEffectText(`Independent target character draws 1 card`).getTargetClass(), 'character');
+        assert.strictEqual(new CardEffectText(`All characters draw 1 card`).getTargetClass(), 'character');
+        assert.strictEqual(new CardEffectText(`Independent target enemy discards 1 card`).getTargetClass(), 'enemy');
+        assert.strictEqual(new CardEffectText(`All enemies discard 1 card`).getTargetClass(), 'enemy');
+        assert.strictEqual(new CardEffectText(`Independent target ally draws 3 cards`).getTargetClass(), 'ally');
+        assert.strictEqual(new CardEffectText(`All allies draw 3 cards`).getTargetClass(), 'ally');
+    });
+
+    it(`reports instruction`, () => {
+        assert.strictEqual(new CardEffectText('Independent target enemy discards 2 cards').getInstruction(), 'discard');
+        assert.strictEqual(new CardEffectText(`Independent target character reveals 1 card`).getInstruction(), 'reveal');
+        assert.strictEqual(new CardEffectText(`You draw 2 cards`).getInstruction(), 'draw');
+        assert.strictEqual(new CardEffectText(`Independent target enemy shuffles 1 card into their grimoire`).getInstruction(), 'shuffle');
+    });
+
+    it('reports amount', () => {
+        assert.strictEqual(new CardEffectText(`Card's target ally draws 3 cards`).getAmount(), 3);
+    });
+
+    it(`reports card modifier`, () => {
+        assert.strictEqual(new CardEffectText(`Independent target enemy discards 3 chosen cards`).getCardModifier(), 'chosen');
+        assert.strictEqual(new CardEffectText(`Independent target ally reveals 1 target card`).getCardModifier(), 'target');
+        assert.strictEqual(new CardEffectText(`You shuffle 1 random card into your grimoire`).getCardModifier(), 'random');
+    });
+
+    it(`reports top or bottom`, () => {
+        assert.strictEqual(new CardEffectText(`You put 2 chosen cards on top of your grimoire`).getTopOrBottom(), 'top');
+        assert.strictEqual(new CardEffectText(`Independent target character puts 2 target cards on the bottom of their grimoire`).getTopOrBottom(), 'bottom');
+    });
+
+    it(`reports grimoire targeting`, () => {
+        assert.strictEqual(new CardEffectText(`Independent target ally shuffles 1 chosen card into their grimoire`).getGrimoireTargeting(), 'own');
+        assert.strictEqual(new CardEffectText(`You shuffle 1 random card into your grimoire`).getGrimoireTargeting(), 'own');
+        assert.strictEqual(new CardEffectText(`Card's target character shuffles 1 target card into target grimoire`).getGrimoireTargeting(), 'target');
     });
 
     // #endregion
