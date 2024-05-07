@@ -328,5 +328,41 @@ describe('Class: CardEffectText', () => {
 
     // #endregion
 
+    // #region Setters
 
+    it('sets card modifier', () => {
+        assert.strictEqual(
+            new CardEffectText(`You discard 1 random card`)
+            .setCardModifier('chosen')
+            .getCardModifier(), 'chosen'
+        );
+
+        const effect = new CardEffectText(`You draw 1 random card`).setCardModifier('');
+
+        assert.strictEqual(effect.text, `You draw 1 card`);
+    });
+
+    it('sets instruction', () => {
+        const effect = new CardEffectText(`You discard 1 chosen card`);
+        
+        assert.strictEqual(
+            effect
+            .setInstruction('draw')
+            .getInstruction(), 'draw'
+        );
+        assert.strictEqual(effect.text, `You draw 1 card`)
+    });
+
+    it(`sets amount`, () => {
+        const effect = new CardEffectText(`You draw 1 card`);
+
+        assert.strictEqual(
+            effect
+            .setAmount(2)
+            .getAmount(), 2
+        );
+        assert.strictEqual(effect.text, `You draw 2 cards`);
+    });
+
+    // #endregion
 });
