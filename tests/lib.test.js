@@ -94,4 +94,31 @@ describe(`Class: EffectText`, () => {
         );
         assert.strictEqual(effect.text, `all characters draw 1 card`);
     });
+
+    it(`sets keywords`, () => {
+        const statusEffect = new EffectText(`apply burn to independent target character`);
+        const modifierEffect = new EffectText(`add deal 2 for independent target effect`);
+
+        assert.deepStrictEqual(
+            statusEffect
+            .setKeywords(['wet', 'cold'])
+            .getKeywords(), ['wet', 'cold']
+        );
+        assert.deepStrictEqual(
+            statusEffect
+            .setKeywords(['burn'])
+            .getKeywords(), ['burn']
+        );
+
+        assert.deepStrictEqual(
+            modifierEffect
+            .setKeywords(['multiply', 'add', 'deal'])
+            .getKeywords(), ['multiply', 'add', 'deal']
+        );
+        assert.deepStrictEqual(
+            modifierEffect
+            .setKeywords(['multiply', 'deal'])
+            .getKeywords(), ['multiply', 'deal']
+        );
+    });
 });
