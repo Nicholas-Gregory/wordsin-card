@@ -40,7 +40,7 @@ describe(`Class: EffectText`, () => {
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierSpan(), 'turn');
     });
 
-    it(`sets various test values`, () => {
+    it(`sets outer targeting`, () => {
         const effect = new EffectText(`all enemies discard 1 card`)
 
         assert.strictEqual(
@@ -50,7 +50,6 @@ describe(`Class: EffectText`, () => {
         );
         assert.strictEqual(effect.text, `independent target enemy discards 1 card`);
 
-        console.log(effect.setOuterTargeting('all').parse)
         assert.strictEqual(
             effect
             .setOuterTargeting(`all`)
@@ -69,5 +68,30 @@ describe(`Class: EffectText`, () => {
         assert.strictEqual(otherEffect.text, 'all characters draw 1 card');
 
 
+    });
+
+    it(`sets outer target`, () => {
+        const effect = new EffectText(`all characters draw 1 card`);
+
+        assert.strictEqual(
+            effect
+            .setOuterTarget('all')
+            .getOuterTarget(), 'all'
+        );
+        assert.strictEqual(effect.text, `all allies draw 1 card`);
+
+        assert.strictEqual(
+            effect
+            .setOuterTarget('enem')
+            .getOuterTarget(), 'enem'
+        );
+        assert.strictEqual(effect.text, `all enemies draw 1 card`);
+
+        assert.strictEqual(
+            effect
+            .setOuterTarget('character')
+            .getOuterTarget(), 'character'
+        );
+        assert.strictEqual(effect.text, `all characters draw 1 card`);
     });
 });
