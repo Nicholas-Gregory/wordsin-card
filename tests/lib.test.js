@@ -412,10 +412,29 @@ describe(`Class: EffectEffectText`, () => {
 });
 
 describe(`Class: FocusEffectText`, () => {
-    it(`reports instruction`, () => {
-        assert.strictEqual(new FocusEffectText(`Add 1 to independent target card's focus cost`).getInstruction(), 'add');
-        assert.strictEqual(new FocusEffectText(`Subtract 1 from independent target card's focus cost`).getInstruction(), 'subtract');
-        assert.strictEqual(new FocusEffectText('Gain 1 focus for independent target ally').getInstruction(), 'gain');
-        assert.strictEqual(new FocusEffectText(`Lose 1 focus for independent target enemy`).getInstruction(), 'lose');
+    it('reports target type', () => {
+        assert.strictEqual(new FocusEffectText(`You gain 2 focus`).getTargetType(), 'you');
+        assert.strictEqual(new FocusEffectText(`All allies gain 2 focus`).getTargetType(), 'all');
+        assert.strictEqual(new FocusEffectText(`Independent target character gains 2 focus`).getTargetType(), 'independent');
+        assert.strictEqual(new FocusEffectText(`Card's target character gains 2 focus`).getTargetType(), 'card');
     });
+
+    it(`reports target class`, () => {
+        assert.strictEqual(new FocusEffectText(`All characters gain 2 focus`).getTargetClass(), 'character');
+        assert.strictEqual(new FocusEffectText(`Independent target enemy loses 2 focus`).getTargetClass(), 'enemy');
+        assert.strictEqual(new FocusEffectText(`All enemies lose 2 focus`).getTargetClass(), 'enemy');
+        assert.strictEqual(new FocusEffectText(`All allies gain 2 focus`).getTargetClass(), 'ally');
+        assert.strictEqual(new FocusEffectText(`Independent target ally gains 2 focus`).getTargetClass(), 'ally');
+    });
+
+    it(`reports instruction`, () => {
+        assert.strictEqual(new FocusEffectText(`You gain 2 focus`).getInstruction(), 'gain');
+        assert.strictEqual(new FocusEffectText(`You lose 2 focus`).getInstruction(), 'lose');
+        assert.strictEqual(new FocusEffectText(`Independent target character gains 2 focus`).getInstruction(), 'gain');
+        assert.strictEqual(new FocusEffectText(`Independent target character loses 2 focus`).getInstruction(), 'lose');
+    });
+
+    it('reports amount', () => {
+        assert.strictEqual(new FocusEffectText(`You gain 3 focus`).getAmount(), 3);
+    })
 });
