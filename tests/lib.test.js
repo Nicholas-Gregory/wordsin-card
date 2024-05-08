@@ -12,6 +12,8 @@ describe('regular expressions', () => {
         assert.match(`you discard 3 cards`, regexp);
         assert.match(`independent target enemy discards 3 random cards`, regexp);
         assert.match(`kill all characters`, regexp);
-        // assert.match(`change`)
+        assert.match(`card's target enemy shuffles 1 chosen card into their grimoire`, regexp);
+        assert.match(`apply burn to all enemies for 1 more turn`, regexp);
+        assert.match(`multiply deal 2 for all allies for 3 more exchanges`, regexp);
     })
 });
