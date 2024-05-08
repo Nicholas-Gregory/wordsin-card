@@ -42,9 +42,6 @@ describe(`Class: EffectText`, () => {
 
     it(`sets various test values`, () => {
         const effect = new EffectText(`all enemies discard 1 card`)
-        // .setOuterTargeting('independent')
-
-        // console.log(effect.parse)
 
         assert.strictEqual(
             effect
@@ -52,5 +49,25 @@ describe(`Class: EffectText`, () => {
             .getOuterTargeting(), 'independent'
         );
         assert.strictEqual(effect.text, `independent target enemy discards 1 card`);
+
+        console.log(effect.setOuterTargeting('all').parse)
+        assert.strictEqual(
+            effect
+            .setOuterTargeting(`all`)
+            .getOuterTargeting(), `all`
+        );
+        assert.strictEqual(effect.text, `all enemies discard 1 card`);
+
+        const otherEffect = new EffectText(`independent target character draws 1 card`)
+        .setOuterTargeting('all')
+        console.log(otherEffect.parse)
+        assert.strictEqual(
+            otherEffect
+            .setOuterTargeting('all')
+            .getOuterTargeting(), 'all'
+        );
+        assert.strictEqual(otherEffect.text, 'all characters draw 1 card');
+
+
     });
 });
