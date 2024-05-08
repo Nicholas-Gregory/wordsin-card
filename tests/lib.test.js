@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from 'node:assert';
 import { effectRegExp } from "../lib/regexps.js";
-import EffectText from "./EffectText.js";
+import EffectText from "../lib/EffectText.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -20,7 +20,7 @@ describe('regular expressions', () => {
 });
 
 describe(`Class: EffectText`, () => {
-    it('reports properties from single test strings', () => {
+    it('reports properties from various test strings', () => {
         // console.log(effectRegExp)
         assert.strictEqual(new EffectText('deal 2 to independent target enemy').getAction(), 'deal');
         assert.deepStrictEqual(new EffectText('multiply heal 3 for all effects for 2 more exchanges').getKeywords(), ['multiply', 'heal']);
@@ -38,5 +38,19 @@ describe(`Class: EffectText`, () => {
         assert.strictEqual(new EffectText(`random enemy shuffles 1 random card into their grimoire`).getGrimoireTargeting(), 'their');
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierAmount(), 2);
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierSpan(), 'turn');
+    });
+
+    it(`sets various test values`, () => {
+        const effect = new EffectText(`all enemies discard 1 card`)
+        // .setOuterTargeting('independent')
+
+        // console.log(effect.parse)
+
+        assert.strictEqual(
+            effect
+            .setOuterTargeting('independent')
+            .getOuterTargeting(), 'independent'
+        );
+        assert.strictEqual(effect.text, `independent target enemy discards 1 card`);
     });
 });
