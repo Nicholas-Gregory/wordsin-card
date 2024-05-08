@@ -412,6 +412,8 @@ describe(`Class: EffectEffectText`, () => {
 });
 
 describe(`Class: FocusEffectText`, () => {
+    // #region Setters
+
     it('reports target type', () => {
         assert.strictEqual(new FocusEffectText(`You gain 2 focus`).getTargetType(), 'you');
         assert.strictEqual(new FocusEffectText(`All allies gain 2 focus`).getTargetType(), 'all');
@@ -437,4 +439,37 @@ describe(`Class: FocusEffectText`, () => {
     it('reports amount', () => {
         assert.strictEqual(new FocusEffectText(`You gain 3 focus`).getAmount(), 3);
     })
+
+    // #endregion
+
+    // #region Getters
+
+    it('sets instruction', () => {
+        const youEffect = new FocusEffectText(`You lose 2 focus`);
+        const otherGainEffect = new FocusEffectText(`Independent target enemy gains 2 focus`);
+        const otherLoseEffect = new FocusEffectText(`Independent target ally loses 2 focus`);
+
+        assert.strictEqual(
+            youEffect
+            .setInstruction('gain')
+            .getInstruction(), 'gain'
+        );
+        assert.strictEqual(youEffect.text, 'You gain 2 focus');
+
+        assert.strictEqual(
+            otherGainEffect
+            .setInstruction('lose')
+            .getInstruction(), 'lose'
+        );
+        assert.strictEqual(otherGainEffect.text, 'Independent target enemy loses 2 focus');
+
+        assert.strictEqual(
+            otherLoseEffect
+            .setInstruction('gain')
+            .getInstruction(), 'gain'
+        );
+        assert.strictEqual(otherLoseEffect.text, 'Independent target ally gains 2 focus');
+    });
+
+    // #endregion
 });
