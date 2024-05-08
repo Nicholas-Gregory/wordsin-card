@@ -21,7 +21,6 @@ describe('regular expressions', () => {
 
 describe(`Class: EffectText`, () => {
     it('reports properties from various test strings', () => {
-        // console.log(effectRegExp)
         assert.strictEqual(new EffectText('deal 2 to independent target enemy').getAction(), 'deal');
         assert.deepStrictEqual(new EffectText('multiply heal 3 for all effects for 2 more exchanges').getKeywords(), ['multiply', 'heal']);
         assert.strictEqual(new EffectText('add deal 1 for all effects for the rest of the encounter').getAction(), 'add');
@@ -59,7 +58,6 @@ describe(`Class: EffectText`, () => {
 
         const otherEffect = new EffectText(`independent target character draws 1 card`)
         .setOuterTargeting('all')
-        console.log(otherEffect.parse)
         assert.strictEqual(
             otherEffect
             .setOuterTargeting('all')
@@ -120,5 +118,24 @@ describe(`Class: EffectText`, () => {
             .setKeywords(['multiply', 'deal'])
             .getKeywords(), ['multiply', 'deal']
         );
+    });
+
+    it(`sets action`, () => {
+        const outerEffect = new EffectText(`independent target ally discards 1 card`);
+        const actionEffect = new EffectText(`deal 2 to independent target ally`);
+
+        assert.strictEqual(
+            outerEffect
+            .setAction('draw')
+            .getAction(), 'draw'
+        );
+        assert.strictEqual(outerEffect.text, `independent target ally draws 1 card`);
+
+        assert.strictEqual(
+            actionEffect
+            .setAction('heal')
+            .getAction(), 'heal'
+        );
+        assert.strictEqual(actionEffect.text, `heal 2 for independent target ally`);
     });
 });
