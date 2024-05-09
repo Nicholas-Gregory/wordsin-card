@@ -324,4 +324,29 @@ describe(`Class; Effect;`, () => {
 
         assert.deepStrictEqual(targetEffect.text.getKeywords(), ['multiply', 'heal']);
     });
+
+    it(`resolves effects`, () => {
+        const changeTarget = new Effect(new EffectText(`deal 2 to independent target ally`));
+        const changeEffect = new Effect(new EffectText(`change deal to heal for independent target effect`), changeTarget);
+        const setTarget = new Effect(new EffectText(`heal 4 for independent target ally`));
+        const setEffect = new Effect(new EffectText(`set heal 5 for independent target effect`), setTarget);
+        const addTarget = new Effect(new EffectText(`heal 4 for independent target ally`));
+        const addEffect = new Effect(new EffectText(`add heal 1 for independent target effect`), addTarget);
+        const subtractTarget = new Effect(new EffectText(`deal 2 to all allies`));
+        const subtractEffect = new Effect(new EffectText(`subtract deal 2 for independent target effect`), subtractTarget);
+        const multiplyTarget = new Effect(new EffectText(`deal 2 to all enemies`));
+        const multiplyEffect = new Effect(new EffectText(`multiply deal 2 for independent target effect`), multiplyTarget);
+
+        changeEffect.resolve();
+        setEffect.resolve();
+        addEffect.resolve();
+        subtractEffect.resolve();
+        multiplyEffect.resolve();
+
+        assert.strictEqual(changeTarget.text.getAction(), 'heal');
+        assert.strictEqual(setTarget.text.getAmount(), 5);
+        assert.strictEqual(addTarget.text.getAmount(), 5);
+        assert.strictEqual(subtractTarget.text.getAmount(), 0);
+        assert.strictEqual(multiplyTarget.text.getAmount(), 4);
+    });
 });
