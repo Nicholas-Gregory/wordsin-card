@@ -220,4 +220,12 @@ describe(`Class: EffectText`, () => {
         );
         assert.strictEqual(allEffect.text, `kill all allies`);
     });
+
+    it(`sets time modifier amount`, () => {
+        assert.strictEqual(
+            new EffectText(`apply burn to all enemies for 2 more turns`)
+            .setTimeModifierAmount(4)
+            .getTimeModifierAmount(), 4
+        );
+    });
 });
