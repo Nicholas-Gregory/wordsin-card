@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from 'node:assert';
 import { effectRegExp } from "../lib/regexps.js";
 import EffectText from "../lib/EffectText.js";
+import Effect from "../lib/Effect.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -20,7 +21,7 @@ describe('regular expressions', () => {
     });
 });
 
-describe(`Class: EffectText`, () => {
+describe(`Class: EffectText;`, () => {
     it('reports properties from various test strings', () => {
         assert.strictEqual(new EffectText('deal 2 to independent target enemy').getAction(), 'deal');
         assert.deepStrictEqual(new EffectText('multiply heal 3 for all effects for 2 more exchanges').getKeywords(), ['multiply', 'heal']);
@@ -261,5 +262,43 @@ describe(`Class: EffectText`, () => {
             .getTimeModifierSpan(), 'turn'
         );
         assert.strictEqual(singularEffect.text, `apply burn to all enemies for 1 more turn`);
+    });
+});
+
+describe(`Class; Effect;`, () => {
+    it(`sets target effect amount`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 2 to independent target enemy`))
+        const castEffect = new Effect(new EffectText(`set deal 3 for independent target effect`), targetEffect);
+
+        castEffect.setEffectAmount();
+
+        assert.strictEqual(targetEffect.text.getAmount(), 3);
+    });
+
+    it(`adds to target effect amount`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 2 to independent target enemy`));
+        const castEffect = new Effect(new EffectText(`add deal 2 for independent target effect`), targetEffect);
+
+        castEffect.addEffectAmount();
+
+        assert.strictEqual(targetEffect.text.getAmount(), 4);
+    });
+
+    it(`subtracts from target effect amount`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 4 to all allies`));
+        const castEffect = new Effect(new EffectText(`subtract 2 for independent target effect`), targetEffect);
+
+        castEffect.subtractEffectAmount();
+
+        assert.strictEqual(targetEffect.text.getAmount(), 2);
+    });
+
+    it(`divides target effect amount`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 1 to all allies`));
+        const castEffect = new Effect(new EffectText(`divide deal 2 for independent target effect`), targetEffect);
+
+        castEffect.divideAmountText();
+
+        assert.strictEqual(targetEffect.text.getAmount(), 0);
     });
 });
