@@ -38,6 +38,7 @@ describe(`Class: EffectText`, () => {
         assert.strictEqual(new EffectText(`random enemy shuffles 1 random card into their grimoire`).getGrimoireTargeting(), 'their');
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierAmount(), 2);
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierSpan(), 'turn');
+        assert.strictEqual(new EffectText(`change burn to heal for independent target effect`).getChangedValue(), 'heal');
     });
 
     it(`sets outer targeting`, () => {
