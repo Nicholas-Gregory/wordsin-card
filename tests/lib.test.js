@@ -146,4 +146,29 @@ describe(`Class: EffectText`, () => {
             .getAmount(), 3
         );
     });
+
+    it(`sets targeting`, () => {
+        const effect = new EffectText(`deal 2 to independent target enemy`);
+
+        assert.strictEqual(
+            effect
+            .setTargeting('card')
+            .getTargeting(), 'card'
+        );
+        assert.strictEqual(effect.text, `deal 2 to card's target enemy`);
+
+        assert.strictEqual(
+            effect
+            .setTargeting('independent')
+            .getTargeting(), 'independent'
+        );
+        assert.strictEqual(effect.text, `deal 2 to independent target enemy`);
+        // console.log(effect.setTargeting('all').parse)
+        assert.strictEqual(
+            effect
+            .setTargeting('all')
+            .getTargeting(), 'all'
+        );
+        assert.strictEqual(effect.text, `deal 2 to all enemies`);
+    });
 });
