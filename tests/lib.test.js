@@ -16,6 +16,7 @@ describe('regular expressions', () => {
         assert.match(`card's target enemy shuffles 1 chosen card into their grimoire`, regexp);
         assert.match(`apply burn to all enemies for 1 more turn`, regexp);
         assert.match(`multiply deal 2 for all allies for 3 more exchanges`, regexp);
+        assert.match(`change deal to heal for independent target effect`, regexp);
     });
 });
 
@@ -170,5 +171,53 @@ describe(`Class: EffectText`, () => {
             .getTargeting(), 'all'
         );
         assert.strictEqual(effect.text, `deal 2 to all enemies`);
+    });
+
+    it(`sets target`, () => {
+        const singularEffect = new EffectText(`deal 2 to independent target character`);
+        const allEffect = new EffectText(`kill all allies`);
+
+        assert.strictEqual(
+            singularEffect
+            .setTarget('enem')
+            .getTarget(), 'enem'
+        );
+        assert.strictEqual(singularEffect.text, `deal 2 to independent target enemy`);
+
+        assert.strictEqual(
+            singularEffect
+            .setTarget('all')
+            .getTarget(), 'all'
+        );
+        // console.log(singularEffect.parse)
+        assert.strictEqual(singularEffect.text, `deal 2 to independent target ally`);
+
+        assert.strictEqual(
+            singularEffect
+            .setTarget('character')
+            .getTarget(), 'character'
+        );
+        assert.strictEqual(singularEffect.text, `deal 2 to independent target character`);
+
+        assert.strictEqual(
+            allEffect
+            .setTarget('enem')
+            .getTarget(), 'enem'
+        );
+        assert.strictEqual(allEffect.text, `kill all enemies`);
+
+        assert.strictEqual(
+            allEffect
+            .setTarget('character')
+            .getTarget(), 'character'
+        );
+        assert.strictEqual(allEffect.text, `kill all characters`);
+
+        assert.strictEqual(
+            allEffect
+            .setTarget('all')
+            .getTarget(), 'all'
+        );
+        assert.strictEqual(allEffect.text, `kill all allies`);
     });
 });
