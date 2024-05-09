@@ -18,6 +18,7 @@ describe('regular expressions', () => {
         assert.match(`apply burn to all enemies for 1 more turn`, regexp);
         assert.match(`multiply deal 2 for all allies for 3 more exchanges`, regexp);
         assert.match(`change deal to heal for independent target effect`, regexp);
+        assert.match(`multiply add deal 3 for all allied effects for 1 more turn`, regexp);
     });
 });
 
@@ -300,5 +301,16 @@ describe(`Class; Effect;`, () => {
         castEffect.divideAmountText();
 
         assert.strictEqual(targetEffect.text.getAmount(), 0);
+    });
+
+    it(`matches keywords`, () => {
+        const targetEffect = new Effect(new EffectText(`add deal 3 for independent target effect`));
+        const effect = new Effect(new EffectText(`multiply add deal 2 for independent target effect`), targetEffect);
+
+        assert(effect.matchKeywords());
+
+        const falseEffect = new Effect(new EffectText(`multiply add heal 2 for independent target effect`), targetEffect);
+        
+        assert(!falseEffect.matchKeywords())
     });
 });
