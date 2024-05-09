@@ -19,6 +19,7 @@ describe('regular expressions', () => {
         assert.match(`multiply deal 2 for all allies for 3 more exchanges`, regexp);
         assert.match(`change deal to heal for independent target effect`, regexp);
         assert.match(`multiply add deal 3 for all allied effects for 1 more turn`, regexp);
+        assert.match(`change add deal to add heal for independent target effect`, regexp);
     });
 });
 
@@ -41,6 +42,7 @@ describe(`Class: EffectText;`, () => {
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierAmount(), 2);
         assert.strictEqual(new EffectText(`apply burn to all enemies for 2 more turns`).getTimeModifierSpan(), 'turn');
         assert.strictEqual(new EffectText(`change burn to heal for independent target effect`).getChangedValue(), 'heal');
+        assert.strictEqual(new EffectText(`change add heal to multiply heal for independent target effect`).getChangedValue(), 'multiply heal');
     });
 
     it(`sets outer targeting`, () => {
@@ -312,5 +314,14 @@ describe(`Class; Effect;`, () => {
         const falseEffect = new Effect(new EffectText(`multiply add heal 2 for independent target effect`), targetEffect);
         
         assert(!falseEffect.matchKeywords())
+    });
+
+    it(`sets keywords`, () => {
+        const targetEffect = new Effect(new EffectText(`add heal 2 for independent target effect`));
+        const effect = new Effect(new EffectText(`change add heal to multiply heal for independent target effect`), targetEffect);
+
+        effect.changeKeywords();
+
+        assert.deepStrictEqual(targetEffect.text.getKeywords(), ['multiply', 'heal']);
     });
 });
