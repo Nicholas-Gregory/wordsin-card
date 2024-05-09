@@ -228,4 +228,37 @@ describe(`Class: EffectText`, () => {
             .getTimeModifierAmount(), 4
         );
     });
+
+    it(`sets time modifier span`, () => {
+        const pluralEffect = new EffectText(`apply burn to all enemies for 2 more exchanges`);
+        const singularEffect = new EffectText(`apply burn to all enemies for 1 more turn`);
+
+        assert.strictEqual(
+            pluralEffect
+            .setTimeModifierSpan('turn')
+            .getTimeModifierSpan(), 'turn'
+        );
+        assert.strictEqual(pluralEffect.text, `apply burn to all enemies for 2 more turns`);
+
+        assert.strictEqual(
+            pluralEffect
+            .setTimeModifierSpan('exchange')
+            .getTimeModifierSpan(), 'exchange'
+        );
+        assert.strictEqual(pluralEffect.text, `apply burn to all enemies for 2 more exchanges`);
+
+        assert.strictEqual(
+            singularEffect
+            .setTimeModifierSpan('exchange')
+            .getTimeModifierSpan(), 'exchange'
+        );
+        assert.strictEqual(singularEffect.text, `apply burn to all enemies for 1 more exchange`);
+
+        assert.strictEqual(
+            singularEffect
+            .setTimeModifierSpan('turn')
+            .getTimeModifierSpan(), 'turn'
+        );
+        assert.strictEqual(singularEffect.text, `apply burn to all enemies for 1 more turn`);
+    });
 });
