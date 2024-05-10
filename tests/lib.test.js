@@ -3,6 +3,7 @@ import assert from 'node:assert';
 import { effectRegExp } from "../lib/regexps.js";
 import EffectText from "../lib/EffectText.js";
 import Effect from "../lib/Effect.js";
+import Character from "../lib/Character.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -456,5 +457,50 @@ describe(`Class; Effect;`, () => {
         assert.strictEqual(targetTarget.text.getTarget(), 'enem');
         assert.strictEqual(spanTarget.text.getTimeModifierSpan(), 'exchange');
         assert.strictEqual(grimoireTargetingTarget.text.getGrimoireTargeting(), 'independent');
+    });
+
+    it(`sets character state`, () => {
+        const character = new Character({ wellness: 5 });
+        const effect = new Effect(new EffectText(`set wellness 10 for independent target character`), character);
+
+        effect.setState('wellness');
+
+        assert.strictEqual(character.getState('wellness'), 10);
+    });
+
+    it(`adds character state`, () => {
+        const character = new Character({ wellness: 5 });
+        const effect = new Effect(new EffectText(`add wellness 5 for independent target character`), character);
+
+        effect.addState('wellness');
+
+        assert.strictEqual(character.getState('wellness'), 10);
+    });
+
+    it (`subtracts character state`, () => {
+        const character = new Character({ wellness: 15 });
+        const effect = new Effect(new EffectText(`subtract wellness 5 for independent target character`), character);
+
+        effect.subtractState('wellness');
+
+        assert.strictEqual(character.getState('wellness'), 10);
+    });
+
+    it(`multiplies character state`, () => {
+        const character = new Character({ wellness: 5 });
+        const effect = new Effect(new EffectText(`multiply wellness 2 for independent target character`), character);
+
+        effect.multiplyState('wellness');
+
+        assert.strictEqual(character.getState('wellness'), 10);
+    });
+
+    it(`divides character state`, () => {
+        const character = new Character({ wellness: 20 });
+        const effect = new Effect(new EffectText(`divide wellness 2 for independent target character`), character);
+
+        effect.divideState('wellness');
+
+        assert.strictEqual(character.getState('wellness'), 10);
     });
 });
