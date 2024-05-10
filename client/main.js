@@ -1,7 +1,6 @@
-import { Application } from 'pixi.js';
-import HandRenderer from './lib/renderers/HandRenderer';
-import CardRenderer from './lib/renderers/CardRenderer';
-import { CARD_HEIGHT } from './lib/renderers/render-constants';
+import { Application, Graphics } from 'pixi.js';
+import Renderer from './lib/renderers/Renderer.js';
+import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
 
 (async () =>
 {
@@ -17,13 +16,16 @@ import { CARD_HEIGHT } from './lib/renderers/render-constants';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const hand = new HandRenderer([
-        new CardRenderer(),
-        new CardRenderer(),
-        new CardRenderer()
-    ]);
+    const renderer = new Renderer(app.stage);
+    const squares = new Renderer(renderer);
 
-    hand
-    .setY(app.screen.height - CARD_HEIGHT - 10)
-    .render(app);
+    const smallSquare = new GraphicsRenderer(squares)
+    .rect(10, 10, 10, 10)
+    .fill(0xffffff);
+    const largeSquare = new GraphicsRenderer(squares)
+    .rect(100, 100, 100, 100)
+    .fill(0xffffff);
+
+    smallSquare.render();
+    largeSquare.render();
 })();

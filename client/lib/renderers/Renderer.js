@@ -1,25 +1,11 @@
 import { Container } from "pixi.js";
+import { render } from "./helpers";
 
-export default class Renderer {
-    constructor() {
-        this.container = new Container();
-    }
+export default class Renderer extends Container {
+    constructor(parentRenderer) {
+        super();
 
-    render(app) {
-        app.stage.addChild(this.container);
-
-        return this;
-    }
-
-    setX(value) {
-        this.container.x = value;
-
-        return this;
-    }
-
-    setY(value) {
-        this.container.y = value;
-
-        return this;
+        this.parentRenderer = parentRenderer;
+        this.render = render.bind(this, parentRenderer);
     }
 }
