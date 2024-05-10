@@ -428,4 +428,33 @@ describe(`Class; Effect;`, () => {
 
         assert.strictEqual(targetEffect.text.getGrimoireTargeting(), 'independent');
     });
+
+    it(`resolves effect text modifiers`, () => {
+        const outerTargetingTarget = new Effect(new EffectText(`card's target enemy discards 1 random card`));
+        const outerTargetingEffect = new Effect(new EffectText(`change outer targeting to all for independent target effect`), outerTargetingTarget);
+        const outerTargetTarget = new Effect(new EffectText(`card's target ally discards 2 random cards`));
+        const outerTargetEffect = new Effect(new EffectText(`change outer target to enemy for independent target effect`), outerTargetTarget);
+        const targetingTarget = new Effect(new EffectText(`deal 2 to independent target enemy`));
+        const targetingEffect = new Effect(new EffectText(`change targeting to all for independent target effect`), targetingTarget);
+        const targetTarget = new Effect(new EffectText(`deal 2 to independent target ally`));
+        const targetEffect = new Effect(new EffectText(`change target to enemy for independent target effect`), targetTarget);
+        const spanTarget = new Effect(new EffectText(`apply burn to all allies for 1 more turn`));
+        const spanEffect = new Effect(new EffectText(`change span to exchange for independent target effect`), spanTarget);
+        const grimoireTargetingTarget = new Effect(new EffectText(`independent target enemy shuffles 1 card into their grimoire`));
+        const grimoireTargetingEffect = new Effect(new EffectText(`change grimoire targeting to independent for independent target effect`), grimoireTargetingTarget);
+
+        outerTargetEffect.resolveEffectText();
+        outerTargetingEffect.resolveEffectText();
+        targetEffect.resolveEffectText();
+        targetingEffect.resolveEffectText();
+        spanEffect.resolveEffectText();
+        grimoireTargetingEffect.resolveEffectText();
+
+        assert.strictEqual(outerTargetingTarget.text.getOuterTargeting(), 'all');
+        assert.strictEqual(outerTargetTarget.text.getOuterTarget(), 'enem');
+        assert.strictEqual(targetingTarget.text.getTargeting(), 'all');
+        assert.strictEqual(targetTarget.text.getTarget(), 'enem');
+        assert.strictEqual(spanTarget.text.getTimeModifierSpan(), 'exchange');
+        assert.strictEqual(grimoireTargetingTarget.text.getGrimoireTargeting(), 'independent');
+    });
 });
