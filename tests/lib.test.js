@@ -503,4 +503,13 @@ describe(`Class; Effect;`, () => {
 
         assert.strictEqual(character.getState('wellness'), 10);
     });
+
+    it(`resolves character state modifiers`, () => {
+        const character = new Character({ wellness: 10 });
+        const effect = new Effect(new EffectText(`set wellness 5 for independent target character`), character);
+
+        effect.resolveCharacterState();
+
+        assert.strictEqual(character.getState('wellness'), 5);
+    });
 });
