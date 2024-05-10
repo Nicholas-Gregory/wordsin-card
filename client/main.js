@@ -26,5 +26,6 @@ import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
     .rect(100, 100, 100, 100)
     .fill(0xffffff);
 
-    renderer.renderAllChildren();
+    smallSquare.render();
+    largeSquare.render();
 })();

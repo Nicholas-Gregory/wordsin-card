@@ -1,7 +1,7 @@
-import { Graphics } from "pixi.js";
+import { Sprite } from "pixi.js";
 import { render } from "./helpers";
 
-export default class GraphicsRenderer extends Graphics {
+export default class SpriteRenderer extends Sprite {
     constructor(parentRenderer, options) {
         super(options);
 

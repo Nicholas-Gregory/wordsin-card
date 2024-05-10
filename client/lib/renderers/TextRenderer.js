@@ -1,7 +1,6 @@
-import { Graphics } from "pixi.js";
-import { render } from "./helpers";
+import { BitmapText } from "pixi.js";
 
-export default class GraphicsRenderer extends Graphics {
+export default class TextRenderer extends BitmapText {
     constructor(parentRenderer, options) {
         super(options);
 
