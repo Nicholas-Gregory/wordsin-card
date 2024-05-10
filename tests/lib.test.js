@@ -266,6 +266,31 @@ describe(`Class: EffectText;`, () => {
         );
         assert.strictEqual(singularEffect.text, `apply burn to all enemies for 1 more turn`);
     });
+
+    it(`sets grimoire targeting`, () => {
+        const effect = new EffectText(`all enemies shuffle 1 random card into their grimoire`);
+
+        assert.strictEqual(
+            effect
+            .setGrimoireTargeting('independent')
+            .getGrimoireTargeting(), 'independent'
+        );
+        assert.strictEqual(effect.text, `all enemies shuffle 1 random card into independent target grimoire`);
+
+        assert.strictEqual(
+            effect
+            .setGrimoireTargeting('card')
+            .getGrimoireTargeting(), 'card'
+        );
+        assert.strictEqual(effect.text, `all enemies shuffle 1 random card into card's target grimoire`);
+
+        assert.strictEqual(
+            effect
+            .setGrimoireTargeting('their')
+            .getGrimoireTargeting(), 'their'
+        );
+        assert.strictEqual(effect.text, `all enemies shuffle 1 random card into their grimoire`);
+    });
 });
 
 describe(`Class; Effect;`, () => {
@@ -300,7 +325,7 @@ describe(`Class; Effect;`, () => {
         const targetEffect = new Effect(new EffectText(`deal 1 to all allies`));
         const castEffect = new Effect(new EffectText(`divide deal 2 for independent target effect`), targetEffect);
 
-        castEffect.divideAmountText();
+        castEffect.divideEffectAmount();
 
         assert.strictEqual(targetEffect.text.getAmount(), 0);
     });
@@ -316,18 +341,7 @@ describe(`Class; Effect;`, () => {
         assert(!falseEffect.matchKeywords())
     });
 
-    it(`sets keywords`, () => {
-        const targetEffect = new Effect(new EffectText(`add heal 2 for independent target effect`));
-        const effect = new Effect(new EffectText(`change add heal to multiply heal for independent target effect`), targetEffect);
-
-        effect.changeKeywords();
-
-        assert.deepStrictEqual(targetEffect.text.getKeywords(), ['multiply', 'heal']);
-    });
-
-    it(`resolves effects`, () => {
-        const changeTarget = new Effect(new EffectText(`deal 2 to independent target ally`));
-        const changeEffect = new Effect(new EffectText(`change deal to heal for independent target effect`), changeTarget);
+    it(`resolves effect amount modifiers`, () => {
         const setTarget = new Effect(new EffectText(`heal 4 for independent target ally`));
         const setEffect = new Effect(new EffectText(`set heal 5 for independent target effect`), setTarget);
         const addTarget = new Effect(new EffectText(`heal 4 for independent target ally`));
@@ -336,17 +350,82 @@ describe(`Class; Effect;`, () => {
         const subtractEffect = new Effect(new EffectText(`subtract deal 2 for independent target effect`), subtractTarget);
         const multiplyTarget = new Effect(new EffectText(`deal 2 to all enemies`));
         const multiplyEffect = new Effect(new EffectText(`multiply deal 2 for independent target effect`), multiplyTarget);
+        const divideTarget = new Effect(new EffectText(`deal 4 to all allies`));
+        const divideEffect = new Effect(new EffectText(`divide deal 2 for independent target effect`), divideTarget);
 
-        changeEffect.resolve();
-        setEffect.resolve();
-        addEffect.resolve();
-        subtractEffect.resolve();
-        multiplyEffect.resolve();
+        setEffect.resolveEffectAmount();
+        addEffect.resolveEffectAmount();
+        subtractEffect.resolveEffectAmount();
+        multiplyEffect.resolveEffectAmount();
+        divideEffect.resolveEffectAmount();
 
-        assert.strictEqual(changeTarget.text.getAction(), 'heal');
         assert.strictEqual(setTarget.text.getAmount(), 5);
         assert.strictEqual(addTarget.text.getAmount(), 5);
         assert.strictEqual(subtractTarget.text.getAmount(), 0);
         assert.strictEqual(multiplyTarget.text.getAmount(), 4);
+        assert.strictEqual(divideTarget.text.getAmount(), 2);
+    });
+
+    it(`sets outer target`, () => {
+        const targetEffect = new Effect(new EffectText(`independent target ally discards 1 random card`))
+        const effect = new Effect(new EffectText(`change target to enemy for independent target effect`), targetEffect);
+
+        effect.setOuterTarget();
+
+        assert.strictEqual(targetEffect.text.getOuterTarget(), 'enem');
+    });
+
+    it(`sets outer targeting`, () => {
+        const targetEffect = new Effect(new EffectText(`card's target enemy discards 1 card`));
+        const effect = new Effect(new EffectText(`change outer targeting to independent for independent target effect`), targetEffect);
+
+        effect.setOuterTargeting();
+
+        assert.strictEqual(targetEffect.text.getOuterTargeting(), 'independent');
+    });
+
+    it(`sets targeting`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 2 to card's target enemy`));
+        const effect = new Effect(new EffectText(`change target to independent for independent target effect`), targetEffect);
+
+        effect.setTargeting();
+
+        assert.strictEqual(targetEffect.text.getTargeting(), 'independent');
+    });
+
+    it(`sets target`, () => {
+        const targetEffect = new Effect(new EffectText(`deal 2 to independent target ally`));
+        const effect = new Effect(new EffectText(`change target to enemy for independent target effect`), targetEffect);
+
+        effect.setTarget();
+
+        assert.strictEqual(targetEffect.text.getTarget(), 'enem');
+    });
+
+    it(`sets time modifier amount`, () => {
+        const targetEffect = new Effect(new EffectText(`add heal 2 for all effects for 1 more turn`));
+        const effect = new Effect(new EffectText(`set amount 3 for independent target effect`), targetEffect);
+
+        effect.setTimeModifierAmount();
+
+        assert.strictEqual(targetEffect.text.getTimeModifierAmount(), 3);
+    });
+
+    it(`sets time modifier span`, () => {
+        const targetEffect = new Effect(new EffectText(`set heal 4 for independent target effect for 1 more exchange`));
+        const effect = new Effect(new EffectText(`change span to turn for independent target effect`), targetEffect);
+
+        effect.setTimeModifierSpan();
+
+        assert.strictEqual(targetEffect.text.getTimeModifierSpan(), 'turn');
+    });
+
+    it(`sets grimoire targeting`, () => {
+        const targetEffect = new Effect(new EffectText(`independent target enemy shuffles 1 card into their grimoire`));
+        const effect = new Effect(new EffectText(`change target to independent for independent target effect`), targetEffect);
+
+        effect.setGrimoireTargeting()
+
+        assert.strictEqual(targetEffect.text.getGrimoireTargeting(), 'independent');
     });
 });
