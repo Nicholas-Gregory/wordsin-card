@@ -1,4 +1,4 @@
-import { Application, Graphics } from 'pixi.js';
+import { Application, Container, Graphics } from 'pixi.js';
 import Renderer from './lib/renderers/Renderer.js';
 import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
 
@@ -26,6 +26,5 @@ import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
     .rect(100, 100, 100, 100)
     .fill(0xffffff);
 
-    smallSquare.render();
-    largeSquare.render();
+    renderer.renderAllChildren();
 })();
