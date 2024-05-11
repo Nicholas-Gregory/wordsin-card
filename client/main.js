@@ -1,6 +1,5 @@
 import { Application, Container, Graphics } from 'pixi.js';
-import CardContainer from './lib/containers/CardContainer';
-import HandContainer from './lib/containers/HandContainer';
+import TextBox from './lib/containers/TextBox.js';
 
 (async () =>
 {
@@ -17,13 +16,8 @@ import HandContainer from './lib/containers/HandContainer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const cards = [
-        new CardContainer(['Deal 2 to independent target enemy']),
-        new CardContainer([`Heal 4 for independent target ally`]),
-        new CardContainer([`You draw 1 card`])
-    ];
-
-    const hand = new HandContainer(cards);
-
-    app.stage.addChild(hand);
+    const text = new TextBox('hellodog hi dog you are a dog', 20, 0xEEEEEE, 0x333333);
+    text.x = 10,
+    text.y = 10
+    app.stage.addChild(text);
 })();
