@@ -1,6 +1,6 @@
 import { Application, Container, Graphics } from 'pixi.js';
-import Renderer from './lib/renderers/Renderer.js';
-import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
+import CardContainer from './lib/containers/CardContainer';
+import HandContainer from './lib/containers/HandContainer';
 
 (async () =>
 {
@@ -10,22 +10,20 @@ import GraphicsRenderer from './lib/renderers/GraphicsRenderer.js';
     // Intialize the application.
     await app.init({ 
         background: '#1099bb',
-        width: 800, height: 600
+        width: 400, height: 180,
+        resolution: 4
     });
 
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const renderer = new Renderer(app.stage);
-    const squares = new Renderer(renderer);
+    const cards = [
+        new CardContainer(['Deal 2 to independent target enemy']),
+        new CardContainer([`Heal 4 for independent target ally`]),
+        new CardContainer([`You draw 1 card`])
+    ];
 
-    const smallSquare = new GraphicsRenderer(squares)
-    .rect(10, 10, 10, 10)
-    .fill(0xffffff);
-    const largeSquare = new GraphicsRenderer(squares)
-    .rect(100, 100, 100, 100)
-    .fill(0xffffff);
+    const hand = new HandContainer(cards);
 
-    smallSquare.render();
-    largeSquare.render();
+    app.stage.addChild(hand);
 })();
