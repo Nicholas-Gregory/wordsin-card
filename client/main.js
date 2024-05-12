@@ -1,5 +1,6 @@
 import { Application, Container, Graphics } from 'pixi.js';
 import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
+import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
 
 (async () =>
 {
@@ -16,8 +17,8 @@ import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const box = new ShadowBoxRenderer(40, 80, 0x333333);
-    await box.render();
+    const textBox = new TextShadowBoxRenderer('hello dog you are a dog', 40, 0x333333, 0xEEEEEE, 4);
+    await textBox.render();
 
-    app.stage.addChild(box);
+    app.stage.addChild(textBox);
 })();

@@ -8,7 +8,6 @@ export default class ShadowBoxRenderer extends Renderer {
         this.givenWidth = width;
         this.givenHeight = height;
         this.givenColor = color;
-        this.rendererChildren = [];
     }
 
     makeShadow() {
