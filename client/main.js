@@ -1,8 +1,6 @@
-import { Application, Container, Graphics } from 'pixi.js';
-import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
-import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
-import TargetRenderer from './lib/renderers/TargetRenderer';
+import { Application } from 'pixi.js';
 import { EffectRenderer } from './lib/renderers/EffectRenderer';
+import TimeChunkRenderer from './lib/renderers/TimeChunkRenderer';
 
 (async () =>
 {
@@ -19,11 +17,20 @@ import { EffectRenderer } from './lib/renderers/EffectRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const singleTargetEffect = new EffectRenderer('deal 2 to independent target enemy', 1);
-    const doubleTargetEffect = new EffectRenderer(`independent target enemy discards 1 independent target card`, 2);
+    const timeChunk = new TimeChunkRenderer(10, 0x000000, app);
 
-    const singleSize = singleTargetEffect.getSize();
-    doubleTargetEffect.y = singleSize.height + 1;
+    const lightenCb = time => timeChunk.lighten(time);
+    const darkenCb = time => timeChunk.darken(time);
 
-    app.stage.addChild(singleTargetEffect, doubleTargetEffect);
+    timeChunk
+    .on('pointerenter', event => {
+        app.ticker.add(lightenCb);
+        app.ticker.remove(darkenCb);
+    })
+    .on('pointerleave', event => {
+        app.ticker.add(darkenCb);
+        app.ticker.remove(lightenCb);
+    });
+
+    app.stage.addChild(timeChunk);
 })();
