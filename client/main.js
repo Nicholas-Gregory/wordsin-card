@@ -2,6 +2,7 @@ import { Application, Container, Graphics } from 'pixi.js';
 import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
 import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
 import TargetRenderer from './lib/renderers/TargetRenderer';
+import { EffectRenderer } from './lib/renderers/EffectRenderer';
 
 (async () =>
 {
@@ -18,8 +19,11 @@ import TargetRenderer from './lib/renderers/TargetRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const target = new TargetRenderer();
-    await target.render();
+    const singleTargetEffect = new EffectRenderer('deal 2 to independent target enemy', 1);
+    const doubleTargetEffect = new EffectRenderer(`independent target enemy discards 1 independent target card`, 2);
 
-    app.stage.addChild(target);
+    const singleSize = singleTargetEffect.getSize();
+    doubleTargetEffect.y = singleSize.height + 1;
+
+    app.stage.addChild(singleTargetEffect, doubleTargetEffect);
 })();

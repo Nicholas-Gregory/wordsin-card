@@ -1,8 +1,7 @@
-import { Sprite } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 import TextureGetter from '../assets/TextureGetter.js'
-import Renderer from './Renderer.js';
 
-export default class TargetRenderer extends Renderer {
+export default class TargetRenderer extends Container {
     constructor() {
         super();
 
@@ -12,16 +11,10 @@ export default class TargetRenderer extends Renderer {
     async makeTarget() {
         this.texture = await this.textureGetter.load();
         this.sprite = new Sprite(this.texture);
-        this.sprite.scale = 0.25;
+        this.sprite.scale = 0.33;
 
-        this.rendererChildren[0] = this.sprite;
+        this.addChild(this.sprite);
 
         return this;
-    }
-
-    async render() {
-        await this.makeTarget();
-
-        await super.render();
     }
 }

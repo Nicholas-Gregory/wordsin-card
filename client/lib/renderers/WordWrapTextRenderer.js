@@ -1,7 +1,6 @@
-import { Text } from "pixi.js";
-import Renderer from "./Renderer";
+import { Container, Text } from "pixi.js";
 
-export default class WordWrapTextRenderer extends Renderer {
+export default class WordWrapTextRenderer extends Container {
     constructor(textString, width, textColor, fontSize) {
         super();
 
@@ -25,12 +24,8 @@ export default class WordWrapTextRenderer extends Renderer {
             }
         });
 
-        this.rendererChildren[0] = this.pixiText;
+        this.addChild(this.pixiText);
 
         return this;
-    }
-
-    async render() {
-        await super.render();
     }
 }

@@ -1,8 +1,8 @@
-import Renderer from "./Renderer";
+import { Container } from "pixi.js";
 import ShadowBoxRenderer from "./ShadowBoxRenderer";
 import WordWrapTextRenderer from "./WordWrapTextRenderer";
 
-export default class TextShadowBoxRenderer extends Renderer {
+export default class TextShadowBoxRenderer extends Container {
     constructor(textString, width, backgroundColor, textColor, fontSize) {
         super();
 
@@ -11,14 +11,17 @@ export default class TextShadowBoxRenderer extends Renderer {
         this.backgroundColor = backgroundColor;
         this.textColor = textColor;
         this.givenFontSize = fontSize;
+
+        this
+        .makeText()
+        .makeBox();
     }
 
     makeBox() {
-        const textBounds = this.wordWrapText.pixiText.getBounds();
-
-        this.shadowBox = new ShadowBoxRenderer(this.givenWidth + 1, textBounds.height + 1, this.backgroundColor);
+        const textSize = this.wordWrapText.getSize();
+        this.shadowBox = new ShadowBoxRenderer(this.givenWidth + 1, textSize.height + 1, this.backgroundColor);
         
-        this.rendererChildren[0] = this.shadowBox;
+        this.addChild(this.shadowBox);
 
         return this;
     }
@@ -28,17 +31,10 @@ export default class TextShadowBoxRenderer extends Renderer {
 
         this.wordWrapText.x = 1;
         this.wordWrapText.y = 1;
+        this.wordWrapText.zIndex = 1;
 
-        this.rendererChildren[1] = this.wordWrapText;
+        this.addChild(this.wordWrapText);
 
         return this;
-    }
-
-    async render() {
-        this
-        .makeText()
-        .makeBox();
-
-        await super.render();
     }
 }
