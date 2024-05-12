@@ -1,9 +1,8 @@
 import { Application, Container, Graphics } from 'pixi.js';
-import TextBox from './lib/containers/TextBox.js';
-import Target from './lib/containers/Target.js';
-import EffectTextBox from './lib/containers/EffectTextBox.js';
-import Effect from '../lib/Effect.js';
-import EffectText from '../lib/EffectText.js';
+import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
+import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
+import TargetRenderer from './lib/renderers/TargetRenderer';
+import { EffectRenderer } from './lib/renderers/EffectRenderer';
 
 (async () =>
 {
@@ -20,9 +19,11 @@ import EffectText from '../lib/EffectText.js';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const effect = new EffectTextBox(new Effect(new EffectText(`independent target enemy discards 1 independent target card`)));
-    await effect.render();
-    console.log(effect.children)
+    const singleTargetEffect = new EffectRenderer('deal 2 to independent target enemy', 1);
+    const doubleTargetEffect = new EffectRenderer(`independent target enemy discards 1 independent target card`, 2);
 
-    app.stage.addChild(effect);
+    const singleSize = singleTargetEffect.getSize();
+    doubleTargetEffect.y = singleSize.height + 1;
+
+    app.stage.addChild(singleTargetEffect, doubleTargetEffect);
 })();
