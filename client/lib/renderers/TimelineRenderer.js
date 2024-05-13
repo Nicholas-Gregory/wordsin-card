@@ -39,14 +39,14 @@ export default class TimelineRenderer extends Container {
             const closeCb = time => renderer.closeEffect(time);
 
             renderer
-            .on('pointerenter', event => {
+            .on('mouseenter', event => {
                 app.ticker.remove(darkenCb);
                 app.ticker.remove(closeCb);
 
                 app.ticker.add(lightenCb);
-                app.ticker.add(popupCb)
+                app.ticker.add(popupCb);
             })
-            .on('pointerleave', event => {
+            .on('mouseleave', event => {
                 app.ticker.remove(lightenCb);
                 app.ticker.remove(popupCb);
 

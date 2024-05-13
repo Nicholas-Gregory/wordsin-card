@@ -2,6 +2,7 @@ import { Application } from 'pixi.js';
 import { EffectRenderer } from './lib/renderers/EffectRenderer';
 import TimeChunkRenderer from './lib/renderers/TimeChunkRenderer';
 import TimelineRenderer from './lib/renderers/TimelineRenderer';
+import DialogueBoxRenderer from './lib/renderers/DialogueBoxRenderer';
 
 (async () =>
 {
@@ -18,47 +19,11 @@ import TimelineRenderer from './lib/renderers/TimelineRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const timeline = new TimelineRenderer([
-        {
-            time: 10,
-            text: 'deal 2 to independent target enemy',
-            numberOfTargets: 1
-        },
-        {
-            time: 20,
-            text: `card's target enemy discards 1 target card`,
-            numberOfTargets: 2
-        }
-    ]);
-    timeline.makeAnimationEvents(app);
+    const dialogue = new DialogueBoxRenderer('hello this is dog ;yes dog you are dog yes i am dog hello i am dog what is dog');
+    dialogue.x = 1;
+    dialogue.y = app.screen.height - dialogue.getSize().height - 1;
 
-    app.stage.addChild(timeline);
-
-    // const timeChunk = new TimeChunkRenderer(10, 0x000000, {
-    //     text: `deal 1 to independent target enemy`,
-    //     numberOfTargets: 1
-    // });
-
-    // const lightenCb = time => timeChunk.lighten(time);
-    // const darkenCb = time => timeChunk.darken(time);
-    // const popupCb = time => timeChunk.popupEffect(time);
-    // const closeCb = time => timeChunk.closeEffect(time);
-
-    // timeChunk
-    // .on('pointerenter', event => {
-    //     app.ticker.add(lightenCb);
-    //     app.ticker.remove(darkenCb);
-
-    //     app.ticker.add(popupCb);
-    //     app.ticker.remove(closeCb);
-    // })
-    // .on('pointerleave', event => {
-    //     app.ticker.add(darkenCb);
-    //     app.ticker.remove(lightenCb);
-
-    //     app.ticker.add(closeCb);
-    //     app.ticker.remove(popupCb);
-    // });
-
-    // app.stage.addChild(timeChunk);
-})();
+    app.stage.addChild(dialogue);
+    dialogue.makeAnimationEvents(app);
+    dialogue.emit(`dialoguestart`)
+;})();
