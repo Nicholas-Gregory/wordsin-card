@@ -17,19 +17,30 @@ import TimeChunkRenderer from './lib/renderers/TimeChunkRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const timeChunk = new TimeChunkRenderer(10, 0x000000, app);
+    const timeChunk = new TimeChunkRenderer(10, 0x000000, {
+        text: `deal 1 to independent target enemy`,
+        numberOfTargets: 1
+    });
 
     const lightenCb = time => timeChunk.lighten(time);
     const darkenCb = time => timeChunk.darken(time);
+    const popupCb = time => timeChunk.popupEffect(time);
+    const closeCb = time => timeChunk.closeEffect(time);
 
     timeChunk
     .on('pointerenter', event => {
         app.ticker.add(lightenCb);
         app.ticker.remove(darkenCb);
+
+        app.ticker.add(popupCb);
+        app.ticker.remove(closeCb);
     })
     .on('pointerleave', event => {
         app.ticker.add(darkenCb);
         app.ticker.remove(lightenCb);
+
+        app.ticker.add(closeCb);
+        app.ticker.remove(popupCb);
     });
 
     app.stage.addChild(timeChunk);

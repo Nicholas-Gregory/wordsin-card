@@ -1,16 +1,19 @@
 import { Container, Graphics } from "pixi.js";
 import ShadowBoxRenderer from "./ShadowBoxRenderer";
+import { EffectRenderer } from "./EffectRenderer";
 
 export default class TimeChunkRenderer extends Container {
-    constructor(time, color) {
+    constructor(time, color, effect) {
         super({ eventMode: 'static' });
 
         this.time = time;
         this.givenColor = color;
+        this.effect = effect;
 
         this
         .makeBox()
-        .makeLight();
+        .makeLight()
+        .makeEffectPopup();
     }
 
     makeBox() {
@@ -32,6 +35,29 @@ export default class TimeChunkRenderer extends Container {
         // console.log(this.light)
 
         return this;
+    }
+
+    makeEffectPopup() {
+        if (this.effect) {
+            this.effectRenderer = new EffectRenderer(this.effect.text, this.effect.numberOfTargets);
+            this.effectRenderer.alpha = 0;
+            this.effectRenderer.x = this.x;
+            this.effectRenderer.y = this.getSize().height;
+
+            this.addChild(this.effectRenderer);
+        }
+    }
+
+    popupEffect(time) {
+        if (this.effectRenderer.alpha < 1) {
+            this.effectRenderer.alpha += 0.05 * time.deltaTime;
+        }
+    }
+
+    closeEffect(time) {
+        if (this.effectRenderer.alpha > 0) {
+            this.effectRenderer.alpha -= 0.05 * time.deltaTime;
+        }
     }
 
     lighten(time) {
