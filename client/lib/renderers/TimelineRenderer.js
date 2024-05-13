@@ -1,5 +1,6 @@
 import { Container } from "pixi.js";
 import TimeChunkRenderer from "./TimeChunkRenderer";
+import AnimationManager from "../managers/AnimationManager";
 
 export default class TimelineRenderer extends Container {
     constructor(effects) {
@@ -8,6 +9,7 @@ export default class TimelineRenderer extends Container {
         this.effects = effects;
         this.timeChunkRenderers = [];
         this.animationCallbacks = [];
+        this.animationManagers = [];
 
         this.makeTimeChunks();
     }
@@ -32,27 +34,16 @@ export default class TimelineRenderer extends Container {
     makeAnimationEvents(app) {
         for (let i = 0; i < this.timeChunkRenderers.length; i++) {
             let renderer = this.timeChunkRenderers[i];
-
-            const lightenCb = time => renderer.lighten(time);
-            const darkenCb = time => renderer.darken(time);
-            const popupCb = time => renderer.popupEffect(time);
-            const closeCb = time => renderer.closeEffect(time);
-
-            renderer
-            .on('mouseenter', event => {
-                app.ticker.remove(darkenCb);
-                app.ticker.remove(closeCb);
-
-                app.ticker.add(lightenCb);
-                app.ticker.add(popupCb);
-            })
-            .on('mouseleave', event => {
-                app.ticker.remove(lightenCb);
-                app.ticker.remove(popupCb);
-
-                app.ticker.add(darkenCb);
-                app.ticker.add(closeCb);
-            });
+            this.animationManagers.push(new AnimationManager(app, renderer, {
+                mouseenter: {
+                    add: ['lighten', 'popupEffect'],
+                    remove: ['darken', 'closeEffect']
+                },
+                mouseleave: {
+                    add: ['darken', 'closeEffect'],
+                    remove: ['lighten', 'popupEffect']
+                }
+            }));
         }
     }
 }
