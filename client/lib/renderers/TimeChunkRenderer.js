@@ -43,12 +43,12 @@ export default class TimeChunkRenderer extends Container {
             this.effectRenderer.alpha = 0;
             this.effectRenderer.x = this.x;
             this.effectRenderer.y = this.getSize().height;
-
-            this.addChild(this.effectRenderer);
         }
     }
 
     popupEffect(time) {
+        this.addChild(this.effectRenderer);
+
         if (this.effectRenderer.alpha < 1) {
             this.effectRenderer.alpha += 0.05 * time.deltaTime;
         }
@@ -57,6 +57,8 @@ export default class TimeChunkRenderer extends Container {
     closeEffect(time) {
         if (this.effectRenderer.alpha > 0) {
             this.effectRenderer.alpha -= 0.05 * time.deltaTime;
+        } else {
+            this.removeChild(this.effectRenderer);
         }
     }
 
