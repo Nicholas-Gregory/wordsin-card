@@ -43,9 +43,10 @@ export default class DialogueBoxRenderer extends Container {
     }
 
     type(time) {
-        this.elapsed += time.deltaTime;
+        this.elapsed += time.elapsedMS;
+        const mod = Math.floor(this.elapsed) % 100;
 
-        if (this.wordIndex < this.words.length && this.elapsed / 500 <= 100) {
+        if (this.wordIndex < this.words.length && (mod <= 10 || mod >= 90)) {
             this.text.text = `${this.text.text} ${this.words[this.wordIndex]}`;
             this.wordIndex++;
         } else {
@@ -54,8 +55,7 @@ export default class DialogueBoxRenderer extends Container {
     }
 
     makeAnimationEvents(app) {
-        let elapsed = 0;
-        const startCb = time => this.type(time, elapsed);
+        const startCb = time => this.type(time);
 
         this
         .on('dialoguestart', event => app.ticker.add(startCb))

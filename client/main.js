@@ -1,4 +1,4 @@
-import { Application } from 'pixi.js';
+import { Application, Graphics } from 'pixi.js';
 import { EffectRenderer } from './lib/renderers/EffectRenderer';
 import TimeChunkRenderer from './lib/renderers/TimeChunkRenderer';
 import TimelineRenderer from './lib/renderers/TimelineRenderer';
@@ -25,5 +25,12 @@ import DialogueBoxRenderer from './lib/renderers/DialogueBoxRenderer';
 
     app.stage.addChild(dialogue);
     dialogue.makeAnimationEvents(app);
-    dialogue.emit(`dialoguestart`)
+
+    const button = new Graphics({ eventMode: 'static' })
+    .rect(10, 10, 20, 20)
+    .fill(0xFF0000);
+
+    button.on('click', event => dialogue.emit(`dialoguestart`));
+
+    app.stage.addChild(button)
 ;})();
