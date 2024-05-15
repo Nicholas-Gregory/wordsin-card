@@ -15,6 +15,7 @@ export default class ScrollableBox extends Container {
         .makeContent()
         .makeMask()
         .makeScrollBar()
+        .registerMouseEvents()
         .registerWheelEvent();
     }
 
@@ -53,13 +54,44 @@ export default class ScrollableBox extends Container {
         const maskBounds = this.maskGraphics.getBounds();
         const contentBounds = this.contentContainer.getBounds();
 
-        this.scrollBar = new Graphics()
-        .rect(this.box.givenWidth - 2, 1, 1, (maskBounds.height * maskBounds.height) / contentBounds.height)
+        this.scrollBar = new Graphics({ eventMode: 'static' })
+        .rect(this.box.givenWidth - 5, 1, 4, (maskBounds.height * maskBounds.height) / contentBounds.height)
         .fill(0x333333);
 
         this.addChild(this.scrollBar);
 
         this.contentContainer.mask = this.maskGraphics;
+
+        return this;
+    }
+
+    registerMouseEvents() {
+        this.scrollBar
+        .on('mousedown', event => this.dragging = true)
+        .on('mouseup', event => this.dragging = false)
+        .on('mouseleave', event => this.dragging = false)
+        .on('mousemove', ({ global }) => {
+            if (this.dragging) {
+                this.contentContainer.mask = null;
+                const maskBounds = this.maskGraphics.getBounds();
+                const scrollBarBounds = this.scrollBar.getBounds();
+                const contentBounds = this.contentContainer.getBounds();
+
+                const calculatedY = this.toLocal(global).y - scrollBarBounds.height / 2;
+
+                if (calculatedY <= maskBounds.top) {
+                    this.scrollBar.y = maskBounds.top;
+                } else if (calculatedY + scrollBarBounds.height >= maskBounds.bottom) {
+                    this.scrollBar.y = maskBounds.bottom - scrollBarBounds.height;
+                } else {
+                    this.scrollBar.y = calculatedY;
+                }
+
+                this.contentContainer.y = -(((this.scrollBar.y - 1) * contentBounds.height) / maskBounds.height);
+
+                this.contentContainer.mask = this.maskGraphics;
+            }
+        });
 
         return this;
     }
