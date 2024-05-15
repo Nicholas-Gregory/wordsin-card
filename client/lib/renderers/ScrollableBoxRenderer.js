@@ -54,14 +54,14 @@ export default class ScrollableBox extends Container {
             const contentBounds = this.contentContainer.getBounds();
             const maskBounds = this.maskGraphics.getBounds();
 
-            this.contentContainer.y -= deltaY * 0.1;
+            const calculatedY = this.contentContainer.y - deltaY * 0.1;
 
-            if (contentBounds.top > maskBounds.top) {
+            if (calculatedY > maskBounds.top) {
                 this.contentContainer.y = maskBounds.top - 1;
-            }
-
-            if (contentBounds.bottom < maskBounds.bottom) {
+            } else if (calculatedY + contentBounds.bottom < maskBounds.bottom && deltaY > 0) {
                 this.contentContainer.y = -(contentBounds.height - maskBounds.bottom)
+            } else {
+                this.contentContainer.y = calculatedY;
             }
 
             this.contentContainer.mask = this.maskGraphics;
