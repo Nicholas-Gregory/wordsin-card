@@ -30,6 +30,12 @@ import ScrollableBox from './lib/renderers/ScrollableBoxRenderer';
         .fill(0xFFFFFF),
         new Graphics()
         .rect(20, 150, 20, 20)
+        .fill(0xffffff),
+        new Graphics()
+        .rect(20, 250, 20, 20)
+        .fill(0xffffff),
+        new Graphics()
+        .rect(20, 350, 20, 20)
         .fill(0xffffff)
     ]);
 

@@ -14,8 +14,8 @@ export default class ScrollableBox extends Container {
         .makeBox()
         .makeContent()
         .makeMask()
-        .registerWheelEvent()
-
+        .makeScrollBar()
+        .registerWheelEvent();
     }
 
     makeBox() {
@@ -48,6 +48,22 @@ export default class ScrollableBox extends Container {
         return this;
     }
 
+    makeScrollBar() {
+        this.contentContainer.mask = null;
+        const maskBounds = this.maskGraphics.getBounds();
+        const contentBounds = this.contentContainer.getBounds();
+
+        this.scrollBar = new Graphics()
+        .rect(this.box.givenWidth - 2, 1, 1, (maskBounds.height * maskBounds.height) / contentBounds.height)
+        .fill(0x333333);
+
+        this.addChild(this.scrollBar);
+
+        this.contentContainer.mask = this.maskGraphics;
+
+        return this;
+    }
+
     registerWheelEvent() {
         this.on('wheel', ({ deltaY }) => {
             this.contentContainer.mask = null;
@@ -58,11 +74,13 @@ export default class ScrollableBox extends Container {
 
             if (calculatedY > maskBounds.top) {
                 this.contentContainer.y = maskBounds.top - 1;
-            } else if (calculatedY + contentBounds.bottom < maskBounds.bottom && deltaY > 0) {
+            } else if (calculatedY + contentBounds.height < maskBounds.bottom && deltaY > 0) {
                 this.contentContainer.y = -(contentBounds.height - maskBounds.bottom)
             } else {
                 this.contentContainer.y = calculatedY;
             }
+
+            this.scrollBar.y = (maskBounds.height * -this.contentContainer.y) / contentBounds.height;
 
             this.contentContainer.mask = this.maskGraphics;
         })
