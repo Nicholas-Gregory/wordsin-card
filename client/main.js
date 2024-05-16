@@ -5,6 +5,7 @@ import TimelineRenderer from './lib/renderers/TimelineRenderer';
 import DialogueBoxRenderer from './lib/renderers/DialogueBoxRenderer';
 import AnimationManager from './lib/managers/AnimationManager';
 import ScrollableBox from './lib/renderers/ScrollableBoxRenderer';
+import VerticalListRenderer from './lib/renderers/VerticalListRenderer';
 
 (async () =>
 {
@@ -21,23 +22,17 @@ import ScrollableBox from './lib/renderers/ScrollableBoxRenderer';
     // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const scroll = new ScrollableBox(100, 150, 0x000055, [
+    const list = new VerticalListRenderer(2, [
         new Graphics()
-        .rect(1, 1, 10, 10)
+        .rect(0, 0, 50, 20)
         .fill(0xFFFFFF),
         new Graphics()
-        .rect(20, 20, 20, 20)
+        .rect(0, 0, 60, 20)
         .fill(0xFFFFFF),
         new Graphics()
-        .rect(20, 150, 20, 20)
-        .fill(0xffffff),
-        new Graphics()
-        .rect(20, 250, 20, 20)
-        .fill(0xffffff),
-        new Graphics()
-        .rect(20, 350, 20, 20)
-        .fill(0xffffff)
+        .rect(0, 0, 30, 20)
+        .fill(0xFFFFFF)
     ]);
 
-    app.stage.addChild(scroll);
+    app.stage.addChild(list);
 ;})();
