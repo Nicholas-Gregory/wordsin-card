@@ -516,7 +516,7 @@ describe(`Class; Effect;`, () => {
 });
 
 describe(`Class: Timeline;`, () => {
-    it(`reports starting time of effect`, () => {
+    it(`reports ending time of effect`, () => {
         const timeline = new Timeline([
             [
                 { time: 3 },
@@ -533,10 +533,10 @@ describe(`Class: Timeline;`, () => {
             ]
         ]);
 
-        assert.strictEqual(timeline.getEffectStartingTime(0, 1), 3);
-        assert.strictEqual(timeline.getEffectStartingTime(1, 1), 5);
-        assert.strictEqual(timeline.getEffectStartingTime(2, 1), 6);
+        assert.strictEqual(timeline.getEffectEndingTime(0, 1), 8);
+        assert.strictEqual(timeline.getEffectEndingTime(1, 1), 8);
+        assert.strictEqual(timeline.getEffectEndingTime(2, 1), 8);
 
-        assert.strictEqual(timeline.getEffectStartingTime(1, 2), 8);
+        assert.strictEqual(timeline.getEffectEndingTime(1, 2), 9);
     });
 });
