@@ -4,6 +4,7 @@ import { effectRegExp } from "../lib/regexps.js";
 import EffectText from "../lib/EffectText.js";
 import Effect from "../lib/Effect.js";
 import Character from "../lib/Character.js";
+import Timeline from "../lib/Timeline.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -511,5 +512,31 @@ describe(`Class; Effect;`, () => {
         effect.resolveCharacterState();
 
         assert.strictEqual(character.getState('wellness'), 5);
+    });
+});
+
+describe(`Class: Timeline;`, () => {
+    it(`reports starting time of effect`, () => {
+        const timeline = new Timeline([
+            [
+                { time: 3 },
+                { time: 5 }
+            ],
+            [
+                { time: 2 },
+                { time: 3 },
+                { time: 1 }
+            ],
+            [
+                { time: 1 },
+                { time: 2 }
+            ]
+        ]);
+
+        assert.strictEqual(timeline.getEffectStartingTime(0, 1), 3);
+        assert.strictEqual(timeline.getEffectStartingTime(1, 1), 5);
+        assert.strictEqual(timeline.getEffectStartingTime(2, 1), 6);
+
+        assert.strictEqual(timeline.getEffectStartingTime(1, 2), 8);
     });
 });
