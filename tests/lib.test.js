@@ -5,6 +5,7 @@ import EffectText from "../lib/EffectText.js";
 import Effect from "../lib/Effect.js";
 import Character from "../lib/Character.js";
 import Timeline from "../lib/Timeline.js";
+import StateEntity from "../lib/StateEntity.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -22,6 +23,7 @@ describe('regular expressions', () => {
         assert.match(`change deal to heal for independent target effect`, regexp);
         assert.match(`multiply add deal 3 for all allied effects for 1 more turn`, regexp);
         assert.match(`change add deal to add heal for independent target effect`, regexp);
+        assert.match(`apply burn 2 to independent target object`, regexp);
     });
 });
 
@@ -509,9 +511,24 @@ describe(`Class; Effect;`, () => {
         const character = new Character({ wellness: 10 });
         const effect = new Effect(new EffectText(`set wellness 5 for independent target character`), character);
 
-        effect.resolveCharacterState();
+        effect.resolveState();
 
         assert.strictEqual(character.getState('wellness'), 5);
+    });
+
+    it(`applies state`, () => {
+        const entity = new StateEntity({});
+        const numberEffect = new Effect(new EffectText(`apply burn 2 to independent target object`), entity);
+        const listEffect = new Effect(new EffectText(`apply wet cold to independent target object`), entity);
+
+        numberEffect.applyState();
+
+        assert.strictEqual(entity.getState('burn'), 2);
+
+        listEffect.applyState();
+
+        assert(entity.getState('wet'));
+        assert(entity.getState('cold'));
     });
 });
 
