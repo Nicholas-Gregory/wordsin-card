@@ -5,6 +5,7 @@ import EffectRenderer from './lib/renderers/EffectRenderer';
 import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
 import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
 import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
+import TileRegionRenderer from './lib/renderers/TileRegionRenderer';
 
 (async () =>
 {
@@ -18,22 +19,35 @@ import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
 
     document.body.appendChild(app.canvas);
 
-    const scroll = new ScrollableBoxRenderer(100, 100, 0x0000DD, [
-        new VerticalListRenderer(2, [
-            new EffectRenderer(`deal 2 to independent target enemy`, 1),
-            // new EffectRenderer(`you draw 2 cards`, 0),
-            // new EffectRenderer(`heal 4 for independent target ally`),
-            // new EffectRenderer(`destroy all objects`, 0),
-            new EffectRenderer(`change heal to deal for independent target effect`, 1),
-            new EffectRenderer(`independent target enemy discards 1 independent target card`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
-            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2)
-        ])
+    const tiles = new TileRegionRenderer(3, [
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x330000),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x003300),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x000033),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x660000),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x006600),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x000066),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x990000),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x009900),
+        new Graphics()
+        .rect(0, 0, 5, 5)
+        .fill(0x000099)
     ]);
 
-    app.stage.addChild(scroll);
+    app.stage.addChild(tiles);
 ;})();
