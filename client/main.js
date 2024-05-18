@@ -1,38 +1,39 @@
 import { Application, Graphics } from 'pixi.js';
-import { EffectRenderer } from './lib/renderers/EffectRenderer';
-import TimeChunkRenderer from './lib/renderers/TimeChunkRenderer';
-import TimelineRenderer from './lib/renderers/TimelineRenderer';
-import DialogueBoxRenderer from './lib/renderers/DialogueBoxRenderer';
-import AnimationManager from './lib/managers/AnimationManager';
-import ScrollableBox from './lib/renderers/ScrollableBoxRenderer';
+import ScrollableBoxRenderer from './lib/renderers/ScrollableBoxRenderer';
 import VerticalListRenderer from './lib/renderers/VerticalListRenderer';
+import EffectRenderer from './lib/renderers/EffectRenderer';
+import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
+import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
+import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
 
 (async () =>
 {
-    // Create a PixiJS application.
     const app = new Application();
 
-    // Intialize the application.
     await app.init({ 
         background: '#1099bb',
         width: 400, height: 180,
         resolution: 4
     });
 
-    // Then adding the application's canvas to the DOM body.
     document.body.appendChild(app.canvas);
 
-    const list = new VerticalListRenderer(2, [
-        new Graphics()
-        .rect(0, 0, 50, 20)
-        .fill(0xFFFFFF),
-        new Graphics()
-        .rect(0, 0, 60, 20)
-        .fill(0xFFFFFF),
-        new Graphics()
-        .rect(0, 0, 30, 20)
-        .fill(0xFFFFFF)
+    const scroll = new ScrollableBoxRenderer(100, 100, 0x0000DD, [
+        new VerticalListRenderer(2, [
+            new EffectRenderer(`deal 2 to independent target enemy`, 1),
+            // new EffectRenderer(`you draw 2 cards`, 0),
+            // new EffectRenderer(`heal 4 for independent target ally`),
+            // new EffectRenderer(`destroy all objects`, 0),
+            new EffectRenderer(`change heal to deal for independent target effect`, 1),
+            new EffectRenderer(`independent target enemy discards 1 independent target card`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2),
+            new EffectRenderer(`card's target character shuffles 1 card into independent target grimoire`, 2)
+        ])
     ]);
 
-    app.stage.addChild(list);
+    app.stage.addChild(scroll);
 ;})();

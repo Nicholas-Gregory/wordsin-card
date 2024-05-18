@@ -3,7 +3,7 @@ import ShadowBoxRenderer from "./ShadowBoxRenderer";
 import TargetRenderer from "./TargetRenderer";
 import TextShadowBoxRenderer from "./TextShadowBoxRenderer";
 
-export class EffectRenderer extends Container {
+export default class EffectRenderer extends Container {
     constructor(effectTextString, numberOfTargets) {
         super();
 
@@ -37,7 +37,7 @@ export class EffectRenderer extends Container {
     }
 
     async makeTargets() {
-        const textBounds = this.effectTextBox.getBounds();
+        const textBounds = this.effectTextBox.getSize();
 
         for (let i = 0; i < this.numberOfTargets; i++) {
             const target = new TargetRenderer();

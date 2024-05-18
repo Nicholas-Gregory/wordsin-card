@@ -15,7 +15,12 @@ export default class VerticalListRenderer extends Container {
             const item = this.items[i];
 
             item.x = 0;
-            item.y = (item.getLocalBounds().height + this.margin) * i;
+            // item.y = (height + this.margin) * i;
+            item.y = this.items.reduce((currentHeight, currentItem, index) => {
+                if (index < i) {
+                    return currentHeight + currentItem.getSize().height + this.margin;
+                } else { return currentHeight }
+            }, 0)
 
             this.addChild(item);
         }

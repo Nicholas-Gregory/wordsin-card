@@ -1,7 +1,7 @@
 import { Container, Graphics } from "pixi.js";
 import ShadowBoxRenderer from "./ShadowBoxRenderer";
 
-export default class ScrollableBox extends Container {
+export default class ScrollableBoxRenderer extends Container {
     constructor(width, height, color, content) {
         super({ eventMode: 'static' });
 
