@@ -43,6 +43,8 @@ export default class DialogueManager {
         buttonContainer.x = boxBounds.right - buttonSize.width - 2;
         buttonContainer.y = boxBounds.bottom - buttonSize.height - 2;
         buttonContainer.on('click', event => {
+            dialogueAnimationManager.cleanup();
+
             this.index++;
             this.renderIndex();
         })

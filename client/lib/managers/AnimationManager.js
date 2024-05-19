@@ -28,13 +28,16 @@ export default class AnimationManager {
         return this;
     }
 
+    getMethodNameArray(addOrRemove, eventName) {
+        const value = this.events[eventName][addOrRemove] || [];
+        return Array.isArray(value) ? value : [value];
+    }
+
     initEvents() {
         for (let eventName of Object.keys(this.events)) {
             this.renderer.on(eventName, event => {
-                const addValue = this.events[eventName].add || [];
-                const removeValue = this.events[eventName].remove || [];
-                const addArray = Array.isArray(addValue) ? addValue : [addValue];
-                const removeArray = Array.isArray(removeValue) ? removeValue : [removeValue];
+                const addArray = this.getMethodNameArray('add', eventName)
+                const removeArray = this.getMethodNameArray('remove', eventName);
 
                 addArray.forEach(methodName => {
                     this.app.ticker.remove(this.callbacks[methodName]);
@@ -48,5 +51,16 @@ export default class AnimationManager {
         }
 
         return this;
+    }
+
+    cleanup() {
+        for (let eventName of Object.keys(this.events)) {
+            this.renderer.removeAllListeners(eventName);
+
+            const addArray = this.getMethodNameArray('add', eventName);
+            addArray.forEach(methodName => (
+                this.app.ticker.remove(this.callbacks[methodName]))
+            );
+        }
     }
 }
