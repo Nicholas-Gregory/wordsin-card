@@ -2,6 +2,7 @@ import { Application, Graphics, Sprite } from 'pixi.js';
 import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
+import CardRenderer from './lib/renderers/CardRenderer';
 
 (async () =>
 {
@@ -37,4 +38,21 @@ import GraphicsTileSet from './lib/TileSet';
     const playerSprite = new Sprite(playerTexture);
 
     const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
+
+    const card = new CardRenderer({
+        effects: [
+            {
+                text: 'deal 2 to independent target enemy',
+                numberOfTargets: 1
+            },
+            {
+                text: 'independent target enemy discards 1 independent target card',
+                numberOfTargets: 2
+            }
+        ]
+    });
+    await card.makeCardSprite();
+    card.makeEffectTextBox();
+
+    app.stage.addChild(card);
 ;})();

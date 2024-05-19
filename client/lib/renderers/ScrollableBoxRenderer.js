@@ -44,6 +44,8 @@ export default class ScrollableBoxRenderer extends Container {
         .rect(1, 1, this.givenWidth - 2, this.givenHeight - 2)
         .fill(0xffffff);
 
+        this.addChild(this.maskGraphics);
+
         this.contentContainer.mask = this.maskGraphics;
 
         return this;
@@ -51,8 +53,8 @@ export default class ScrollableBoxRenderer extends Container {
 
     makeScrollBar() {
         this.contentContainer.mask = null;
-        const maskBounds = this.maskGraphics.getBounds();
-        const contentBounds = this.contentContainer.getBounds();
+        const maskBounds = this.maskGraphics.getLocalBounds();
+        const contentBounds = this.contentContainer.getLocalBounds();
 
         this.scrollBar = new Graphics({ eventMode: 'static' })
         .rect(this.box.givenWidth - 5, 1, 4, (maskBounds.height * maskBounds.height) / contentBounds.height)
@@ -73,9 +75,9 @@ export default class ScrollableBoxRenderer extends Container {
         .on('mousemove', ({ global }) => {
             if (this.dragging) {
                 this.contentContainer.mask = null;
-                const maskBounds = this.maskGraphics.getBounds();
-                const scrollBarBounds = this.scrollBar.getBounds();
-                const contentBounds = this.contentContainer.getBounds();
+                const maskBounds = this.maskGraphics.getLocalBounds();
+                const scrollBarBounds = this.scrollBar.getLocalBounds();
+                const contentBounds = this.contentContainer.getLocalBounds();
 
                 const calculatedY = this.toLocal(global).y - scrollBarBounds.height / 2;
 
@@ -99,8 +101,8 @@ export default class ScrollableBoxRenderer extends Container {
     registerWheelEvent() {
         this.on('wheel', ({ deltaY }) => {
             this.contentContainer.mask = null;
-            const contentBounds = this.contentContainer.getBounds();
-            const maskBounds = this.maskGraphics.getBounds();
+            const contentBounds = this.contentContainer.getLocalBounds();
+            const maskBounds = this.maskGraphics.getLocalBounds();
 
             const calculatedY = this.contentContainer.y - deltaY * 0.1;
 
