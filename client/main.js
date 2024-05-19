@@ -2,7 +2,7 @@ import { Application, Graphics, Sprite } from 'pixi.js';
 import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
-import CardRenderer from './lib/renderers/CardRenderer';
+import HandRenderer from './lib/renderers/HandRenderer';
 
 (async () =>
 {
@@ -39,20 +39,61 @@ import CardRenderer from './lib/renderers/CardRenderer';
 
     const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
 
-    const card = new CardRenderer({
-        effects: [
-            {
-                text: 'deal 2 to independent target enemy',
-                numberOfTargets: 1
-            },
-            {
-                text: 'independent target enemy discards 1 independent target card',
-                numberOfTargets: 2
-            }
-        ]
-    });
-    await card.makeCardSprite();
-    card.makeEffectTextBox();
+    const cards = [
+        {
+            effects: [
+                {
+                    text: 'deal 2 to independent target enemy',
+                    numberOfTargets: 1
+                }
+            ]
+        },
+        {
+            effects: [
+                {
+                    text: 'heal 4 for independent target ally',
+                    numberOfTargets: 1
+                }
+            ]
+        },
+        {
+            effects: [
+                {
+                    text: `card's target enemy discards 1 chosen card`,
+                    numberOfTargets: 1
+                },
+                {
+                    text: `deal 2 to card's target enemy`,
+                    numberOfTargets: 1
+                },
+                {
+                    text: `independent target ally draws 1 card`,
+                    numberOfTargets: 1
+                }
+            ]
+        },
+        {
+            effects: [
+                {
+                    text: 'deal 2 to independent target enemy',
+                    numberOfTargets: 1
+                }
+            ]
+        },
+        {
+            effects: [
+                {
+                    text: 'deal 2 to independent target enemy',
+                    numberOfTargets: 1
+                }
+            ]
+        }
+    ];
 
-    app.stage.addChild(card);
+    const handRenderer = new HandRenderer(app.screen.width / 2, cards);
+    await handRenderer.makeCards();
+    handRenderer.y = app.screen.height - handRenderer.getSize().height;
+    handRenderer.x = app.screen.width / 2 - handRenderer.getSize().width / 2;
+
+    app.stage.addChild(handRenderer)
 ;})();
