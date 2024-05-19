@@ -19,6 +19,7 @@ export default class HandRenderer extends Container {
             await cardRenderer.makeCardSprite();
             cardRenderer.makeEffectTextBox();
             cardRenderer.x = (this.displayWidth / this.cards.length) * i;
+            cardRenderer.zIndex = i;
 
             this.cardRenderers.push(cardRenderer);
             this.addChild(cardRenderer);

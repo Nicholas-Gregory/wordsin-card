@@ -3,6 +3,7 @@ import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
 import HandRenderer from './lib/renderers/HandRenderer';
+import HandManager from './lib/managers/HandManager';
 
 (async () =>
 {
@@ -90,10 +91,7 @@ import HandRenderer from './lib/renderers/HandRenderer';
         }
     ];
 
-    const handRenderer = new HandRenderer(app.screen.width / 2, cards);
-    await handRenderer.makeCards();
-    handRenderer.y = app.screen.height - handRenderer.getSize().height;
-    handRenderer.x = app.screen.width / 2 - handRenderer.getSize().width / 2;
-
-    app.stage.addChild(handRenderer)
+    const hand = new HandManager(app.screen.width / 2, app, cards);
+    await hand.initHand();
+    hand.initMouseEvents();
 ;})();
