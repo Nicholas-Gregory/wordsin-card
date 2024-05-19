@@ -1,58 +1,43 @@
 import { Container } from "pixi.js";
 import AnimationManager from "./AnimationManager";
+import TileRegionRenderer from "../renderers/TileRegionRenderer";
 
 export default class MapManager {
-    constructor(app, mapRenderer, playerSprite) {
-        this.mapRenderer = mapRenderer;
+    constructor(tileWidth, tileHeight, app, map, playerSprite, tileSet) {
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
+        this.tileSet = tileSet;
         this.app = app;
+        this.map = map;
         this.playerSprite = playerSprite;
         this.renderer = new Container();
-        this.renderer.addChild(this.mapRenderer);
-        this.renderer.addChild(this.playerSprite);
 
         this.app.stage.addChild(this.renderer);
 
         this
         .initKeyboardEvents()
-        .initPlayerSprite()
-        .initAnimations();
+        .initMap()
+        .initPlayerSprite();
     }
 
     initPlayerSprite() {
-        this.playerSprite.anchor.set(0.5);
+        this.playerSprite.anchor.set(1);
         this.playerSprite.x = this.app.screen.width / 2;
         this.playerSprite.y = this.app.screen.height / 2;
+
+        this.renderer.addChild(this.playerSprite);
 
         return this;
     }
 
-    initAnimations() {
-        this.animationManager = new AnimationManager(this.app, this.mapRenderer, {
-            arrowdowndown: {
-                add: 'moveDown'
-            },
-            arrowupdown: {
-                add: 'moveUp'
-            },
-            arrowleftdown: {
-                add: 'moveLeft'
-            },
-            arrowrightdown: {
-                add: 'moveRight'
-            },
-            arrowdownup: {
-                remove: 'moveDown'
-            },
-            arrowupup: {
-                remove: 'moveUp'
-            },
-            arrowleftup: {
-                remove: 'moveLeft'
-            },
-            arrowrightup: {
-                remove: 'moveRight'
-            }
-        });
+    initMap() {
+        this.mapRenderer = new TileRegionRenderer(this.tileWidth, this.tileHeight, 100, this.map.tiles.map(
+            tile => this.tileSet.getNewTileFromId(tile.id)
+        ));
+        this.mapRenderer.x = (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth;
+        this.mapRenderer.y = (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight;
+
+        this.renderer.addChild(this.mapRenderer);
 
         return this;
     }
@@ -64,29 +49,17 @@ export default class MapManager {
             event.preventDefault();
 
             if (key === `ArrowDown`) {
-                this.mapRenderer.emit('arrowdowndown');
+                this.map.moveDown(1);
+                this.placeMap();
             } else if (key === `ArrowUp`) {
-                this.mapRenderer.emit('arrowupdown')
+                this.map.moveUp(1);
+                this.placeMap();
             } else if (key === 'ArrowLeft') {
-                this.mapRenderer.emit('arrowleftdown')
+                this.map.moveLeft(1);
+                this.placeMap();
             } else if (key === 'ArrowRight') {
-                this.mapRenderer.emit('arrowrightdown')
-            }
-        });
-
-        window.addEventListener('keyup', event => {
-            const { key } = event;
-
-            event.preventDefault();
-
-            if (key === `ArrowDown`) {
-                this.mapRenderer.emit('arrowdownup');
-            } else if (key === `ArrowUp`) {
-                this.mapRenderer.emit('arrowupup')
-            } else if (key === 'ArrowLeft') {
-                this.mapRenderer.emit('arrowleftup')
-            } else if (key === 'ArrowRight') {
-                this.mapRenderer.emit('arrowrightup')
+                this.map.moveRight(1);
+                this.placeMap();
             }
         });
 

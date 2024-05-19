@@ -1,14 +1,7 @@
 import { Application, Graphics, Sprite } from 'pixi.js';
-import ScrollableBoxRenderer from './lib/renderers/ScrollableBoxRenderer';
-import VerticalListRenderer from './lib/renderers/VerticalListRenderer';
-import EffectRenderer from './lib/renderers/EffectRenderer';
-import TextShadowBoxRenderer from './lib/renderers/TextShadowBoxRenderer';
-import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
-import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
-import TileRegionRenderer from './lib/renderers/TileRegionRenderer';
 import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
-import MapRenderer from './lib/renderers/MapRenderer';
+import GraphicsTileSet from './lib/TileSet';
 
 (async () =>
 {
@@ -22,26 +15,26 @@ import MapRenderer from './lib/renderers/MapRenderer';
 
     document.body.appendChild(app.canvas);
 
-    const colors = [
-        0x330000, 0x003300, 0x000033,
-        0x660000, 0x006600, 0x000066,
-        0x990000, 0x009900, 0x000099
-    ]
+    const tileSet = new GraphicsTileSet([
+        new Graphics().rect(0, 0, 6, 6).fill(0x330000), new Graphics().rect(0, 0, 6, 6).fill(0x003300), new Graphics().rect(0, 0, 6, 6).fill(0x000033),
+        new Graphics().rect(0, 0, 6, 6).fill(0x660000), new Graphics().rect(0, 0, 6, 6).fill(0x006600), new Graphics().rect(0, 0, 6, 6).fill(0x000066),
+        new Graphics().rect(0, 0, 6, 6).fill(0x990000), new Graphics().rect(0, 0, 6, 6).fill(0x009900), new Graphics().rect(0, 0, 6, 6).fill(0x000099)
+    ]);
 
     const tiles = [...new Array(10000)].map(
-        tile => new Graphics()
-        .rect(0, 0, 6, 6)
-        .fill(colors[Math.floor(Math.random() * colors.length)])
+        tile => ({
+            id: Math.floor(Math.random() * tileSet.tileSet.length)
+        })
     );
 
     const playerGraphic = new Graphics()
     .circle(0, 0, 3)
     .fill(0xFFFFFF);
 
+    const map = new Map(100, tiles, [], { x: 10, y: 10 });
+
     const playerTexture = app.renderer.generateTexture(playerGraphic);
     const playerSprite = new Sprite(playerTexture);
 
-    const mapRenderer = new MapRenderer(new TileRegionRenderer(100, tiles), 2);
-
-    const mapManager = new MapManager(app, mapRenderer, playerSprite);
+    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet);
 ;})();

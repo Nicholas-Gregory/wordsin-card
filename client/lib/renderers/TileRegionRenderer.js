@@ -1,9 +1,11 @@
 import { Container } from "pixi.js";
 
 export default class TileRegionRenderer extends Container {
-    constructor(widthInTiles, tileSpriteArray) {
+    constructor(tileWidth, tileHeight, widthInTiles, tileSpriteArray) {
         super();
 
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
         this.widthInTiles = widthInTiles;
         this.tiles = tileSpriteArray;
 
