@@ -37,11 +37,12 @@ export default class AnimationManager {
                 const removeArray = Array.isArray(removeValue) ? removeValue : [removeValue];
 
                 addArray.forEach(methodName => {
-                    this.app.ticker.add(this.callbacks[methodName])
+                    this.app.ticker.remove(this.callbacks[methodName]);
+                    this.app.ticker.add(this.callbacks[methodName]);
                 });
 
                 removeArray.forEach(methodName => {
-                    this.app.ticker.remove(this.callbacks[methodName])
+                    this.app.ticker.remove(this.callbacks[methodName]);
                 });
             })
         }

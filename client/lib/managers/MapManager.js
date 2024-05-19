@@ -123,22 +123,18 @@ export default class MapManager extends Container {
 
             if (key === `ArrowDown`) {
                 if (!this.moving) {
-                    this.map.moveDown(1);
                     this.emit('movedown');
                 }
             } else if (key === `ArrowUp`) {
                 if (!this.moving) {
-                    this.map.moveUp(1);
                     this.emit('moveup');
                 }
             } else if (key === 'ArrowLeft') {
                 if (!this.moving) {
-                    this.map.moveLeft(1);
                     this.emit('moveleft');
                 }
             } else if (key === 'ArrowRight') {
                 if (!this.moving) {
-                    this.map.moveRight(1);
                     this.emit('moveright');
                 }
             }
