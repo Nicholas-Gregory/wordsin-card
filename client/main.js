@@ -4,6 +4,7 @@ import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
 import HandRenderer from './lib/renderers/HandRenderer';
 import HandManager from './lib/managers/HandManager';
+import DialogueManager from './lib/managers/DialogueManager';
 
 (async () =>
 {
@@ -40,58 +41,15 @@ import HandManager from './lib/managers/HandManager';
 
     const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
 
-    const cards = [
+    const dialogue = [
         {
-            effects: [
-                {
-                    text: 'deal 2 to independent target enemy',
-                    numberOfTargets: 1
-                }
-            ]
+            text: 'hello dog this is dog i am dog'
         },
         {
-            effects: [
-                {
-                    text: 'heal 4 for independent target ally',
-                    numberOfTargets: 1
-                }
-            ]
-        },
-        {
-            effects: [
-                {
-                    text: `card's target enemy discards 1 chosen card`,
-                    numberOfTargets: 1
-                },
-                {
-                    text: `deal 2 to card's target enemy`,
-                    numberOfTargets: 1
-                },
-                {
-                    text: `independent target ally draws 1 card`,
-                    numberOfTargets: 1
-                }
-            ]
-        },
-        {
-            effects: [
-                {
-                    text: 'deal 2 to independent target enemy',
-                    numberOfTargets: 1
-                }
-            ]
-        },
-        {
-            effects: [
-                {
-                    text: 'deal 2 to independent target enemy',
-                    numberOfTargets: 1
-                }
-            ]
+            text: 'yes dog hi dog i am also dog'
         }
-    ];
+    ]
 
-    const hand = new HandManager(app.screen.width / 2, app, cards);
-    await hand.initHand();
-    hand.initMouseEvents();
+    const dialogueManager = new DialogueManager(app, dialogue);
+    dialogueManager.renderIndex()
 ;})();
