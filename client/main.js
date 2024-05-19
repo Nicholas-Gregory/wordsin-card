@@ -36,5 +36,5 @@ import GraphicsTileSet from './lib/TileSet';
     const playerTexture = app.renderer.generateTexture(playerGraphic);
     const playerSprite = new Sprite(playerTexture);
 
-    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet);
+    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
 ;})();
