@@ -577,4 +577,12 @@ describe('Class: Grimoire', () => {
 
         assert.deepStrictEqual(cards, [0, 1, 2]);
     });
+
+    it('inserts cards at a specified index', () => {
+        const grimoire = new Grimoire([0, 1, 3, 4]);
+
+        grimoire.insertCard(2, 2);
+
+        assert.deepStrictEqual(grimoire.cards, [0, 1, 2, 3, 4]);
+    })
 })
