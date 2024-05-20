@@ -7,6 +7,7 @@ import HandManager from './lib/managers/HandManager';
 import DialogueManager from './lib/managers/DialogueManager';
 import Encounter from '../lib/Encounter';
 import EncounterManager from './lib/managers/EncounterManager';
+import Entity from '../lib/Entity';
 
 (async () =>
 {
@@ -35,13 +36,6 @@ import EncounterManager from './lib/managers/EncounterManager';
     const playerGraphic = new Graphics()
     .circle(0, 0, 3)
     .fill(0xFFFFFF);
-
-    const map = new Map(100, tiles, [], { x: 10, y: 10 });
-
-    const playerTexture = app.renderer.generateTexture(playerGraphic);
-    const playerSprite = new Sprite(playerTexture);
-
-    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
 
     const dialogue = [
         {
@@ -89,8 +83,13 @@ import EncounterManager from './lib/managers/EncounterManager';
             end: 'goodchoice'
         }
     ];
-    // console.log(encounter.eventsList)
 
-    const encounterManager = new EncounterManager(app, events);
-    encounterManager.renderEvent();
+    const entity = new Entity(11, 11, {}, {}, new Encounter(events, 0, true));
+
+    const map = new Map(100, tiles, [entity], { x: 10, y: 10 });
+
+    const playerTexture = app.renderer.generateTexture(playerGraphic);
+    const playerSprite = new Sprite(playerTexture);
+
+    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
 ;})();

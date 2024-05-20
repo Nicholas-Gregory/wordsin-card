@@ -1,6 +1,7 @@
 import { Container } from "pixi.js";
 import AnimationManager from "./AnimationManager";
 import TileRegionRenderer from "../renderers/TileRegionRenderer";
+import EncounterManager from "./EncounterManager";
 
 export default class MapManager extends Container {
     constructor(tileWidth, tileHeight, app, map, playerSprite, tileSet, movementSpeed) {
@@ -13,14 +14,30 @@ export default class MapManager extends Container {
         this.map = map;
         this.playerSprite = playerSprite;
         this.movementSpeed = movementSpeed;
-
         this.app.stage.addChild(this);
 
         this
         .initKeyboardEvents()
         .initMap()
         .initPlayerSprite()
-        .initAnimations();
+        .initAnimations()
+        .initCollisions();
+    }
+
+    initCollisions() {
+        this.on('stopmove', event => {
+            const entity = this.map.collidingEntity;
+
+            if (entity) {
+                window.removeEventListener('keydown', this.keyDownCallback);
+
+                const encounterManager = new EncounterManager(this.app, entity.collisionEncounter);
+                encounterManager.on('encounterdone', event => {
+                    window.addEventListener('keydown', this.keyDownCallback);
+                })
+                encounterManager.renderEvent();
+            }
+        });
     }
 
     initPlayerSprite() {
@@ -116,7 +133,7 @@ export default class MapManager extends Container {
     }
 
     initKeyboardEvents() {
-        window.addEventListener(`keydown`, event => {
+        this.keyDownCallback = event => {
             const { key } = event;
 
             event.preventDefault();
@@ -142,7 +159,9 @@ export default class MapManager extends Container {
             if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'ArrowLeft' || key === 'ArrowRight') {
                 this.moving = true;
             }
-        });
+        }
+
+        window.addEventListener(`keydown`, this.keyDownCallback);
 
         window.addEventListener(`keyup`, event => {
             const { key } = event;
