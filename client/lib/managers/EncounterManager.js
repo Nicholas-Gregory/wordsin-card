@@ -1,6 +1,7 @@
 import { Container } from "pixi.js";
 import Encounter from "../../../lib/Encounter";
 import DialogueManager from "./DialogueManager";
+import BattleManager from "./BattleManager";
 
 export default class EncounterManager extends Container {
     constructor(app, encounter) {
@@ -10,7 +11,7 @@ export default class EncounterManager extends Container {
         this.encounter = encounter;
     }
 
-    renderEvent() {
+    async renderEvent() {
         const event = this.encounter.getCurrentEvent();
 
         if (event.type === 'dialogue') {
@@ -24,7 +25,10 @@ export default class EncounterManager extends Container {
             this.emit('encounterdone');
             this.encounter.index = 0;
         } else if (event.type === 'battle') {
-            console.log('battle')
+            console.log('here');
+            const battleManager = new BattleManager(this.app, event.battle);
+
+            await battleManager.startBattle();
         }
     }
 }

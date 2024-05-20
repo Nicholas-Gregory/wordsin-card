@@ -1,7 +1,10 @@
+import { Container } from "pixi.js";
 import HandRenderer from "../renderers/HandRenderer";
 
-export default class HandManager {
+export default class HandManager extends Container {
     constructor(displayWidth, app, cards) {
+        super();
+
         this.app = app;
         this.cards = cards;
         this.displayWidth = displayWidth;
@@ -16,7 +19,7 @@ export default class HandManager {
         this.handRenderer.y = this.app.screen.height - handRendererSize.height;
         this.handRenderer.x = this.app.screen.width / 2 - handRendererSize.width / 2;
 
-        this.app.stage.addChild(this.handRenderer);
+        this.addChild(this.handRenderer);
     }
 
     initMouseEvents() {

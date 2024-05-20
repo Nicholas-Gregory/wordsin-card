@@ -8,6 +8,9 @@ import DialogueManager from './lib/managers/DialogueManager';
 import Encounter from '../lib/Encounter';
 import EncounterManager from './lib/managers/EncounterManager';
 import Entity from '../lib/Entity';
+import Battle from '../lib/Battle';
+import Character from '../lib/Character';
+import Grimoire from '../lib/Grimoire';
 
 (async () =>
 {
@@ -68,7 +71,47 @@ import Entity from '../lib/Entity';
             text: 'no wait we must fight',
             end: 'fight'
         }
-    ]
+    ];
+
+    const battle = new Battle([
+        new Character({ swiftness: 1 }, new Grimoire([
+            {
+                effects: [
+                    {
+                        text: 'deal 2 to independent target enemy',
+                        numberOfTargets: 1
+                    }
+                ]
+            },
+            {
+                effects: [
+                    {
+                        text: 'heal 4 for independent target ally',
+                        numberOfTargets: 1
+                    }
+                ]
+            }
+        ]))
+    ], [
+        new Character({ swiftness: 10 }, new Grimoire([
+            {
+                effects: [
+                    {
+                        text: 'deal 2 to independent target enemy',
+                        numberOfTargets: 1
+                    }
+                ]
+            },
+            {
+                effects: [
+                    {
+                        text: 'heal 4 for independent target ally',
+                        numberOfTargets: 1
+                    }
+                ]
+            }
+        ]))
+    ], 2)
 
     const events = [
         {
@@ -77,7 +120,7 @@ import Entity from '../lib/Entity';
             goodchoice: 2
         },
         {
-            battle: 'batle!'
+            battle
         },
         {
             end: 'goodchoice'
