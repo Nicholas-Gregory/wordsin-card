@@ -6,6 +6,7 @@ import Effect from "../lib/Effect.js";
 import Character from "../lib/Character.js";
 import Timeline from "../lib/Timeline.js";
 import StateEntity from "../lib/StateEntity.js";
+import Grimoire from "../lib/Grimoire.js";
 
 describe('regular expressions', () => {
     it('matches various test strings', () => {
@@ -557,3 +558,23 @@ describe(`Class: Timeline;`, () => {
         assert.strictEqual(timeline.getEffectEndingTime(1, 2), 9);
     });
 });
+
+describe('Class: Grimoire', () => {
+    it('takes cards at specified indices', () => {
+        const grimoire = new Grimoire([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        
+        const card1 = grimoire.takeCardAt(0);
+        const card2 = grimoire.takeCardAt(1);
+
+        assert.deepStrictEqual(grimoire.cards, [1, 3, 4, 5, 6, 7, 8, 9]);
+        assert.strictEqual(card1, 0);
+        assert.strictEqual(card2, 2);
+    });
+
+    it('draws a specified amount of cards', () => {
+        const grimoire = new Grimoire([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        const cards = grimoire.drawCards(3);
+
+        assert.deepStrictEqual(cards, [0, 1, 2]);
+    });
+})
