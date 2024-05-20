@@ -47,6 +47,27 @@ import DialogueManager from './lib/managers/DialogueManager';
         },
         {
             text: 'yes dog hi dog i am also dog'
+        },
+        {
+            text: 'dog wwhat do you think dog1 or dog2?',
+            choices: [
+                {
+                    text: 'dog1',
+                    index: 3
+                },
+                {
+                    text: 'dog2',
+                    index: 4
+                }
+            ]
+        },
+        {
+            text: 'dog1 ah good choice',
+            end: true
+        },
+        {
+            text: 'dog2 yes interesting',
+            end: true
         }
     ]
 

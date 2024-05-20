@@ -1,30 +1,20 @@
 import { Container, Graphics } from "pixi.js";
 import DialogueBoxRenderer from "../renderers/DialogueBoxRenderer";
 import AnimationManager from "./AnimationManager";
+import TextShadowBoxRenderer from "../renderers/TextShadowBoxRenderer";
 
 export default class DialogueManager {
     constructor(app, dialogue, startingIndex) {
         this.app = app;
         this.dialogue = dialogue;
         this.index = startingIndex || 0;
+        this.renderer = new Container();
+
+        app.stage.addChild(this.renderer);
     }
 
-    renderIndex() {
-        const dialogueBox = new DialogueBoxRenderer(this.dialogue[this.index].text);
-
-        dialogueBox.x = this.app.screen.width / 2 - dialogueBox.getSize().width / 2;
-        dialogueBox.y = this.app.screen.height - dialogueBox.getSize().height;
-
+    makeNextButton(dialogueAnimationManager, dialogueBox) {
         const boxBounds = dialogueBox.getBounds();
-        
-        const dialogueAnimationManager = new AnimationManager(this.app, dialogueBox, {
-            dialoguestart: {
-                add: 'type'
-            },
-            dialoguend: {
-                remove: 'type'
-            }
-        });
 
         const buttonContainer = new Container({ eventMode: 'static' });
 
@@ -49,8 +39,59 @@ export default class DialogueManager {
             this.renderIndex();
         })
 
-        this.app.stage.addChild(dialogueBox);
-        this.app.stage.addChild(buttonContainer);
+        this.renderer.addChild(buttonContainer);
+    }
+
+    renderIndex() {
+        this.renderer.removeChildren();
+
+        const dialogue = this.dialogue[this.index];
+
+        const dialogueBox = new DialogueBoxRenderer(dialogue.text);
+
+        dialogueBox.x = this.app.screen.width / 2 - dialogueBox.getSize().width / 2;
+        dialogueBox.y = this.app.screen.height - dialogueBox.getSize().height;
+
+        this.renderer.addChild(dialogueBox);
+        
+        const dialogueAnimationManager = new AnimationManager(this.app, dialogueBox, {
+            dialoguestart: {
+                add: 'type'
+            },
+            dialoguend: {
+                remove: 'type'
+            }
+        });
+
+        if (!dialogue.choices) {
+            this.makeNextButton(dialogueAnimationManager, dialogueBox);
+        } else {
+            const choiceButtons = new Container();
+
+            for (let i = 0; i < dialogue.choices.length; i++) {
+                let choice = dialogue.choices[i];
+
+                const boxBounds = dialogueBox.getBounds();
+
+                const choiceButtonContainer = new Container({ eventMode: 'static' });
+                choiceButtonContainer.addChild(new TextShadowBoxRenderer(choice.text, 20, 0x000099, 0xFFFFFF, 5));
+                choiceButtonContainer.x = this.app.screen.width / 2 - choiceButtonContainer.getSize().width / 2;
+                choiceButtonContainer.y = boxBounds.top + boxBounds.height / 2 + choiceButtons.getSize().height;
+                choiceButtonContainer.on('click', event => {
+                    if (dialogue.end) {
+                        this.renderer.destroy();
+                        return;
+                    }
+
+                    this.index = choice.index;
+                    this.renderIndex();
+                });
+
+                choiceButtons.addChild(choiceButtonContainer);
+            }
+
+            this.renderer.addChild(choiceButtons);
+        }
 
         dialogueBox.emit('dialoguestart');
     }
