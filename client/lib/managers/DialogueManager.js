@@ -3,8 +3,10 @@ import DialogueBoxRenderer from "../renderers/DialogueBoxRenderer";
 import AnimationManager from "./AnimationManager";
 import TextShadowBoxRenderer from "../renderers/TextShadowBoxRenderer";
 
-export default class DialogueManager {
+export default class DialogueManager extends Container {
     constructor(app, dialogue, startingIndex) {
+        super({ eventMode: 'static' });
+
         this.app = app;
         this.dialogue = dialogue;
         this.index = startingIndex || 0;
@@ -13,7 +15,7 @@ export default class DialogueManager {
         app.stage.addChild(this.renderer);
     }
 
-    makeNextButton(dialogueAnimationManager, dialogueBox) {
+    makeNextButton(dialogueAnimationManager, dialogueBox, dialogue) {
         const boxBounds = dialogueBox.getBounds();
 
         const buttonContainer = new Container({ eventMode: 'static' });
@@ -34,6 +36,14 @@ export default class DialogueManager {
         buttonContainer.y = boxBounds.bottom - buttonSize.height - 2;
         buttonContainer.on('click', event => {
             dialogueAnimationManager.cleanup();
+
+            if (dialogue.end) {
+                this.endValue = dialogue.end;
+                this.renderer.destroy();
+                this.emit('dialoguedone');
+
+                return;
+            }
 
             this.index++;
             this.renderIndex();
@@ -64,7 +74,7 @@ export default class DialogueManager {
         });
 
         if (!dialogue.choices) {
-            this.makeNextButton(dialogueAnimationManager, dialogueBox);
+            this.makeNextButton(dialogueAnimationManager, dialogueBox, dialogue);
         } else {
             const choiceButtons = new Container();
 
@@ -79,7 +89,13 @@ export default class DialogueManager {
                 choiceButtonContainer.y = boxBounds.top + boxBounds.height / 2 + choiceButtons.getSize().height;
                 choiceButtonContainer.on('click', event => {
                     if (dialogue.end) {
+                        console.log('here');
                         this.renderer.destroy();
+                        this.endValue = dialogue.end;
+                        this.emit('dialoguedone');
+
+                        dialogueAnimationManager.cleanup();
+
                         return;
                     }
 

@@ -5,6 +5,8 @@ import GraphicsTileSet from './lib/TileSet';
 import HandRenderer from './lib/renderers/HandRenderer';
 import HandManager from './lib/managers/HandManager';
 import DialogueManager from './lib/managers/DialogueManager';
+import Encounter from '../lib/Encounter';
+import EncounterManager from './lib/managers/EncounterManager';
 
 (async () =>
 {
@@ -63,14 +65,32 @@ import DialogueManager from './lib/managers/DialogueManager';
         },
         {
             text: 'dog1 ah good choice',
-            end: true
+            end: 'goodchoice'
         },
         {
             text: 'dog2 yes interesting',
-            end: true
+        },
+        {
+            text: 'no wait we must fight',
+            end: 'fight'
         }
     ]
 
-    const dialogueManager = new DialogueManager(app, dialogue);
-    dialogueManager.renderIndex()
+    const events = [
+        {
+            dialogue,
+            fight: 1,
+            goodchoice: 2
+        },
+        {
+            battle: 'batle!'
+        },
+        {
+            end: 'goodchoice'
+        }
+    ];
+    // console.log(encounter.eventsList)
+
+    const encounterManager = new EncounterManager(app, events);
+    encounterManager.renderEvent();
 ;})();
