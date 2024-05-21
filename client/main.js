@@ -2,11 +2,7 @@ import { Application, Graphics, Sprite } from 'pixi.js';
 import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
-import HandRenderer from './lib/renderers/HandRenderer';
-import HandManager from './lib/managers/HandManager';
-import DialogueManager from './lib/managers/DialogueManager';
 import Encounter from '../lib/Encounter';
-import EncounterManager from './lib/managers/EncounterManager';
 import Entity from '../lib/Entity';
 import Battle from '../lib/Battle';
 import Character from '../lib/Character';
@@ -74,7 +70,7 @@ import Grimoire from '../lib/Grimoire';
     ];
 
     const battle = new Battle([
-        new Character({ swiftness: 1 }, new Grimoire([
+        new Character({ swiftness: 10 }, new Grimoire([
             {
                 effects: [
                     {
@@ -93,7 +89,7 @@ import Grimoire from '../lib/Grimoire';
             }
         ]))
     ], [
-        new Character({ swiftness: 10 }, new Grimoire([
+        new Character({ swiftness: 1 }, new Grimoire([
             {
                 effects: [
                     {

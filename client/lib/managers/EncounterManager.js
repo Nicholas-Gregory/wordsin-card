@@ -25,7 +25,6 @@ export default class EncounterManager extends Container {
             this.emit('encounterdone');
             this.encounter.index = 0;
         } else if (event.type === 'battle') {
-            console.log('here');
             const battleManager = new BattleManager(this.app, event.battle);
 
             await battleManager.startBattle();
