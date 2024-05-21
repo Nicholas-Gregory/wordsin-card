@@ -17,8 +17,9 @@ export default class TileRegionRenderer extends Container {
             let tile = this.tiles[i];
             let tileSize = tile.getSize();
 
-            tile.x = (i % this.widthInTiles) * tileSize.width;
-            tile.y = (Math.floor(i / this.widthInTiles)) * tileSize.height;
+            tile.x = (i % this.widthInTiles) * this.tileWidth;
+            tile.y = (Math.floor(i / this.widthInTiles)) * this.tileHeight;
+            tile.setSize(this.tileWidth, this.tileHeight);
 
             this.addChild(tile);
         }

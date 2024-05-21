@@ -15,7 +15,7 @@ import Grimoire from '../lib/Grimoire';
     await app.init({ 
         background: '#1099bb',
         width: 400, height: 180,
-        resolution: 4
+        resolution: 3
     });
 
     document.body.appendChild(app.canvas);
@@ -136,5 +136,5 @@ import Grimoire from '../lib/Grimoire';
         .fill(0xFF0000))
     }
 
-    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, entityTextures, 0.5);
+    const mapManager = new MapManager(9, 9, app, map, playerSprite, tileSet, entityTextures, 0.5);
 ;})();
