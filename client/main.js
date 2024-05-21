@@ -123,12 +123,18 @@ import Grimoire from '../lib/Grimoire';
         }
     ];
 
-    const entity = new Entity(11, 11, {}, {}, new Encounter(events, 0, true));
+    const entity = new Entity(11, 11, {}, {}, new Encounter(events, 0, true), 'doge');
 
     const map = new Map(100, tiles, [entity], { x: 10, y: 10 });
 
     const playerTexture = app.renderer.generateTexture(playerGraphic);
     const playerSprite = new Sprite(playerTexture);
 
-    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, 0.5);
+    const entityTextures = {
+        doge: app.renderer.generateTexture(new Graphics()
+        .circle(0, 0, 3)
+        .fill(0xFF0000))
+    }
+
+    const mapManager = new MapManager(6, 6, app, map, playerSprite, tileSet, entityTextures, 0.5);
 ;})();

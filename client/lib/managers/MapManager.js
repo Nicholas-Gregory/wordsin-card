@@ -1,10 +1,10 @@
-import { Container } from "pixi.js";
+import { Container, Sprite } from "pixi.js";
 import AnimationManager from "./AnimationManager";
 import TileRegionRenderer from "../renderers/TileRegionRenderer";
 import EncounterManager from "./EncounterManager";
 
 export default class MapManager extends Container {
-    constructor(tileWidth, tileHeight, app, map, playerSprite, tileSet, movementSpeed) {
+    constructor(tileWidth, tileHeight, app, map, playerSprite, tileSet, entityTextures, movementSpeed) {
         super({ eventMode: 'static' });
 
         this.tileWidth = tileWidth;
@@ -13,15 +13,31 @@ export default class MapManager extends Container {
         this.app = app;
         this.map = map;
         this.playerSprite = playerSprite;
+        this.entityTextures = entityTextures;
         this.movementSpeed = movementSpeed;
         this.app.stage.addChild(this);
 
         this
         .initKeyboardEvents()
         .initMap()
+        .initEntitySprites()
         .initPlayerSprite()
         .initAnimations()
         .initCollisions();
+    }
+
+    initEntitySprites() {
+        for (let entity of this.map.entities) {
+            let entitySprite = Sprite.from(this.entityTextures[entity.textureId]);
+
+            entitySprite.anchor.set(1);
+            entitySprite.x = entity.x * this.tileWidth;
+            entitySprite.y = entity.y * this.tileHeight;
+
+            this.mapContainer.addChild(entitySprite);
+        }
+
+        return this;
     }
 
     initCollisions() {
@@ -51,20 +67,22 @@ export default class MapManager extends Container {
     }
 
     initMap() {
+        this.mapContainer = new Container();
         this.mapRenderer = new TileRegionRenderer(this.tileWidth, this.tileHeight, 100, this.map.tiles.map(
             tile => this.tileSet.getNewTileFromId(tile.id)
         ));
-        this.mapRenderer.x = (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth;
-        this.mapRenderer.y = (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight;
+        this.mapContainer.x = (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth;
+        this.mapContainer.y = (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight;
+        this.mapContainer.addChild(this.mapRenderer);
 
-        this.addChild(this.mapRenderer);
+        this.addChild(this.mapContainer);
 
         return this;
     }
 
     moveMapUp(time) {
-        if (this.mapRenderer.y > (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight) {
-            this.mapRenderer.y -= this.movementSpeed * time.deltaTime;
+        if (this.mapContainer.y > (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight) {
+            this.mapContainer.y -= this.movementSpeed * time.deltaTime;
         } else {
             if (this.moving) {
                 this.map.moveDown(1);
@@ -75,8 +93,8 @@ export default class MapManager extends Container {
     }
 
     moveMapDown(time) {
-        if (this.mapRenderer.y < (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight) {
-            this.mapRenderer.y += this.movementSpeed * time.deltaTime;
+        if (this.mapContainer.y < (this.app.screen.height / 2) - this.map.playerLocation.y * this.mapRenderer.tileHeight) {
+            this.mapContainer.y += this.movementSpeed * time.deltaTime;
         } else {
             if (this.moving) {
                 this.map.moveUp(1);
@@ -87,8 +105,8 @@ export default class MapManager extends Container {
     }
 
     moveMapRight(time) {
-        if (this.mapRenderer.x < (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth) {
-            this.mapRenderer.x += this.movementSpeed * time.deltaTime;
+        if (this.mapContainer.x < (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth) {
+            this.mapContainer.x += this.movementSpeed * time.deltaTime;
         } else {
             if (this.moving) {
                 this.map.moveLeft(1);
@@ -99,8 +117,8 @@ export default class MapManager extends Container {
     }
 
     moveMapLeft(time) {
-        if (this.mapRenderer.x > (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth) {
-            this.mapRenderer.x -= this.movementSpeed * time.deltaTime;
+        if (this.mapContainer.x > (this.app.screen.width / 2) - this.map.playerLocation.x * this.mapRenderer.tileWidth) {
+            this.mapContainer.x -= this.movementSpeed * time.deltaTime;
         } else {
             if (this.moving) {
                 this.map.moveRight(1);
