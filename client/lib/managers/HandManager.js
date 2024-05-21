@@ -1,5 +1,5 @@
 import { Container } from "pixi.js";
-import HandRenderer from "../renderers/HandRenderer";
+import CardManager from "./CardManager";
 
 export default class HandManager extends Container {
     constructor(displayWidth, app, cards) {
@@ -10,25 +10,36 @@ export default class HandManager extends Container {
         this.displayWidth = displayWidth;
     }
 
-    async initHand() {
-        this.handRenderer = new HandRenderer(this.displayWidth, this.cards);
-        await this.handRenderer.makeCards();
+    async initHand(startsRevealed) {
+        this.cardManagers = [];
 
-        const handRendererSize = this.handRenderer.getSize();
+        for (let i = 0; i < this.cards.length; i++) {
+            let card = this.cards[i];
+            let cardManager = new CardManager(this.app, card, startsRevealed);
 
-        this.handRenderer.y = this.app.screen.height - handRendererSize.height;
-        this.handRenderer.x = this.app.screen.width / 2 - handRendererSize.width / 2;
+            await cardManager.initCardRenderer();
+            await cardManager.initCardBack();
 
-        this.addChild(this.handRenderer);
+            if (startsRevealed) {
+                cardManager.reveal();
+            } else {
+                cardManager.conceal();
+            }
+
+            cardManager.x = (this.displayWidth / this.cards.length) * i;
+
+            this.cardManagers.push(cardManager);
+            this.addChild(cardManager);
+        }
     }
 
     initMouseEvents() {
-        for (let i = 0; i < this.handRenderer.cardRenderers.length; i++) {
-            let card = this.handRenderer.cardRenderers[i];
+        for (let i = 0; i < this.cardManagers.length; i++) {
+            let card = this.cardManagers[i];
 
             card.eventMode = 'static';
             card
-            .on('mouseenter', event => card.zIndex = this.handRenderer.cardRenderers.length)
+            .on('mouseenter', event => card.zIndex = this.cardManagers.length)
             .on('mouseleave', event => card.zIndex = i)
         }
 

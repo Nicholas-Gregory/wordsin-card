@@ -1,6 +1,5 @@
 import { Container } from "pixi.js";
 import HandManager from './HandManager.js';
-import CardManager from "./CardManager.js";
 
 export default class BattleManager extends Container {
     constructor(app, battle) {
@@ -9,7 +8,7 @@ export default class BattleManager extends Container {
         this.app = app;
         this.battle = battle;
         this.allyHandManagers = [];
-        this.enemyHands = [];
+        this.enemyHandManagers = [];
         
         this.app.stage.addChild(this);
     }
@@ -24,7 +23,7 @@ export default class BattleManager extends Container {
     showProactiveHand() {
         const proactive = this.battle.getProactiveCharacter();
         const enemyOrAlly = Object.keys(proactive)[0];
-        console.log(proactive)
+        
         if (enemyOrAlly === 'ally') {
             this.showAllyHand(proactive.ally);
         } else {
@@ -40,11 +39,12 @@ export default class BattleManager extends Container {
     async makeAllyHands() {
         for (let ally of this.battle.allies) {
             const hand = ally.hand;
-            console.log(hand)
+            
             const handManager = new HandManager(this.app.screen.width / 2, this.app, hand);
 
-            await handManager.initHand();
+            await handManager.initHand(true);
             handManager.initMouseEvents();
+            handManager.y = this.app.screen.height - handManager.getSize().height - 2;
 
             this.allyHandManagers.push(handManager);
         }
@@ -52,38 +52,22 @@ export default class BattleManager extends Container {
 
     async makeEnemyHands() {
         for (let enemy of this.battle.enemies) {
-            const handContainer = new Container();
-            const hand = enemy.hand;
-            const handManager = [];
-            
-            for (let card of hand) {
-                const cardManager = new CardManager(this.app, card, false);
+            const handManager = new HandManager(this.app.screen.width / 2, this.app, enemy.hand);
 
-                await cardManager.initCardRenderer();
-                await cardManager.initCardBack();
+            await handManager.initHand(false);
+            handManager.initMouseEvents();
+            handManager.y = 2;
 
-                handManager.push(cardManager);
-            }
-
-            for (let card of handManager) {
-                handContainer.addChild(card.cardBack);
-            }
-
-            const handSize = handContainer.getSize();
-
-            handContainer.x = this.app.screen.width / 2 - handSize.width / 2;
-            handContainer.y = 2;
-
-            this.enemyHands.push(handContainer);
+            this.enemyHandManagers.push(handManager);
         }
     }
 
     showEnemyHand(index) {
-        for (let hand of this.enemyHands) {
+        for (let hand of this.enemyHandManagers) {
             this.removeChild(hand);
         }
 
-        this.addChild(this.enemyHands[index]);
+        this.addChild(this.enemyHandManagers[index]);
     }
 
     showAllyHand(index) {
@@ -92,6 +76,5 @@ export default class BattleManager extends Container {
         }
 
         this.addChild(this.allyHandManagers[index]);
-        console.log(this.children)
     }
 }
