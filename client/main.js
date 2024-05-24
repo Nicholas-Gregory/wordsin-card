@@ -1,4 +1,4 @@
-import { Application, Graphics, Sprite } from 'pixi.js';
+import { Application, Assets, Graphics, Sprite, Texture } from 'pixi.js';
 import Map from '../lib/Map';
 import MapManager from './lib/managers/MapManager';
 import GraphicsTileSet from './lib/TileSet';
@@ -14,8 +14,8 @@ import Grimoire from '../lib/Grimoire';
 
     await app.init({ 
         background: '#1099bb',
-        width: 400, height: 180,
-        resolution: 3
+        width: window.innerWidth / 2, height: window.innerHeight / 2,
+        resolution: 2
     });
 
     document.body.appendChild(app.canvas);
@@ -127,7 +127,8 @@ import Grimoire from '../lib/Grimoire';
 
     const map = new Map(100, tiles, [entity], { x: 10, y: 10 });
 
-    const playerTexture = app.renderer.generateTexture(playerGraphic);
+    const playerTexture = await Assets.load('./assets/character-sprite.png');
+    playerTexture.source.scaleMode = 'nearest';
     const playerSprite = new Sprite(playerTexture);
 
     const entityTextures = {
@@ -136,5 +137,5 @@ import Grimoire from '../lib/Grimoire';
         .fill(0xFF0000))
     }
 
-    const mapManager = new MapManager(9, 9, app, map, playerSprite, tileSet, entityTextures, 0.5);
+    const mapManager = new MapManager(18, 18, app, map, playerSprite, tileSet, entityTextures, 0.5);
 ;})();

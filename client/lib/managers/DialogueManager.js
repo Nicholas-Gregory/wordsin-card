@@ -80,16 +80,14 @@ export default class DialogueManager extends Container {
 
             for (let i = 0; i < dialogue.choices.length; i++) {
                 let choice = dialogue.choices[i];
-
                 const boxBounds = dialogueBox.getBounds();
-
                 const choiceButtonContainer = new Container({ eventMode: 'static' });
+
                 choiceButtonContainer.addChild(new TextShadowBoxRenderer(choice.text, 20, 0x000099, 0xFFFFFF, 5));
                 choiceButtonContainer.x = this.app.screen.width / 2 - choiceButtonContainer.getSize().width / 2;
                 choiceButtonContainer.y = boxBounds.top + boxBounds.height / 2 + choiceButtons.getSize().height;
                 choiceButtonContainer.on('click', event => {
-                    if (dialogue.end) {
-                        console.log('here');
+                    if (dialogue.end) {                        
                         this.renderer.destroy();
                         this.endValue = dialogue.end;
                         this.emit('dialoguedone');
