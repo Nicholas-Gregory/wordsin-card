@@ -1,8 +1,8 @@
 import { Container } from "pixi.js";
 
 export default class Renderer extends Container {
-    constructor(renderers) {
-        super();
+    constructor(renderers, options) {
+        super(options);
 
         this.renderers = renderers || {};
     }
