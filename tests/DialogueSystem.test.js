@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import DialogueSystem from './DialogueSystem.js';
-import Entity from '../Entity.js';
+import DialogueSystem from '../lib/systems/DialogueSystem.js';
+import Entity from '../lib/Entity.js';
 
 describe('Class: DialogueSystem;', () => {
     it('advances linearly', () => {

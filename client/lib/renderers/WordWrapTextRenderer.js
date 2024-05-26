@@ -1,3 +1,4 @@
+import { Text } from "pixi.js";
 import Renderer from "./Renderer";
 
 export default class WordWrapTextRenderer extends Renderer {
@@ -18,7 +19,7 @@ export default class WordWrapTextRenderer extends Renderer {
                 wordWrapWidth: this.givenWidth,
                 fontFamily: 'Courier New',
                 fontSize: this.givenFontSize,
-                fill: this.textColor
+                fill: this.textFill
             }
         });
 
