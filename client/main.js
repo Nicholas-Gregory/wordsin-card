@@ -26,13 +26,21 @@ import Emitter from '../lib/events/Emitter';
 
     const dialogue = new Entity({
         index: 0,
+        wordIndex: 0,
         renderer: new Container(),
         wordWrapTextRenderers: [
             new WordWrapTextRenderer('did you know that dogs are cats?', 100, 0xFFFFFF, 6).initText().init(),
             new WordWrapTextRenderer(`it's true!`, 100, 0xFFFFFF, 6).initText().init()
         ],
         shadowBoxRenderer: shadowBox,
-        events: [{}, {}],
+        events: [
+            {
+                text: 'did you know that dogs are cats?'
+            }, 
+            {
+                text: `it's true!`
+            }
+        ],
         nextButton: new Graphics({ eventMode: 'static' })
         .moveTo(0, 0)
         .lineTo(0, 19)
@@ -45,9 +53,9 @@ import Emitter from '../lib/events/Emitter';
     const emitter = new Emitter(manager.listeners);
 
     dialogue.nextButton.y = 20;
-    dialogue.nextButton.on('click', event => emitter.emit('nextbuttonclick', dialogue, null));
+    dialogue.nextButton.on('click', event => emitter.emit('nextbuttonclick', dialogue, null, app));
 
     app.stage.addChild(dialogue.renderer);
 
-    manager.process();
+    manager.process(undefined, app);
 ;})();
