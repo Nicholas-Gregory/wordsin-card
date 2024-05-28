@@ -79,7 +79,7 @@ const dialogueManagerCallback = (entity, choice, app) => {
 };
 
 
-export default class DialogueManager extends EventSystem {
+export default class DialogueSystem extends EventSystem {
     constructor(entities) {
         super(needed, null, entities, dialogueManagerCallback, ['nextbuttonclick', 'choiceclick']);
     }

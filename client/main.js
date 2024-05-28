@@ -2,8 +2,9 @@ import { Application, Assets, Container, Graphics, Sprite, Texture } from 'pixi.
 import Entity from '../lib/Entity';
 import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
 import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
-import DialogueManager from './lib/managers/DialogueManager';
+import DialogueSystem from './lib/systems/DialogueSystem';
 import Emitter from '../lib/events/Emitter';
+import RenderSystem from './lib/systems/RenderSystem';
 
 
 (async () =>
@@ -49,13 +50,16 @@ import Emitter from '../lib/events/Emitter';
         .stroke(0x000055)
         .fill(0x000099)
     });
-    const manager = new DialogueManager([dialogue]);
+    const manager = new DialogueSystem([dialogue]);
     const emitter = new Emitter(manager.listeners);
 
     dialogue.nextButton.y = 20;
     dialogue.nextButton.on('click', event => emitter.emit('nextbuttonclick', dialogue, null, app));
+    dialogue.position = { x: 20, y: 20 };
 
-    app.stage.addChild(dialogue.renderer);
+    const renderSystem = new RenderSystem([dialogue]);
+
+    renderSystem.process(app);
 
     manager.process(undefined, app);
 ;})();
