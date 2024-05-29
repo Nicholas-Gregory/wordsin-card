@@ -1,5 +1,6 @@
 import { AnimatedSprite, Application, Assets, Container, Graphics, Sprite, Spritesheet, Texture } from 'pixi.js';
 import SpriteRenderer from './lib/renderers/SpriteRenderer';
+import TileMapRenderer from './lib/renderers/TileMapRenderer';
 
 (async () =>
 {
@@ -8,7 +9,7 @@ import SpriteRenderer from './lib/renderers/SpriteRenderer';
     await app.init({ 
         background: '#1099bb',
         width: window.innerWidth / 2, height: window.innerHeight / 2,
-        resolution: 3
+        resolution: 2
     });
 
     document.body.appendChild(app.canvas);
@@ -50,7 +51,17 @@ import SpriteRenderer from './lib/renderers/SpriteRenderer';
         } else if (key === 'ArrowLeft') {
             sprite.setSprite('facingWest');
         }
-    })
+    });
 
-    app.stage.addChild(sprite);
+    const map = new TileMapRenderer('./assets/spritesheets/grass-tiles-1.json', 3, [
+        'short1', 'short3', 'short2',
+        'short3', 'short1', 'short2',
+        'short2', 'short2', 'short3'
+    ]);
+    await map.initTileSet();
+    map
+    .initTiles()
+    .init();
+
+    app.stage.addChild(map, sprite);
 ;})();
