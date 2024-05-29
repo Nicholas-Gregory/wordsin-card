@@ -1,11 +1,5 @@
 import { AnimatedSprite, Application, Assets, Container, Graphics, Sprite, Spritesheet, Texture } from 'pixi.js';
-import Entity from '../lib/Entity';
-import WordWrapTextRenderer from './lib/renderers/WordWrapTextRenderer';
-import ShadowBoxRenderer from './lib/renderers/ShadowBoxRenderer';
-import DialogueSystem from './lib/systems/DialogueSystem';
-import Emitter from '../lib/events/Emitter';
-import RenderSystem from './lib/systems/RenderSystem';
-
+import SpriteRenderer from './lib/renderers/SpriteRenderer';
 
 (async () =>
 {
@@ -19,13 +13,44 @@ import RenderSystem from './lib/systems/RenderSystem';
 
     document.body.appendChild(app.canvas);
 
-    const spritesheet = await Assets.load('./assets/spritesheets/char-1.json');
-    const sprite = new AnimatedSprite(spritesheet.animations.walkEast);
+    const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth');
 
-    spritesheet.textureSource.scaleMode = 'nearest';
+    await sprite.initSpritesheet();
+    sprite
+    .initSprites()
+    .init();
 
-    sprite.animationSpeed = 0.1;
-    sprite.play();
+    window.addEventListener('keydown', event => {
+        const key = event.key;
+
+        event.preventDefault();
+
+        if (key === 'ArrowUp') {
+            sprite.setSprite('walkNorth');
+        } else if (key === 'ArrowDown') {
+            sprite.setSprite('walkSouth');
+        } else if (key === 'ArrowRight') {
+            sprite.setSprite('walkEast');
+        } else if (key === 'ArrowLeft') {
+            sprite.setSprite('walkWest');
+        }
+    });
+
+    window.addEventListener('keyup', event => {
+        const key = event.key;
+
+        event.preventDefault();
+
+        if (key === 'ArrowUp') {
+            sprite.setSprite('facingNorth');
+        } else if (key === 'ArrowDown') {
+            sprite.setSprite('facingSouth');
+        } else if (key === 'ArrowRight') {
+            sprite.setSprite('facingEast');
+        } else if (key === 'ArrowLeft') {
+            sprite.setSprite('facingWest');
+        }
+    })
 
     app.stage.addChild(sprite);
 ;})();

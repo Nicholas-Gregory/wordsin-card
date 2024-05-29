@@ -2,8 +2,8 @@ import { Container, Graphics } from "pixi.js";
 import Renderer from "./Renderer";
 
 export default class ShadowBoxRenderer extends Renderer {
-    constructor(width, height, fill) {
-        super();
+    constructor(width, height, fill, options) {
+        super({}, options);
 
         this.givenWidth = width;
         this.givenHeight = height;

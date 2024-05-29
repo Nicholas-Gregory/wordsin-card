@@ -2,8 +2,8 @@ import { Text } from "pixi.js";
 import Renderer from "./Renderer";
 
 export default class WordWrapTextRenderer extends Renderer {
-    constructor(textString, width, textFill, fontSize) {
-        super();
+    constructor(textString, width, textFill, fontSize, options) {
+        super({}, options);
 
         this.textString = textString;
         this.givenWidth = width;
