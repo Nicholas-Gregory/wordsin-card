@@ -20,7 +20,9 @@ import RenderSystem from './lib/systems/RenderSystem';
     document.body.appendChild(app.canvas);
 
     const spritesheet = await Assets.load('./assets/spritesheets/char-1.json');
-    const sprite = new AnimatedSprite(spritesheet.animations.walkNorth);
+    const sprite = new AnimatedSprite(spritesheet.animations.walkEast);
+
+    spritesheet.textureSource.scaleMode = 'nearest';
 
     sprite.animationSpeed = 0.1;
     sprite.play();
