@@ -1,6 +1,8 @@
 import { AnimatedSprite, Application, Assets, Container, Graphics, Sprite, Spritesheet, Texture } from 'pixi.js';
 import SpriteRenderer from './lib/renderers/SpriteRenderer';
 import TileMapRenderer from './lib/renderers/TileMapRenderer';
+import Entity from '../lib/Entity';
+import RenderSystem from './lib/systems/RenderSystem';
 
 (async () =>
 {
@@ -20,6 +22,11 @@ import TileMapRenderer from './lib/renderers/TileMapRenderer';
     sprite
     .initSprites()
     .init();
+
+    const playerEntity = new Entity({
+        position: { x: app.screen.width / 2, y: app.screen.height / 2 },
+        renderer: sprite
+    });
 
     window.addEventListener('keydown', event => {
         const key = event.key;
@@ -63,5 +70,7 @@ import TileMapRenderer from './lib/renderers/TileMapRenderer';
     .initTiles()
     .init();
 
-    app.stage.addChild(map, sprite);
+    const renderSystem = new RenderSystem([playerEntity]);
+
+    app.ticker.add(time => renderSystem.process(app));
 ;})();
