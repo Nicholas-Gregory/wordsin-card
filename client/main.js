@@ -3,6 +3,7 @@ import SpriteRenderer from './lib/renderers/SpriteRenderer';
 import TileMapRenderer from './lib/renderers/TileMapRenderer';
 import Entity from '../lib/Entity';
 import RenderSystem from './lib/systems/RenderSystem';
+import PathfindingSystem from '../lib/systems/PathfindingSystem';
 
 (async () =>
 {
@@ -70,7 +71,28 @@ import RenderSystem from './lib/systems/RenderSystem';
     .initTiles()
     .init();
 
-    const renderSystem = new RenderSystem([playerEntity]);
+    const mapEntity = new Entity({
+        position: { x: 10, y: 10 },
+        renderer: map,
+        width: 10,
+        tiles: [...new Array(100)].map(tile => ({
+            weight: Math.random() * 5
+        }))
+    });
+
+    const renderSystem = new RenderSystem([playerEntity, mapEntity]);
+
+    const pathfindingEntity = new Entity({
+        mapPosition: { x: 1, y: 1 },
+        mapId: mapEntity.id,
+        destination: { x: 5, y: 5 }
+    });
+
+    const pathfindingSystem = new PathfindingSystem([pathfindingEntity]);
+
+    pathfindingSystem.process(renderSystem);
+
+    console.log(pathfindingEntity.astarPath);
 
     app.ticker.add(time => renderSystem.process(app));
 ;})();
