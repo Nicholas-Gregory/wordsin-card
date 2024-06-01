@@ -10,6 +10,14 @@ export default class TileMapRenderer extends Renderer {
         this.widthInTiles = widthInTiles;
     }
 
+    getTileWidth() {
+        return this.renderers[0].getSize().width;
+    }
+
+    getTileHeight() {
+        return this.renderers[0].getSize().height;
+    }
+
     async initTileSet() {
         this.tileSet = await Assets.load(this.path);
         this.tileSet.textureSource.scaleMode = 'nearest';
@@ -18,7 +26,7 @@ export default class TileMapRenderer extends Renderer {
     initTiles() {
         for (let i = 0; i < this.tiles.length; i++) {
             const tile = this.tiles[i];
-            const sprite = new Sprite(this.tileSet.textures[tile]);
+            const sprite = new Sprite(this.tileSet.textures[tile.tileName]);
             const tileSize = sprite.getSize();
 
             sprite.x = (i % this.widthInTiles) * tileSize.width;

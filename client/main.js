@@ -4,6 +4,22 @@ import TileMapRenderer from './lib/renderers/TileMapRenderer';
 import Entity from '../lib/Entity';
 import RenderSystem from './lib/systems/RenderSystem';
 import PathfindingSystem from '../lib/systems/PathfindingSystem';
+import MovementSystem from './lib/systems/MovementSystem';
+import Emitter from '../lib/events/Emitter';
+import Listener from '../lib/events/Listener';
+import { convertMapCoordinates } from './lib/utils';
+
+const getSprite = async () => {
+    const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth')
+    
+    await sprite.initSpritesheet()
+    sprite
+    .initSprites()
+    .init();
+
+    return sprite;
+}
+
 
 (async () =>
 {
@@ -17,17 +33,7 @@ import PathfindingSystem from '../lib/systems/PathfindingSystem';
 
     document.body.appendChild(app.canvas);
 
-    const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth');
-
-    await sprite.initSpritesheet();
-    sprite
-    .initSprites()
-    .init();
-
-    const playerEntity = new Entity({
-        position: { x: app.screen.width / 2, y: app.screen.height / 2 },
-        renderer: sprite
-    });
+    const sprite = await getSprite();
 
     window.addEventListener('keydown', event => {
         const key = event.key;
@@ -61,11 +67,14 @@ import PathfindingSystem from '../lib/systems/PathfindingSystem';
         }
     });
 
-    const map = new TileMapRenderer('./assets/spritesheets/grass-tiles-1.json', 3, [
-        'short1', 'short3', 'short2',
-        'short3', 'short1', 'short2',
-        'short2', 'short2', 'short3'
-    ]);
+    const tileNames = ['short1', 'short2', 'short3', 'longEdge1', 'longEdge2', 'longEdge3', 'longSide1', 'longSide2', 'longSide3', 'longTop1', 'longTop2', 'longTop3'];
+
+    const tiles = [...new Array(100)].map(tile => ({
+        weight: Math.random() * 5,
+        tileName: tileNames[Math.floor(Math.random() * tileNames.length)]
+    }));
+
+    const map = new TileMapRenderer('./assets/spritesheets/grass-tiles-1.json', 10, tiles);
     await map.initTileSet();
     map
     .initTiles()
@@ -75,24 +84,59 @@ import PathfindingSystem from '../lib/systems/PathfindingSystem';
         position: { x: 10, y: 10 },
         renderer: map,
         width: 10,
-        tiles: [...new Array(100)].map(tile => ({
-            weight: Math.random() * 5
-        }))
+        tiles
     });
 
-    const renderSystem = new RenderSystem([playerEntity, mapEntity]);
+    const playerEntity = new Entity({
+        renderer: sprite,
+        isPlayerCharacter: true
+    });
 
-    const pathfindingEntity = new Entity({
-        mapPosition: { x: 1, y: 1 },
+    const npcEntity = new Entity({
+        renderer: await getSprite(),
         mapId: mapEntity.id,
-        destination: { x: 5, y: 5 }
+        mapPosition: { x: 0, y: 0 },
+        destination: { x: 5, y: 5 },
+        movementSpeed: 5
     });
 
-    const pathfindingSystem = new PathfindingSystem([pathfindingEntity]);
+    const movementSystem = new MovementSystem([npcEntity]);
+    const renderSystem = new RenderSystem([playerEntity, mapEntity, npcEntity]);
+    const pathfindingSystem = new PathfindingSystem([npcEntity]);
+
+    renderSystem.process(app, renderSystem);
 
     pathfindingSystem.process(renderSystem);
 
-    console.log(pathfindingEntity.astarPath);
+    const emitter = new Emitter(movementSystem.listeners);
+    emitter.subscribe(new Listener('endmove', () => {
+        const nextTile = npcEntity.astarPath.shift();
 
-    app.ticker.add(time => renderSystem.process(app));
+        npcEntity.moving = false;
+
+        if (nextTile) {
+            if (nextTile.x === npcEntity.mapPosition.x) {
+                if (nextTile.y > npcEntity.mapPosition.y) {
+                    npcEntity.movementDirection = 'south';
+                } else {
+                    npcEntity.movementDirection = 'north';
+                }
+            } else {
+                if (nextTile.x < npcEntity.mapPosition.x) {
+                    npcEntity.movementDirection = 'west';
+                } else {
+                    npcEntity.movementDirection = 'east';
+                }
+            }
+
+            npcEntity.mapPosition = nextTile;
+            emitter.emit('beginmove', npcEntity, app, mapEntity, emitter, renderSystem);
+        }
+    }));
+
+    npcEntity.position = convertMapCoordinates(mapEntity, npcEntity.mapPosition);
+
+    emitter.emit('endmove', npcEntity, app, mapEntity, emitter);
+
+    app.ticker.add(time => renderSystem.process(app, renderSystem))
 ;})();
