@@ -6,8 +6,8 @@ import RenderSystem from './lib/systems/RenderSystem';
 import PathfindingSystem from '../lib/systems/PathfindingSystem';
 import MovementSystem from './lib/systems/MovementSystem';
 import Emitter from '../lib/events/Emitter';
-import Listener from '../lib/events/Listener';
 import { convertMapCoordinates } from './lib/utils';
+import NPCPathfindingMovementSystem from './lib/systems/NPCPathfindingMovementSystem';
 
 const getSprite = async () => {
     const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth')
@@ -108,31 +108,9 @@ const getSprite = async () => {
 
     pathfindingSystem.process(renderSystem);
 
-    const emitter = new Emitter(movementSystem.listeners);
-    emitter.subscribe(new Listener('endmove', () => {
-        const nextTile = npcEntity.astarPath.shift();
+    const npcPathfindingMovementSystem = new NPCPathfindingMovementSystem([npcEntity]);
 
-        npcEntity.moving = false;
-
-        if (nextTile) {
-            if (nextTile.x === npcEntity.mapPosition.x) {
-                if (nextTile.y > npcEntity.mapPosition.y) {
-                    npcEntity.movementDirection = 'south';
-                } else {
-                    npcEntity.movementDirection = 'north';
-                }
-            } else {
-                if (nextTile.x < npcEntity.mapPosition.x) {
-                    npcEntity.movementDirection = 'west';
-                } else {
-                    npcEntity.movementDirection = 'east';
-                }
-            }
-
-            npcEntity.mapPosition = nextTile;
-            emitter.emit('beginmove', npcEntity, app, mapEntity, emitter, renderSystem);
-        }
-    }));
+    const emitter = new Emitter([...movementSystem.listeners, ...npcPathfindingMovementSystem.listeners]);
 
     npcEntity.position = convertMapCoordinates(mapEntity, npcEntity.mapPosition);
 

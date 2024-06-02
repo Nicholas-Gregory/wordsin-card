@@ -14,7 +14,7 @@ const moveNorth = (entity, time, map, app, emitter) => {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
         entity.renderer.setSprite('facingNorth');
-        emitter.emit('endmove');
+        emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
@@ -27,7 +27,7 @@ const moveEast = (entity, time, map, app, emitter) => {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
         entity.renderer.setSprite('facingEast');
-        emitter.emit('endmove');
+        emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
@@ -40,7 +40,7 @@ const moveSouth = (entity, time, map, app, emitter) => {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
         entity.renderer.setSprite('facingSouth');
-        emitter.emit('endmove');
+        emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
@@ -53,7 +53,7 @@ const moveWest = (entity, time, map, app, emitter) => {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
         entity.renderer.setSprite('facingWest');
-        emitter.emit('endmove');
+        emitter.emit('endmove', entity, app, map, emitter);
     }
 }
 
