@@ -9,6 +9,8 @@ import { convertMapCoordinates } from './lib/utils';
 import NPCPathfindingMovementSystem from './lib/systems/NPCPathfindingMovementSystem';
 import MapPositioningSystem from './lib/systems/MapPositioningSystem';
 import Renderer from './lib/renderers/Renderer';
+import MapMovementSystem from './lib/systems/MapMovementSystem';
+import PlayerPathfindingMovementSystem from './lib/systems/PlayerPathfindingMovementSystem';
 
 const getSprite = async () => {
     const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth')
@@ -68,6 +70,8 @@ const getSprite = async () => {
         }
     });
 
+    const emitter = new Emitter();
+
     const tileNames = ['short1', 'short2', 'short3', 'longEdge1', 'longEdge2', 'longEdge3', 'longSide1', 'longSide2', 'longSide3', 'longTop1', 'longTop2', 'longTop3'];
 
     const tiles = [...new Array(100)].map(tile => new Entity({
@@ -77,7 +81,7 @@ const getSprite = async () => {
     }));
 
     for (let tile of tiles) {
-        tile.renderer = new SpriteRenderer('./assets/spritesheets/grass-tiles-1.json', tile.tileName);
+        tile.renderer = new SpriteRenderer('./assets/spritesheets/grass-tiles-1.json', tile.tileName, { eventMode: 'static' });
         await tile.renderer.initSpritesheet();
         tile.renderer
         .initSprites()
@@ -88,7 +92,7 @@ const getSprite = async () => {
     mapRenderer.init();
 
     const mapEntity = new Entity({
-        position: { x: 10, y: 10 },
+        position: {},
         renderer: mapRenderer,
         width: 10,
         tiles
@@ -98,7 +102,8 @@ const getSprite = async () => {
         renderer: sprite,
         isPlayerCharacter: true,
         mapId: mapEntity.id,
-        mapPosition: { x: 4, y: 3 }
+        mapPosition: { x: 4, y: 3 },
+        movementSpeed: 5
     });
 
     const npcEntity = new Entity({
@@ -113,8 +118,26 @@ const getSprite = async () => {
 
     const movementSystem = new MovementSystem([npcEntity]);
     const renderSystem = new RenderSystem([mapEntity, playerEntity, npcEntity, ...tiles]);
-    const pathfindingSystem = new PathfindingSystem([npcEntity]);
+    const pathfindingSystem = new PathfindingSystem([npcEntity, playerEntity]);
     const mapPositioningSystem = new MapPositioningSystem([mapEntity]);
+    const mapMovementSystem = new MapMovementSystem([mapEntity]);
+    const playerPathfindingMovementSystem = new PlayerPathfindingMovementSystem([playerEntity]);
+
+    for (let listener of playerPathfindingMovementSystem.listeners) {
+        emitter.subscribe(listener);
+    }
+
+    for (let listener of mapMovementSystem.listeners) {
+        emitter.subscribe(listener);
+    }
+
+    for (let tile of tiles) {
+        tile.renderer.on('click', event => {
+            emitter.emit('tileclick', mapEntity, app, renderSystem, tile)
+            pathfindingSystem.process(renderSystem);
+            emitter.emit('endmapmove', playerEntity, app, mapEntity, emitter);
+        });
+    }
 
     renderSystem.process(app, renderSystem);
 
@@ -122,14 +145,26 @@ const getSprite = async () => {
 
     const npcPathfindingMovementSystem = new NPCPathfindingMovementSystem([npcEntity]);
 
-    const emitter = new Emitter([...movementSystem.listeners, ...npcPathfindingMovementSystem.listeners]);
+    for (let listener of movementSystem.listeners) {
+        emitter.subscribe(listener);
+    }
+
+    for (let listener of npcPathfindingMovementSystem.listeners) {
+        emitter.subscribe(listener);
+    }
+
+    for (let listener of mapPositioningSystem.listeners) {
+        emitter.subscribe(listener);
+    }
 
     npcEntity.position = convertMapCoordinates(mapEntity, npcEntity.mapPosition);
 
     emitter.emit('endmove', npcEntity, app, mapEntity, emitter);
 
+    mapPositioningSystem.process(app, renderSystem);
+
     app.ticker.add(time => {
         renderSystem.process(app, renderSystem);
-        mapPositioningSystem.process(app, renderSystem);
+        
     });
 ;})();
