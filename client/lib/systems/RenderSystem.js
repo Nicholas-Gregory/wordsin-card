@@ -10,6 +10,13 @@ const renderSystemCallback = (entity, app, mapSystem) => {
         entity.renderer.pivot.y = entitySize.height;
         entity.renderer.pivot.x = entitySize.width / 2;
         entity.position = renderPosition;
+
+        map.renderer.addChild(entity.renderer);
+
+        entity.renderer.x = entity.position.x;
+        entity.renderer.y = entity.position.y;
+
+        return;
     }
 
     if (entity.isPlayerCharacter) {
@@ -19,7 +26,7 @@ const renderSystemCallback = (entity, app, mapSystem) => {
     entity.renderer.x = entity.position.x;
     entity.renderer.y = entity.position.y;
 
-    app.stage.addChild(entity.renderer);
+    if (!entity.mapPosition && !entity.weight) app.stage.addChild(entity.renderer);
 };
 
 export default class RenderSystem extends System {

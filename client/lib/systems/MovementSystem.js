@@ -6,53 +6,53 @@ const needed = [
 ];
 
 const moveNorth = (entity, time, map, app, emitter) => {
-    entity.renderer.setSprite('walkNorth');
+    entity.renderer.setSprite?.('walkNorth');
 
     if (entity.position.y < convertMapCoordinates(map, entity.mapPosition).y) {
         entity.position.y -= entity.movementSpeed * 0.1 * time.deltaTime;
     } else {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
-        entity.renderer.setSprite('facingNorth');
+        entity.renderer.setSprite?.('facingNorth');
         emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
 const moveEast = (entity, time, map, app, emitter) => {
-    entity.renderer.setSprite('walkEast');
+    entity.renderer.setSprite?.('walkEast');
 
     if (entity.position.x < convertMapCoordinates(map, entity.mapPosition).x) {
         entity.position.x += entity.movementSpeed * 0.1 * time.deltaTime;
     } else {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
-        entity.renderer.setSprite('facingEast');
+        entity.renderer.setSprite?.('facingEast');
         emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
 const moveSouth = (entity, time, map, app, emitter) => {
-    entity.renderer.setSprite('walkSouth');
+    entity.renderer.setSprite?.('walkSouth');
 
     if (entity.position.y < convertMapCoordinates(map, entity.mapPosition).y) {
         entity.position.y += entity.movementSpeed * 0.1 * time.deltaTime;
     } else {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
-        entity.renderer.setSprite('facingSouth');
+        entity.renderer.setSprite?.('facingSouth');
         emitter.emit('endmove', entity, app, map, emitter);
     }
 };
 
 const moveWest = (entity, time, map, app, emitter) => {
-    entity.renderer.setSprite('walkWest');
+    entity.renderer.setSprite?.('walkWest');
 
     if (entity.position.x > convertMapCoordinates(map, entity.mapPosition).x) {
         entity.position.x -= entity.movementSpeed * 0.1 * time.deltaTime;
     } else {
         entity.moving = null;
         app.ticker.remove(entity.animationCallback);
-        entity.renderer.setSprite('facingWest');
+        entity.renderer.setSprite?.('facingWest');
         emitter.emit('endmove', entity, app, map, emitter);
     }
 }
