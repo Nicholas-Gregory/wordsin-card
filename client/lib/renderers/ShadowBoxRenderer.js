@@ -1,34 +1,27 @@
 import { Container, Graphics } from "pixi.js";
+import Renderer from "./Renderer";
 
-export default class ShadowBoxRenderer extends Container {
-    constructor(width, height, color) {
-        super();
-        
+export default class ShadowBoxRenderer extends Renderer {
+    constructor(width, height, fill, options) {
+        super({}, options);
+
         this.givenWidth = width;
         this.givenHeight = height;
-        this.givenColor = color;
-
-        this
-        .makeShadow()
-        .makeBox()
+        this.givenFill = fill;
     }
 
-    makeShadow() {
-        this.shadowGraphics = new Graphics()
+    initShadow() {
+        this.renderers.shadowGraphics = new Graphics()
         .rect(1, 1, this.givenWidth, this.givenHeight)
-        .fill({ color: 0x000000, alpha: 0.5 });
-
-        this.addChild(this.shadowGraphics);
+        .fill({ color: 0x000000, alpha: 0.5})
 
         return this;
     }
 
-    makeBox() {
-        this.boxGraphics = new Graphics()
+    initBox() {
+        this.renderers.boxGraphics = new Graphics()
         .rect(0, 0, this.givenWidth, this.givenHeight)
-        .fill(this.givenColor);
-
-        this.addChild(this.boxGraphics);
+        .fill(this.givenFill);
 
         return this;
     }

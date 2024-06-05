@@ -1,0 +1,76 @@
+{
+    "frames": {
+        "facingSouth": {
+            "frame": { "x": 0, "y": 0, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "leftLegUpSouth": {
+            "frame": { "x": 0, "y": 30, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "rightLegUpSouth": {
+            "frame": { "x": 0, "y": 60, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "facingEast": {
+            "frame": { "x": 15, "y": 0, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "leftLegUpEast": {
+            "frame": { "x": 15, "y": 30, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "rightLegUpEast": {
+            "frame": { "x": 15, "y": 60, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "facingWest": {
+            "frame": { "x": 27, "y": 0, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "rightLegUpWest": {
+            "frame": { "x": 27, "y": 30, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "leftLegUpWest": {
+            "frame": { "x": 27, "y": 60, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "facingNorth": {
+            "frame": { "x": 42, "y": 0, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "leftLegUpNorth": {
+            "frame": { "x": 42, "y": 30, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        },
+        "rightLegUpNorth": {
+            "frame": { "x": 42, "y": 60, "w": 15, "h": 30},
+            "sourceSize": { "w": 15, "h": 30 },
+            "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
+        }
+    },
+    "animations": {
+        "walkSouth": ["facingSouth", "leftLegUpSouth", "facingSouth", "rightLegUpSouth"],
+        "walkEast": ["facingEast", "leftLegUpEast", "facingEast", "rightLegUpEast"],
+        "walkWest": ["facingWest", "leftLegUpWest", "facingWest", "rightLegUpWest"],
+        "walkNorth": ["facingNorth", "leftLegUpNorth", "facingNorth", "rightLegUpNorth"]
+    },
+    "meta": {
+        "image": "char-1.png",
+        "format": "RGBA8888",
+        "size": { "w": 57, "h": 91 },
+        "scale": 1
+    }
+}

@@ -1,30 +1,27 @@
-import { Container, Text } from "pixi.js";
+import { Text } from "pixi.js";
+import Renderer from "./Renderer";
 
-export default class WordWrapTextRenderer extends Container {
-    constructor(textString, width, textColor, fontSize) {
-        super();
+export default class WordWrapTextRenderer extends Renderer {
+    constructor(textString, width, textFill, fontSize, options) {
+        super({}, options);
 
         this.textString = textString;
         this.givenWidth = width;
-        this.textColor = textColor;
-        this.givenFontSize = fontSize;
-
-        this.makeText();
+        this.textFill = textFill;
+        this.fontSize = fontSize;
     }
 
-    makeText() {
-        this.pixiText = new Text({
+    initText() {
+        this.renderers.pixiText = new Text({
             text: this.textString,
             style: {
                 wordWrap: true,
                 wordWrapWidth: this.givenWidth,
                 fontFamily: 'Courier New',
                 fontSize: this.givenFontSize,
-                fill: this.textColor
+                fill: this.textFill
             }
         });
-
-        this.addChild(this.pixiText);
 
         return this;
     }
