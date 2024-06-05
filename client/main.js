@@ -38,38 +38,6 @@ const getSprite = async () => {
 
     const sprite = await getSprite();
 
-    window.addEventListener('keydown', event => {
-        const key = event.key;
-
-        event.preventDefault();
-
-        if (key === 'ArrowUp') {
-            sprite.setSprite('walkNorth');
-        } else if (key === 'ArrowDown') {
-            sprite.setSprite('walkSouth');
-        } else if (key === 'ArrowRight') {
-            sprite.setSprite('walkEast');
-        } else if (key === 'ArrowLeft') {
-            sprite.setSprite('walkWest');
-        }
-    });
-
-    window.addEventListener('keyup', event => {
-        const key = event.key;
-
-        event.preventDefault();
-
-        if (key === 'ArrowUp') {
-            sprite.setSprite('facingNorth');
-        } else if (key === 'ArrowDown') {
-            sprite.setSprite('facingSouth');
-        } else if (key === 'ArrowRight') {
-            sprite.setSprite('facingEast');
-        } else if (key === 'ArrowLeft') {
-            sprite.setSprite('facingWest');
-        }
-    });
-
     const emitter = new Emitter();
 
     const tileNames = ['short1', 'short2', 'short3', 'longEdge1', 'longEdge2', 'longEdge3', 'longSide1', 'longSide2', 'longSide3', 'longTop1', 'longTop2', 'longTop3'];
@@ -161,7 +129,7 @@ const getSprite = async () => {
 
     emitter.emit('endmove', npcEntity, app, mapEntity, emitter);
 
-    mapPositioningSystem.process(app, renderSystem);
+    mapPositioningSystem.process(mapEntity, app, renderSystem);
 
     app.ticker.add(time => {
         renderSystem.process(app, renderSystem);

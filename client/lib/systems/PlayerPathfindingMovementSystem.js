@@ -1,6 +1,6 @@
 import EventSystem from "../../../lib/systems/EventSystem";
 
-const playerPathfindingMovementSystemCallback = (player, app, map, emitter) => {
+const playerPathfindingMovementSystemCallback = (event, player, app, map, emitter) => {
     const nextTile = player.astarPath.shift();
 
     map.moving = false;

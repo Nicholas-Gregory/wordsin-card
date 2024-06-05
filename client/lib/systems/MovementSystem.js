@@ -57,7 +57,7 @@ const moveWest = (entity, time, map, app, emitter) => {
     }
 }
 
-const movementSystemCallback = (entity, app, map, emitter) => {
+const movementSystemCallback = (event, entity, app, map, emitter) => {
     const direction = entity.movementDirection;
 
     if (!entity.moving) {

@@ -1,6 +1,6 @@
 import EventSystem from "../../../lib/systems/EventSystem";
 
-const mapPositioningSystemCallback = (map, app, playerSystem, tile) => {
+const mapPositioningSystemCallback = (event, map, app, playerSystem, tile) => {
     const player = playerSystem.queryEntity({ isPlayerCharacter: true });
 
     if (player.mapId === map.id) {

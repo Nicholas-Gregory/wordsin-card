@@ -4,7 +4,7 @@ const needed = [
     'mapPosition',
     'astarPath'
 ];
-const npcPathfindingMovementSystemCallback = (entity, app, map, emitter) => {
+const npcPathfindingMovementSystemCallback = (event, entity, app, map, emitter) => {
     const nextTile = entity.astarPath.shift();
 
     entity.moving = false;
