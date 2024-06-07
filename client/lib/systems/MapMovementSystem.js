@@ -52,7 +52,7 @@ const moveLeft = (map, time, app, emitter, player) => {
     }
 }
 
-const mapMovementSystemCallback = (map, app, emitter, player) => {
+const mapMovementSystemCallback = (event, map, app, emitter, player) => {
     const direction = map.movementDirection;
 
     if (!map.moving) {

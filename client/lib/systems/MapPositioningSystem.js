@@ -1,9 +1,9 @@
 import EventSystem from "../../../lib/systems/EventSystem";
 
-const mapPositioningSystemCallback = (map, app, playerSystem, tile) => {
+const mapPositioningSystemCallback = (map, event, app, playerSystem, tile) => {
     const player = playerSystem.queryEntity({ isPlayerCharacter: true });
 
-    if (player.mapId === map.id) {
+    if (player.mapId === map.id && !map.moving) {
         const { x: playerX, y: playerY } = player.mapPosition;
         const playerSize = player.renderer.getSize();
         const tileSize = map.renderer.renderers[0].getSize();
@@ -22,12 +22,9 @@ const mapPositioningSystemCallback = (map, app, playerSystem, tile) => {
 
     if (tile) {
         const index = map.tiles
-        .findIndex(
-            t => t.id === tile.id
-        );
+        .findIndex(t => t.id === tile.id);
 
         player.destination = { x: index % map.width, y: Math.floor(index / map.width)}
-        console.log(player.destination)
     }
 };
 
