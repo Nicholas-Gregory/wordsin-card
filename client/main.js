@@ -3,7 +3,6 @@ import SpriteRenderer from './lib/renderers/SpriteRenderer';
 import Entity from '../lib/Entity';
 import RenderSystem from './lib/systems/RenderSystem';
 import PathfindingSystem from '../lib/systems/PathfindingSystem';
-import MovementSystem from './lib/systems/MovementSystem';
 import Emitter from '../lib/events/Emitter';
 import { convertMapCoordinates } from './lib/utils';
 import NPCPathfindingMovementSystem from './lib/systems/NPCPathfindingMovementSystem';
@@ -11,9 +10,12 @@ import MapPositioningSystem from './lib/systems/MapPositioningSystem';
 import Renderer from './lib/renderers/Renderer';
 import MapMovementSystem from './lib/systems/MapMovementSystem';
 import PlayerPathfindingMovementSystem from './lib/systems/PlayerPathfindingMovementSystem';
+import EventSystem from '../lib/systems/EventSystem';
+import { faceSouth, moveMapOneTileDown, moveMapOneTileLeft, moveMapOneTileRight, moveMapOneTileUp, moveOneTileEast, moveOneTileNorth, moveOneTileSouth, moveOneTileWest, walkEast, walkNorth, walkSouth, walkWest } from './lib/animation';
+import AnimationSystem from './lib/systems/AnimationSystem';
 
 const getSprite = async () => {
-    const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'facingSouth')
+    const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'faceSouth')
     
     await sprite.initSpritesheet()
     sprite
@@ -63,7 +65,33 @@ const getSprite = async () => {
         position: {},
         renderer: mapRenderer,
         width: 10,
-        tiles
+        tiles,
+        animations: {
+            playerwalknorth: {
+                add: ['moveDown'],
+                remove: ['moveLeft', 'moveUp', 'moveRight']
+            },
+            playerwalkeast: {
+                add: ['moveLeft'],
+                remove: ['moveUp', 'moveDown', 'moveRight']
+            },
+            playerwalksouth: {
+                add: ['moveUp'],
+                remove: ['moveDown', 'moveLeft', 'moveRight']
+            },
+            playerwalkwest: {
+                add: ['moveRight'],
+                remove: ['moveUp', 'moveLeft', 'moveDown']
+            },
+            endmapmove: {
+                add: [],
+                remove: ['moveUp', 'moveLeft', 'moveRight', 'moveDown']
+            }
+        },
+        moveDown: time => moveMapOneTileDown(mapEntity, time, app, emitter, playerEntity),
+        moveLeft: time => moveMapOneTileLeft(mapEntity, time, app, emitter, playerEntity),
+        moveUp: time => moveMapOneTileUp(mapEntity, time, app, emitter, playerEntity),
+        moveRight: time => moveMapOneTileRight(mapEntity, time, app, emitter, playerEntity)
     });
 
     const playerEntity = new Entity({
@@ -71,7 +99,34 @@ const getSprite = async () => {
         isPlayerCharacter: true,
         mapId: mapEntity.id,
         mapPosition: { x: 4, y: 3 },
-        movementSpeed: 5
+        movementSpeed: 5,
+        animations: {
+            playerwalknorth: {
+                add: ['walkNorth'],
+                remove: ['walkEast', 'walkSouth', 'walkWest', 'faceSouth']
+            },
+            playerwalkeast: {
+                add: ['walkEast'],
+                remove: ['walkNorth', 'walkSouth', 'walkWest', 'faceSouth']
+            },
+            playerwalksouth: {
+                add: ['walkSouth'],
+                remove: ['walkNorth', 'walkWest', 'walkEast', 'faceSouth']
+            },
+            playerwalkwest: {
+                add: ['walkWest'],
+                remove: ['walkEast', 'walkNorth', 'walkSouth', 'faceSouth']
+            },
+            endmapmove: {
+                add: ['faceSouth'],
+                remove: ['walkNorth', 'walkEast', 'walkSouth', 'walkWest']
+            }
+        },
+        walkNorth: time => walkNorth(playerEntity),
+        walkEast: time => walkEast(playerEntity),
+        walkSouth: time => walkSouth(playerEntity),
+        walkWest: time => walkWest(playerEntity),
+        faceSouth: time => faceSouth(playerEntity)
     });
 
     const npcEntity = new Entity({
@@ -79,21 +134,48 @@ const getSprite = async () => {
         mapId: mapEntity.id,
         mapPosition: { x: 0, y: 0 },
         destination: { x: 5, y: 5 },
-        movementSpeed: 5
+        movementSpeed: 5,
+        animations: {
+            walknorth: {
+                add: ['walkNorth', 'moveNorth'],
+                remove: ['walkEast', 'moveEast', 'walkSouth', 'moveSouth', 'walkWest', 'moveWest', 'faceSouth']
+            },
+            walkeast: {
+                add: ['walkEast', 'moveEast'],
+                remove: ['walkNorth', 'moveNorth', 'walkSouth', 'moveSouth', 'walkWest', 'moveWest', 'faceSouth']
+            },
+            walksouth: {
+                add: ['walkSouth', 'moveSouth'],
+                remove: ['walkNorth', 'moveNorth', 'walkEast', 'moveEast', 'walkWest', 'moveWest', 'faceSouth']
+            },
+            walkwest: {
+                add: ['walkWest', 'moveWest'],
+                remove: ['walkNorth', 'moveNorth', 'walkEast', 'moveEast', 'walkSouth', 'moveSouth', 'faceSouth']
+            },
+            endmove: {
+                add: ['faceSouth'],
+                remove: ['walkNorth', 'moveNorth', 'walkEast', 'moveEast', 'walkSouth', 'moveSouth', 'walkWest', 'moveWest']
+            }
+        },
+        walkNorth: time => walkNorth(npcEntity),
+        moveNorth: time => moveOneTileNorth(npcEntity, time, mapEntity, emitter, app),
+        walkEast: time => walkEast(npcEntity),
+        moveEast: time => moveOneTileEast(npcEntity, time, mapEntity, emitter, app),
+        walkSouth: time => walkSouth(npcEntity),
+        moveSouth: time => moveOneTileSouth(npcEntity, time, mapEntity, emitter, app),
+        walkWest: time => walkWest(npcEntity),
+        moveWest: time => moveOneTileWest(npcEntity, time, mapEntity, emitter, app),
+        faceSouth: time => faceSouth(npcEntity)
     });
 
     mapEntity.renderer.addChild(npcEntity.renderer);
 
-    const movementSystem = new MovementSystem([npcEntity]);
+    const animationSystem = new AnimationSystem([npcEntity, mapEntity, playerEntity]);
     const renderSystem = new RenderSystem([mapEntity, playerEntity, npcEntity, ...tiles]);
     const pathfindingSystem = new PathfindingSystem([npcEntity, playerEntity]);
     const mapPositioningSystem = new MapPositioningSystem([mapEntity]);
     const mapMovementSystem = new MapMovementSystem([mapEntity]);
     const playerPathfindingMovementSystem = new PlayerPathfindingMovementSystem([playerEntity]);
-
-    for (let listener of playerPathfindingMovementSystem.listeners) {
-        emitter.subscribe(listener);
-    }
 
     for (let listener of mapMovementSystem.listeners) {
         emitter.subscribe(listener);
@@ -101,9 +183,9 @@ const getSprite = async () => {
 
     for (let tile of tiles) {
         tile.renderer.on('click', event => {
-            emitter.emit('tileclick', mapEntity, app, renderSystem, tile)
+            emitter.emit('tileclick', app, renderSystem, tile)
             pathfindingSystem.process(renderSystem);
-            emitter.emit('endmapmove', playerEntity, app, mapEntity, emitter);
+            emitter.emit('beginplayerpathfinding', app, mapEntity, emitter);
         });
     }
 
@@ -113,7 +195,11 @@ const getSprite = async () => {
 
     const npcPathfindingMovementSystem = new NPCPathfindingMovementSystem([npcEntity]);
 
-    for (let listener of movementSystem.listeners) {
+    for (let listener of animationSystem.listeners) {
+        emitter.subscribe(listener);
+    }
+
+    for (let listener of playerPathfindingMovementSystem.listeners) {
         emitter.subscribe(listener);
     }
 
@@ -127,12 +213,12 @@ const getSprite = async () => {
 
     npcEntity.position = convertMapCoordinates(mapEntity, npcEntity.mapPosition);
 
-    emitter.emit('endmove', npcEntity, app, mapEntity, emitter);
+    emitter.emit('endmove', app, mapEntity, emitter);
 
     mapPositioningSystem.process(mapEntity, app, renderSystem);
 
     app.ticker.add(time => {
         renderSystem.process(app, renderSystem);
-        
+        mapPositioningSystem.process(mapEntity, app, renderSystem)
     });
 ;})();

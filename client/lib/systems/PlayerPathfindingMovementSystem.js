@@ -1,32 +1,39 @@
 import EventSystem from "../../../lib/systems/EventSystem";
 
-const playerPathfindingMovementSystemCallback = (event, player, app, map, emitter) => {
+const playerPathfindingMovementSystemCallback = (player, event, app, map, emitter) => {
     const nextTile = player.astarPath.shift();
+    
+    if (!map.moving) {
+        let walkEvent;
+        
+        map.moving = true;
 
-    map.moving = false;
-
-    if (nextTile) {
-        if (nextTile.x === player.mapPosition.x) {
-            if (nextTile.y > player.mapPosition.y) {
-                map.movementDirection = 'up';
+        if (nextTile) {
+            if (nextTile.x === player.mapPosition.x) {
+                if (nextTile.y > player.mapPosition.y) {
+                    walkEvent = 'playerwalksouth';
+                } else {
+                    walkEvent = 'playerwalknorth';
+                }
             } else {
-                map.movementDirection = 'down';
+                if (nextTile.x < player.mapPosition.x) {
+                    walkEvent = 'playerwalkwest';
+                } else {
+                    walkEvent = 'playerwalkeast';
+                }
             }
+            player.mapPosition = nextTile;
+        
+            emitter.emit(walkEvent, app);
+            map.previousPosition = { ...map.position };
         } else {
-            if (nextTile.x < player.mapPosition.x) {
-                map.movementDirection = 'right';
-            } else {
-                map.movementDirection = 'left'
-            }
+            map.moving = false;
         }
-
-        player.mapPosition = nextTile;
-        emitter.emit('beginmapmove', map, app, emitter, player);
     }
 }
 
 export default class PlayerPathfindingMovementSystem extends EventSystem {
     constructor(entities) {
-        super(['isPlayerCharacter'], ['frozen'], entities, playerPathfindingMovementSystemCallback, ['endmapmove']);
+        super(['isPlayerCharacter'], ['frozen'], entities, playerPathfindingMovementSystemCallback, ['endmapmove', 'beginplayerpathfinding']);
     }
 }

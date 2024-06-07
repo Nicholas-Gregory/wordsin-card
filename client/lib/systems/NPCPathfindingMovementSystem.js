@@ -4,28 +4,32 @@ const needed = [
     'mapPosition',
     'astarPath'
 ];
-const npcPathfindingMovementSystemCallback = (event, entity, app, map, emitter) => {
+const npcPathfindingMovementSystemCallback = (entity, event, app, map, emitter) => {
     const nextTile = entity.astarPath.shift();
 
-    entity.moving = false;
+    let walkEvent;
 
-    if (nextTile) {
-        if (nextTile.x === entity.mapPosition.x) {
-            if (nextTile.y > entity.mapPosition.y) {
-                entity.movementDirection = 'south';
+    if (!entity.moving) {
+        entity.moving = true;
+
+        if (nextTile) {
+            if (nextTile.x === entity.mapPosition.x) {
+                if (nextTile.y > entity.mapPosition.y) {
+                    walkEvent = 'walksouth';
+                } else {
+                    walkEvent = 'walknorth';
+                }
             } else {
-                entity.movementDirection = 'north';
+                if (nextTile.x < entity.mapPosition.x) {
+                    walkEvent = 'walkwest';
+                } else {
+                    walkEvent = 'walkeast';
+                }
             }
-        } else {
-            if (nextTile.x < entity.mapPosition.x) {
-                entity.movementDirection = 'west';
-            } else {
-                entity.movementDirection = 'east';
-            }
+
+            entity.mapPosition = nextTile;
+            emitter.emit(walkEvent, app, map, emitter);
         }
-
-        entity.mapPosition = nextTile;
-        emitter.emit('beginmove', entity, app, map, emitter);
     }
 };
 

@@ -1,6 +1,6 @@
 {
     "frames": {
-        "facingSouth": {
+        "faceSouth": {
             "frame": { "x": 0, "y": 0, "w": 15, "h": 30},
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
@@ -15,7 +15,7 @@
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
         },
-        "facingEast": {
+        "faceEast": {
             "frame": { "x": 15, "y": 0, "w": 15, "h": 30},
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
@@ -30,7 +30,7 @@
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
         },
-        "facingWest": {
+        "faceWest": {
             "frame": { "x": 27, "y": 0, "w": 15, "h": 30},
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
@@ -45,7 +45,7 @@
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
         },
-        "facingNorth": {
+        "faceNorth": {
             "frame": { "x": 42, "y": 0, "w": 15, "h": 30},
             "sourceSize": { "w": 15, "h": 30 },
             "spriteSourceSize": { "x": 0, "y": 0, "w": 15, "h": 30 }
@@ -62,10 +62,10 @@
         }
     },
     "animations": {
-        "walkSouth": ["facingSouth", "leftLegUpSouth", "facingSouth", "rightLegUpSouth"],
-        "walkEast": ["facingEast", "leftLegUpEast", "facingEast", "rightLegUpEast"],
-        "walkWest": ["facingWest", "leftLegUpWest", "facingWest", "rightLegUpWest"],
-        "walkNorth": ["facingNorth", "leftLegUpNorth", "facingNorth", "rightLegUpNorth"]
+        "walkSouth": ["faceSouth", "leftLegUpSouth", "faceSouth", "rightLegUpSouth"],
+        "walkEast": ["faceEast", "leftLegUpEast", "faceEast", "rightLegUpEast"],
+        "walkWest": ["faceWest", "leftLegUpWest", "faceWest", "rightLegUpWest"],
+        "walkNorth": ["faceNorth", "leftLegUpNorth", "faceNorth", "rightLegUpNorth"]
     },
     "meta": {
         "image": "char-1.png",
