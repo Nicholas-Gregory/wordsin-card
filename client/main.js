@@ -13,6 +13,8 @@ import PlayerPathfindingMovementSystem from './lib/systems/PlayerPathfindingMove
 import EventSystem from '../lib/systems/EventSystem';
 import { faceSouth, moveMapOneTileDown, moveMapOneTileLeft, moveMapOneTileRight, moveMapOneTileUp, moveOneTileEast, moveOneTileNorth, moveOneTileSouth, moveOneTileWest, walkEast, walkNorth, walkSouth, walkWest } from './lib/animation';
 import AnimationSystem from './lib/systems/AnimationSystem';
+import EffectApplicationSystem from '../lib/systems/EffectApplicationSystem';
+import DamageSystem from '../lib/systems/DamageSystem';
 
 const getSprite = async () => {
     const sprite = new SpriteRenderer('./assets/spritesheets/char-1.json', 'faceSouth')
@@ -39,6 +41,7 @@ const getSprite = async () => {
     document.body.appendChild(app.canvas);
 
     const sprite = await getSprite();
+    sprite.eventMode = 'static';
 
     const emitter = new Emitter();
 
@@ -135,6 +138,7 @@ const getSprite = async () => {
         mapPosition: { x: 0, y: 0 },
         destination: { x: 5, y: 5 },
         movementSpeed: 5,
+        hp: 10,
         animations: {
             walknorth: {
                 add: ['walkNorth', 'moveNorth'],
@@ -170,12 +174,25 @@ const getSprite = async () => {
 
     mapEntity.renderer.addChild(npcEntity.renderer);
 
+    const effects = [];
+    const effectApplicationSystem = new EffectApplicationSystem(effects);
+    const damageSystem = new DamageSystem([npcEntity, playerEntity]);
     const animationSystem = new AnimationSystem([npcEntity, mapEntity, playerEntity]);
     const renderSystem = new RenderSystem([mapEntity, playerEntity, npcEntity, ...tiles]);
     const pathfindingSystem = new PathfindingSystem([npcEntity, playerEntity]);
     const mapPositioningSystem = new MapPositioningSystem([mapEntity]);
     const mapMovementSystem = new MapMovementSystem([mapEntity]);
     const playerPathfindingMovementSystem = new PlayerPathfindingMovementSystem([playerEntity]);
+
+    sprite.on('click', event => {
+        effects.push({
+            component: 'deal',
+            targetId: npcEntity.id,
+            deal: 5
+        });
+
+        effectApplicationSystem.process(damageSystem);
+    });
 
     for (let listener of mapMovementSystem.listeners) {
         emitter.subscribe(listener);
@@ -219,6 +236,7 @@ const getSprite = async () => {
 
     app.ticker.add(time => {
         renderSystem.process(app, renderSystem);
-        mapPositioningSystem.process(mapEntity, app, renderSystem)
+        mapPositioningSystem.process(mapEntity, app, renderSystem);
+        damageSystem.process();
     });
 ;})();
