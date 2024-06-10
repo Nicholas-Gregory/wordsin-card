@@ -138,7 +138,7 @@ const getSprite = async () => {
         mapPosition: { x: 0, y: 0 },
         destination: { x: 5, y: 5 },
         movementSpeed: 5,
-        hp: 10,
+        health: { amount: 10 },
         animations: {
             walknorth: {
                 add: ['walkNorth', 'moveNorth'],
@@ -188,7 +188,7 @@ const getSprite = async () => {
         effects.push({
             component: 'deal',
             targetId: npcEntity.id,
-            deal: 5
+            deal: { amount: 5 }
         });
 
         effectApplicationSystem.process(damageSystem);
@@ -238,5 +238,6 @@ const getSprite = async () => {
         renderSystem.process(app, renderSystem);
         mapPositioningSystem.process(mapEntity, app, renderSystem);
         damageSystem.process();
+        console.log(npcEntity.health)
     });
 ;})();
